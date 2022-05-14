@@ -1,9 +1,14 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div id="app">
+    <nav>
+      <router-link to="/login">Connexion</router-link> |
+      <router-link to="/signup">Création de compte</router-link>
+    </nav>
+    <div class="login">
+      <img alt="Groupomania logo" src="./assets/Groupomania-logo-red.png" />
+      <router-view />
+    </div>
+  </div>
 </template>
 
 <style lang="scss">
@@ -23,7 +28,7 @@ nav {
     color: #2c3e50;
 
     &.router-link-exact-active {
-      color: #42b983;
+      color: #e72113;
     }
   }
 }
