@@ -6,6 +6,7 @@
     </nav>
     <div class="login">
       <img alt="Groupomania logo" src="./assets/Groupomania-logo-red.png" />
+      <h1>Réseau Social Interne</h1>
       <router-view />
     </div>
   </div>
@@ -20,8 +21,13 @@
   color: #2c3e50;
 }
 
+h1 {
+  margin-top: 0;
+  color: red;
+}
+
 nav {
-  padding: 30px;
+  padding: 10px;
 
   a {
     font-weight: bold;
