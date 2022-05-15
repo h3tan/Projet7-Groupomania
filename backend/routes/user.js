@@ -7,11 +7,6 @@ const userCtrl = require("../controllers/user");
 router.post("/signup", userCtrl.signup);
 
 // Route pour se connecter à un compte utilisateur
-/* router.post(
-  "/login",
-  checking.checkMailInput,
-  //checking.checkPassword,
-  userCtrl.login
-); */
+router.post("/login", userCtrl.login);
 
 module.exports = router;

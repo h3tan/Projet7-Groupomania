@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-//const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const connexion = require("../mysql_connect");
 
 exports.signup = async (req, res, next) => {
@@ -24,26 +24,29 @@ exports.signup = async (req, res, next) => {
   }
 };
 
-/* exports.login = (req, res, next) => {
-  User.findOne({ email: req.body.email })
-    .then((user) => {
-      if (!user) {
-        return res.status(401).json({ error: "User not in the database" });
-      }
+exports.login = (req, res, next) => {
+  connexion.query(
+    `SELECT user.id, user.password FROM user WHERE nickname = "${req.body.nickname}"`,
+    function (err, result) {
+      let userId = result[0].id;
+      let password = result[0].password;
+      console.log(userId);
+      console.log(password);
+      console.log(req.body.password);
       bcrypt
-        .compare(req.body.password, user.password)
+        .compare(req.body.password, password)
         .then((valid) => {
           if (!valid) {
             return res.status(401).json({ error: "Wrong password" });
           }
           res.status(200).json({
-            userId: user._id,
-            token: jwt.sign({ userId: user._id }, "RANDOM_TOKEN_SECRET", {
+            userId: userId,
+            token: jwt.sign({ userId: userId }, "RANDOM_TOKEN_SECRET", {
               expiresIn: "24h",
             }),
           });
         })
         .catch((error) => res.status(500).json({ error }));
-    })
-    .catch((error) => res.status(500).json({ error }));
-}; */
+    }
+  );
+};
