@@ -1,5 +1,5 @@
 <template>
-    <button>{{ buttonName }}</button>
+    <button id="formButton" disabled>{{ buttonName }}</button>
 </template>
 
 <script>
@@ -25,7 +25,11 @@ button {
     border: none;
 
     &:active {
-        background-color: darken($color-formButton, 20);
+      background-color: darken($color-formButton, 20);
+    }
+
+    &:disabled {
+      background-color: lightgrey;
     }
 }
 </style>

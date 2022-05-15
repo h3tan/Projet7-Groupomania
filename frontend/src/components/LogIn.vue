@@ -3,24 +3,40 @@
     <h2>{{ msg }}</h2>
     <form id="login">
       <label for="nickname">Nom d'utilisateur</label>
-      <input id="nickname" type="text" v-model="nickname" />
+      <input
+        @input="isNicknameValid(this.nickname)"
+        id="nickname"
+        type="text"
+        v-model="nickname"
+      />
       <label for="password">Mot de passe</label>
-      <input id="password" type="password" v-model="password" />
-      <formButton @click="sendLoginForm" buttonName="Se Connecter" />
+      <input
+        @input="isPasswordValid(this.password)"
+        id="password"
+        type="password"
+        v-model="password"
+      />
+      <formButton
+        @click="sendLoginForm(this.nickname, this.password)"
+        buttonName="Se Connecter"
+      />
     </form>
   </div>
 </template>
 
 <script>
 import formButton from "./SubmitFormButton.vue";
+import { isNicknameValid } from "../functions/formCheck.js";
+import { isPasswordValid } from "../functions/formCheck.js";
+import { sendLoginForm } from "../functions/fetchUser.js";
 
 export default {
   name: "LogIn",
   data() {
     return {
-    nickname: "",
-    password: "",
-    }
+      nickname: "",
+      password: "",
+    };
   },
   components: {
     formButton,
@@ -29,31 +45,10 @@ export default {
     msg: String,
   },
   methods: {
-      async sendLoginForm() {
-      try {
-        let signUpFormJson = await fetch(
-          "http://localhost:3000/api/auth/login",
-          {
-            mode: "cors",
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              nickname: `${this.nickname}`,
-              password: `${this.password}`,
-            }),
-          }
-        );
-        let reponse = await signUpFormJson.json();
-        console.log(reponse);
-      } catch (err) {
-        let message = `Impossible de trouver l'API`;
-        throw new Error(message);
-      }
-    }
-  }
+    isNicknameValid,
+    isPasswordValid,
+    sendLoginForm,
+  },
 };
 </script>
 
@@ -68,15 +63,15 @@ h2 {
   padding-left: 20px;
   padding-right: 20px;
   text-align: left;
-}
 
-h2::after {
-  background-color: lightgrey;
-  content: "";
-  display: block;
-  height: 1px;
-  margin-top: 2px;
-  width: 100%;
+  &::after {
+    background-color: lightgrey;
+    content: "";
+    display: block;
+    height: 1px;
+    margin-top: 2px;
+    width: 100%;
+  }
 }
 
 #login {
