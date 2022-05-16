@@ -7,7 +7,7 @@ export const isNicknameValid = (nickname) => {
   } else {
     document.getElementById("nickname").style.background = "lightgreen";
     button.removeAttribute("disabled");
-    isEmpty();
+    areInputsEmpty();
   }
 };
 
@@ -15,13 +15,13 @@ export const isPasswordValid = (password) => {
   const button = document.getElementById("formButton");
   //Comporte 10 caractères, 1 minuscule, 1 majuscule, 1 chiffre et un caractère spécial
   const regex = /^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/;
-  if (!regex.test(password) || isEmpty()) {
+  if (!regex.test(password)) {
     document.getElementById("password").style.background = "red";
     button.setAttribute("disabled", "true");
   } else {
     document.getElementById("password").style.background = "lightgreen";
     button.removeAttribute("disabled");
-    isEmpty();
+    areInputsEmpty();
   }
 };
 
@@ -37,20 +37,11 @@ export const isEmailValid = (email) => {
   } else {
     document.getElementById("email").style.background = "lightgreen";
     button.removeAttribute("disabled");
-    isEmpty();
+    areInputsEmpty();
   }
 };
 
-// Vérifie si au moins un des champs est vide
-export const isSignUpFormEmpty = (nickname, email, password) => {
-  return nickname == "" || email == "" || password == "";
-};
-
-export const isLoginFormEmpty = (nickname, email, password) => {
-  return nickname == "" || email == "" || password == "";
-};
-
-export const isEmpty = () => {
+const areInputsEmpty = () => {
   const button = document.getElementById("formButton");
   let inputs = document.querySelectorAll("input");
   inputs.forEach((input) => {

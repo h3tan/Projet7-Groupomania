@@ -4,6 +4,7 @@
     <form id="signup">
       <label for="nickname">Nom d'utilisateur</label>
       <input
+        onfocus="this.value=''"
         @input="isNicknameValid(this.nickname)"
         id="nickname"
         type="text"
@@ -11,6 +12,7 @@
       />
       <label for="email">E-Mail</label>
       <input
+        onfocus="this.value=''"
         @input="isEmailValid(this.email)"
         id="email"
         type="email"
@@ -18,6 +20,7 @@
       />
       <label for="password">Mot de passe</label>
       <input
+        onfocus="this.value=''"
         @input="isPasswordValid(this.password)"
         id="password"
         type="password"
@@ -28,6 +31,7 @@
         buttonName="Créer un compte"
       />
     </form>
+    <p id="signupresult"></p>
   </div>
 </template>
 
@@ -42,9 +46,9 @@ export default {
   name: "SignUp",
   data() {
     return {
-      nickname: "",
-      email: "",
-      password: "",
+      nickname: "Nom d'utilisateur",
+      email: "E-mail",
+      password: "Mot de Passe",
     };
   },
   components: {
@@ -102,9 +106,17 @@ input {
   width: 100%;
   height: 30px;
   padding-left: 5px;
+  color: grey;
 
   &:focus {
     background-color: lightblue;
+    color: black;
   }
+}
+
+#loginresult {
+  margin-top: 40px;
+  font-size: 20px;
+  color: red;
 }
 </style>

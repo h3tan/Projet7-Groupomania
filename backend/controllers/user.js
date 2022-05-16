@@ -29,7 +29,7 @@ exports.login = (req, res, next) => {
     `SELECT user.id, user.nickname, user.password FROM user WHERE nickname = "${req.body.nickname}"`,
     function (err, result) {
       if (result[0] == undefined) {
-        res.status(401).json({ message: "Wrong user" });
+        res.status(401).json({ error: "Nom d'utilisateur incorrect" });
         return;
       }
       let userId = result[0].id;
@@ -38,7 +38,7 @@ exports.login = (req, res, next) => {
         .compare(req.body.password, password)
         .then((valid) => {
           if (!valid) {
-            return res.status(401).json({ error: "Wrong password" });
+            return res.status(401).json({ error: "Mot de passe incorrect" });
           }
           res.status(200).json({
             userId: userId,

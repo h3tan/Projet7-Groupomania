@@ -15,7 +15,5 @@ export default {
 </script>
 
 <style lang="scss">
-img {
-    width: 300px;
-}
+
 </style>

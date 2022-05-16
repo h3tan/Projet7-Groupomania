@@ -4,6 +4,7 @@
     <form id="login">
       <label for="nickname">Nom d'utilisateur</label>
       <input
+        onfocus="this.value=''"
         @input="isNicknameValid(this.nickname)"
         id="nickname"
         type="text"
@@ -11,6 +12,7 @@
       />
       <label for="password">Mot de passe</label>
       <input
+        onfocus="this.value=''"
         @input="isPasswordValid(this.password)"
         id="password"
         type="password"
@@ -21,6 +23,7 @@
         buttonName="Se Connecter"
       />
     </form>
+    <p id="loginresult"></p>
   </div>
 </template>
 
@@ -96,5 +99,11 @@ input {
   &:focus {
     background-color: lightblue;
   }
+}
+
+#loginresult {
+  margin-top: 40px;
+  font-size: 20px;
+  color: red;
 }
 </style>
