@@ -26,13 +26,14 @@ exports.signup = async (req, res, next) => {
 
 exports.login = (req, res, next) => {
   connexion.query(
-    `SELECT user.id, user.password FROM user WHERE nickname = "${req.body.nickname}"`,
+    `SELECT user.id, user.nickname, user.password FROM user WHERE nickname = "${req.body.nickname}"`,
     function (err, result) {
+      if (result[0] == undefined) {
+        res.status(401).json({ message: "Wrong user" });
+        return;
+      }
       let userId = result[0].id;
       let password = result[0].password;
-      console.log(userId);
-      console.log(password);
-      console.log(req.body.password);
       bcrypt
         .compare(req.body.password, password)
         .then((valid) => {

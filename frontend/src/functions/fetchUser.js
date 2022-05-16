@@ -13,7 +13,7 @@ export const sendLoginForm = async (nickname, password) => {
       }),
     });
     let reponse = await loginFormJson.json();
-    console.log(reponse);
+    return reponse;
   } catch (err) {
     let message = `Impossible de trouver l'API`;
     throw new Error(message);
@@ -35,8 +35,8 @@ export const sendSignUpForm = async (nickname, email, password) => {
         password: `${password}`,
       }),
     });
-    let reponse = await signUpFormJson.json();
-    console.log(reponse);
+    await signUpFormJson.json();
+    alert("Création de compte réussie");
   } catch (err) {
     let message = `Impossible de trouver l'API`;
     throw new Error(message);
