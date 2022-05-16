@@ -10,7 +10,10 @@ exports.signup = async (req, res, next) => {
       `INSERT INTO user (nickname, email, password)
         values ('${req.body.nickname}', '${emailHash}', '${passwordHash}')`,
       function (err, result) {
-        if (err) throw err;
+        if (err) {
+          res.status(401).json({ error: "Nom ou email déjà utilisé" });
+          return;
+        }
         res.status(200).json({
           nickname: req.body.nickname,
           email: emailHash,

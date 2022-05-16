@@ -1,4 +1,5 @@
 export const sendLoginForm = async (nickname, password) => {
+  document.getElementById("loginresult").textContent = "";
   try {
     let loginFormJson = await fetch("http://localhost:3000/api/auth/login", {
       mode: "cors",
@@ -13,6 +14,16 @@ export const sendLoginForm = async (nickname, password) => {
       }),
     });
     let reponse = await loginFormJson.json();
+    if (reponse.error) {
+      document.getElementById("loginresult").textContent = reponse.error;
+      return;
+    }
+    localStorage.clear();
+    localStorage.setItem("userId", reponse.userId);
+    localStorage.setItem("token", reponse.token);
+    document.getElementById("loginresult").style.color = "green";
+    document.getElementById("loginresult").textContent = "Connecté";
+    setTimeout(() => location.reload(), 2000);
     return reponse;
   } catch (err) {
     let message = `Impossible de trouver l'API`;
@@ -21,6 +32,7 @@ export const sendLoginForm = async (nickname, password) => {
 };
 
 export const sendSignUpForm = async (nickname, email, password) => {
+  document.getElementById("signupresult").textContent = "";
   try {
     let signUpFormJson = await fetch("http://localhost:3000/api/auth/signup", {
       mode: "cors",
@@ -35,8 +47,15 @@ export const sendSignUpForm = async (nickname, email, password) => {
         password: `${password}`,
       }),
     });
-    await signUpFormJson.json();
-    alert("Création de compte réussie");
+    let reponse = await signUpFormJson.json();
+    if (reponse.error) {
+      document.getElementById("signupresult").textContent = reponse.error;
+      return;
+    }
+    document.getElementById("signupresult").style.color = "green";
+    document.getElementById("signupresult").textContent =
+      "Création du compte réussie";
+    setTimeout(() => location.reload(), 2000);
   } catch (err) {
     let message = `Impossible de trouver l'API`;
     throw new Error(message);
