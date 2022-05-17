@@ -1,23 +1,39 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
-import LoginView from "../views/LoginView.vue";
-import SignUpView from "../views/SignUpView.vue";
+import { createRouter, createWebHistory } from "vue-router";
+import LoginFormView from "../views/LoginFormView.vue";
+import SignUpFormView from "../views/SignUpFormView.vue";
+import UserInfosView from "../views/UserInfosView.vue";
+import WhatsNewView from "../views/WhatsNewView.vue";
 
 const routes = [
   {
+    path: "/",
+    redirect: "/login",
+  },
+  {
     path: "/login",
     name: "login",
-    component: LoginView,
+    component: LoginFormView,
   },
   {
     path: "/signup",
     name: "signup",
-    component: SignUpView,
+    component: SignUpFormView,
+  },
+  {
+    path: "/userinfos",
+    name: "userinfos",
+    component: UserInfosView,
+  },
+  {
+    path: "/whatsnew",
+    name: "whatsnew",
+    component: WhatsNewView,
   },
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),
-  routes
-})
+  history: createWebHistory(),
+  routes,
+});
 
-export default router
+export default router;

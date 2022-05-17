@@ -1,7 +1,7 @@
 <template>
-  <div class="login">
+  <div v-if="userLogged" class="signup">
     <h2>{{ msg }}</h2>
-    <form id="login">
+    <form id="signup" v-on:submit.prevent="sendSignUpForm(this.nickname, this.email, this.password)">
       <label for="nickname">Nom d'utilisateur</label>
       <input
         onfocus="this.value=''"
@@ -9,6 +9,14 @@
         id="nickname"
         type="text"
         v-model="nickname"
+      />
+      <label for="email">E-Mail</label>
+      <input
+        onfocus="this.value=''"
+        @input="isEmailValid(this.email)"
+        id="email"
+        type="email"
+        v-model="email"
       />
       <label for="password">Mot de passe</label>
       <input
@@ -19,11 +27,10 @@
         v-model="password"
       />
       <formButton
-        @click="sendLoginForm(this.nickname, this.password)"
-        buttonName="Se Connecter"
+        buttonName="Créer un compte"
       />
     </form>
-    <p id="loginresult"></p>
+    <p id="signupresult"></p>
   </div>
 </template>
 
@@ -31,13 +38,16 @@
 import formButton from "./SubmitFormButton.vue";
 import { isNicknameValid } from "../functions/formCheck.js";
 import { isPasswordValid } from "../functions/formCheck.js";
-import { sendLoginForm } from "../functions/fetchUser.js";
+import { isEmailValid } from "../functions/formCheck.js";
+import { sendSignUpForm } from "../functions/fetchUser.js";
+import { userLogged } from "../functions/fetchUser.js";
 
 export default {
-  name: "LogIn",
+  name: "SignUpForm",
   data() {
     return {
       nickname: "",
+      email: "",
       password: "",
     };
   },
@@ -49,15 +59,17 @@ export default {
   },
   methods: {
     isNicknameValid,
+    isEmailValid,
     isPasswordValid,
-    sendLoginForm,
+    sendSignUpForm,
+    userLogged
   },
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.login {
+.signup {
   margin-top: 40px;
 }
 
@@ -77,7 +89,7 @@ h2 {
   }
 }
 
-#login {
+#signup {
   width: 90%;
   margin: auto;
 }
@@ -85,6 +97,7 @@ h2 {
 label {
   display: flex;
   margin-top: 20px;
+  margin-bottom: 2px;
   font-weight: bold;
   font-size: 17px;
 }
@@ -98,11 +111,12 @@ input {
 
   &:focus {
     background-color: lightblue;
+    color: black;
   }
 }
 
-#loginresult {
-  margin-top: 40px;
+#signupresult {
+  margin-top: 20px;
   font-size: 20px;
   color: red;
 }
