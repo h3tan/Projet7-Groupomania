@@ -7,6 +7,7 @@ import WhatsNewView from "../views/WhatsNewView.vue";
 const routes = [
   {
     path: "/",
+    name: "home",
     redirect: "/login",
   },
   {
