@@ -16,14 +16,13 @@ export const sendLoginForm = async (nickname, password) => {
     let reponse = await loginFormJson.json();
     if (reponse.error) {
       document.getElementById("loginresult").textContent = reponse.error;
-      return;
+      return reponse;
     }
     localStorage.clear();
     localStorage.setItem("userId", reponse.userId);
     localStorage.setItem("token", reponse.token);
     document.getElementById("loginresult").style.color = "green";
     document.getElementById("loginresult").textContent = "Connecté";
-    setTimeout(() => location.reload(), 2000);
     return reponse;
   } catch (err) {
     let message = `Impossible de trouver l'API`;
@@ -55,9 +54,35 @@ export const sendSignUpForm = async (nickname, email, password) => {
     document.getElementById("signupresult").style.color = "green";
     document.getElementById("signupresult").textContent =
       "Création du compte réussie";
-    setTimeout(() => location.reload(), 2000);
+    return reponse;
   } catch (err) {
     let message = `Impossible de trouver l'API`;
     throw new Error(message);
   }
+};
+
+export const requestUserInfos = async (id) => {
+  try {
+    let userInfosJson = await fetch(
+      `http://localhost:3000/api/auth/user/${id}`,
+      { method: "GET" }
+    );
+    let reponse = await userInfosJson.json();
+    if (reponse.error) {
+      return reponse.error;
+    }
+    return reponse;
+  } catch (err) {
+    let message = `Impossible de trouver l'API`;
+    throw new Error(message);
+  }
+};
+
+export const userLogOut = () => {
+  localStorage.clear();
+  return true;
+};
+
+export const userLogged = () => {
+  return localStorage.length != 0;
 };

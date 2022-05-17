@@ -1,4 +1,4 @@
-<template>
+<template v-if="isLogged == true">
   <div id="userinfos">
     <h1>Vos Informations</h1>
     <UserInfos />

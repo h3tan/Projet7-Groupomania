@@ -53,3 +53,16 @@ exports.login = (req, res, next) => {
     }
   );
 };
+
+exports.getUserInfos = async (req, res, next) => {
+  connexion.query(
+    `SELECT user.id, user.nickname, user.email, user.privilege FROM user WHERE id = "${req.params.id}"`,
+    function (err, result) {
+      if (result[0] == undefined) {
+        res.status(401).json({ error: "Nom d'utilisateur incorrect" });
+        return;
+      }
+      return res.status(200).json(result);
+    }
+  );
+};
