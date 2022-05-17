@@ -1,5 +1,5 @@
 <template>
-  <div v-if="userLogged" class="signup">
+  <div class="signup">
     <h2>{{ msg }}</h2>
     <form id="signup" v-on:submit.prevent="sendSignUpForm(this.nickname, this.email, this.password)">
       <label for="nickname">Nom d'utilisateur</label>
@@ -26,8 +26,9 @@
         type="password"
         v-model="password"
       />
-      <formButton
+      <UserButton class="formButton"
         buttonName="Créer un compte"
+        disabled
       />
     </form>
     <p id="signupresult"></p>
@@ -35,7 +36,7 @@
 </template>
 
 <script>
-import formButton from "./SubmitFormButton.vue";
+import UserButton from "./UserButton.vue";
 import { isNicknameValid } from "../functions/formCheck.js";
 import { isPasswordValid } from "../functions/formCheck.js";
 import { isEmailValid } from "../functions/formCheck.js";
@@ -52,7 +53,7 @@ export default {
     };
   },
   components: {
-    formButton,
+    UserButton,
   },
   props: {
     msg: String,

@@ -1,7 +1,7 @@
 <template>
-  <div v-if="userLogged" class="login">
+  <div class="login">
     <h2>{{ msg }}</h2>
-    <form id="login" v-on:submit.prevent="sendLoginForm(this.nickname, this.password)">
+    <form id="login" v-on:submit.prevent="goToUserInfos">
       <label for="nickname">Nom d'utilisateur</label>
       <input
         onfocus="this.value=''"
@@ -18,16 +18,14 @@
         type="password"
         v-model="password"
       />
-      <formButton
-        buttonName="Se Connecter"
-      />
+      <UserButton class="formButton" buttonName="Se Connecter" disabled />
     </form>
     <p id="loginresult"></p>
   </div>
 </template>
 
 <script>
-import formButton from "./SubmitFormButton.vue";
+import UserButton from "./UserButton.vue";
 import { isNicknameValid } from "../functions/formCheck.js";
 import { isPasswordValid } from "../functions/formCheck.js";
 import { sendLoginForm } from "../functions/fetchUser.js";
@@ -42,7 +40,7 @@ export default {
     };
   },
   components: {
-    formButton,
+    UserButton,
   },
   props: {
     msg: String,
@@ -51,7 +49,13 @@ export default {
     isNicknameValid,
     isPasswordValid,
     sendLoginForm,
-    userLogged
+    userLogged,
+    async goToUserInfos() {
+      let reponse = await sendLoginForm(this.nickname, this.password);
+      if (!reponse.error) {
+        setTimeout(() => this.$router.push("/userinfos"), 2000);
+      }
+    },
   },
 };
 </script>

@@ -1,5 +1,5 @@
 export const isNicknameValid = (nickname) => {
-  const button = document.getElementById("formButton");
+  const button = document.querySelector(".formButton");
   const regex = /^[a-zA-Z]\w*$/;
   if (!regex.test(nickname)) {
     document.getElementById("nickname").style.background = "red";
@@ -12,7 +12,7 @@ export const isNicknameValid = (nickname) => {
 };
 
 export const isPasswordValid = (password) => {
-  const button = document.getElementById("formButton");
+  const button = document.querySelector(".formButton");
   //Comporte 10 caractères, 1 minuscule, 1 majuscule, 1 chiffre et un caractère spécial
   const regex = /^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/;
   if (!regex.test(password)) {
@@ -27,7 +27,7 @@ export const isPasswordValid = (password) => {
 
 // Vérifie si "email" est bien de type "email"
 export const isEmailValid = (email) => {
-  const button = document.getElementById("formButton");
+  const button = document.querySelector(".formButton");
   // Permet d'utiliser
   //eslint-disable-next-line
   const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
@@ -42,7 +42,7 @@ export const isEmailValid = (email) => {
 };
 
 const areInputsEmpty = () => {
-  const button = document.getElementById("formButton");
+  const button = document.querySelector(".formButton");
   let inputs = document.querySelectorAll("input");
   inputs.forEach((input) => {
     if (input.value == "") button.setAttribute("disabled", "true");

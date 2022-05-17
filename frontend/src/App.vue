@@ -13,14 +13,25 @@
       <h1>Réseau social interne</h1>
     </div>
     <router-view />
+    <UserButton
+      v-if="isLogged == true"
+      UserButton
+      @click="goToLogIn"
+      class="logoutButton"
+      buttonName="Se Déconnecter"
+    />
   </div>
 </template>
 
 <script>
 import { userLogOut } from "./functions/fetchUser.js";
 import { userLogged } from "./functions/fetchUser.js";
+import UserButton from "./components/UserButton.vue";
 
 export default {
+  components: {
+    UserButton,
+  },
   data() {
     return {
       isLogged: userLogged(),
@@ -29,6 +40,9 @@ export default {
   methods: {
     userLogOut,
     userLogged,
+    goToLogIn() {
+      if (userLogOut()) this.$router.push("/login");
+    },
   },
 };
 </script>
