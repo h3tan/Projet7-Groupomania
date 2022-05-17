@@ -4,11 +4,10 @@ const connexion = require("../mysql_connect");
 
 exports.signup = async (req, res, next) => {
   try {
-    let emailHash = await bcrypt.hash(req.body.email, 10);
     let passwordHash = await bcrypt.hash(req.body.password, 10);
     connexion.query(
       `INSERT INTO user (nickname, email, password)
-        values ('${req.body.nickname}', '${emailHash}', '${passwordHash}')`,
+        values ('${req.body.nickname}', '${req.body.email}', '${passwordHash}')`,
       function (err, result) {
         if (err) {
           res.status(401).json({ error: "Nom ou email déjà utilisé" });
@@ -16,7 +15,7 @@ exports.signup = async (req, res, next) => {
         }
         res.status(200).json({
           nickname: req.body.nickname,
-          email: emailHash,
+          email: req.body.email,
           password: passwordHash,
         });
       }
