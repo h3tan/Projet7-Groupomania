@@ -1,7 +1,7 @@
 <template>
   <div class="login">
-    <h2>{{ msg }}</h2>
-    <form id="login" v-on:submit.prevent="goToUserInfos">
+    <h2>Veuillez vous connecter</h2>
+    <form id="login" v-on:submit.prevent="logIn">
       <label for="nickname">Nom d'utilisateur</label>
       <input
         onfocus="this.value=''"
@@ -18,7 +18,16 @@
         type="password"
         v-model="password"
       />
-      <UserButton class="formButton" buttonName="Se Connecter" disabled />
+      <div class="submitForm">
+        <UserButton
+          v-if="!isLogged"
+          buttonClass="formButton"
+          buttonText="Se Connecter"
+          disabled
+        />
+        <p class="logged" v-if="isLogged">Connecté</p>
+        <p class="errorLog" v-if="showErrorLogin">{{ errorLogin }}</p>
+      </div>
     </form>
     <p id="loginresult"></p>
   </div>
@@ -37,24 +46,38 @@ export default {
     return {
       nickname: "",
       password: "",
+      isLogged: "",
+      showErrorLogin: "",
+      errorLogin: "",
     };
   },
   components: {
     UserButton,
-  },
-  props: {
-    msg: String,
   },
   methods: {
     isNicknameValid,
     isPasswordValid,
     sendLoginForm,
     userLogged,
-    async goToUserInfos() {
+    async logIn() {
       let reponse = await sendLoginForm(this.nickname, this.password);
       if (!reponse.error) {
-        setTimeout(() => this.$router.push("/userinfos"), 2000);
+        localStorage.clear();
+        localStorage.setItem("userId", reponse.userId);
+        localStorage.setItem("token", reponse.token);
+        this.showErrorLogin = false;
+        this.isLogged = true;
+        setTimeout(() => {
+          this.$router.push(`/userinfos/`);
+          document.getElementById("loginSign").style.display = "none";
+          document.getElementById("logged").style.display = "block";
+        }, 1000);
+      } else {
+        this.showErrorLogin = true;
+        this.errorLogin = reponse.error;
+        return;
       }
+      return reponse;
     },
   },
 };
@@ -62,10 +85,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.login {
-  margin-top: 40px;
-}
-
 h2 {
   font-size: 22px;
   padding-left: 20px;
@@ -105,6 +124,22 @@ input {
   &:focus {
     background-color: lightblue;
   }
+}
+.logged {
+  color: green;
+  position: absolute;
+  left: 145px;
+  margin-top: 45px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.errorLog {
+  margin-top: 40px;
+}
+
+button {
+  margin-top: 40px;
 }
 
 #loginresult {

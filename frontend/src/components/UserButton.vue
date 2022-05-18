@@ -1,22 +1,22 @@
 <template>
-    <button>{{ buttonName }}</button>
+    <button :class="buttonClass">{{ buttonText }}</button>
 </template>
 
 <script>
 export default {
   name: "UserButton",
   props: {
-    buttonName: String,
+    buttonText: String,
+    buttonClass: String
   },
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 $color-formButton: rgb(243, 10, 10);
 $color-logoutButton: grey;
 
 .formButton {
-    margin-top: 40px;
     width: 200px;
     height: 50px;
     background-color: $color-formButton;
@@ -35,7 +35,6 @@ $color-logoutButton: grey;
 }
 
 .logoutButton {
-    margin-top: 40px;
     width: 200px;
     height: 50px;
     background-color: $color-logoutButton;

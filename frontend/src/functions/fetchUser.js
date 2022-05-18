@@ -14,15 +14,6 @@ export const sendLoginForm = async (nickname, password) => {
       }),
     });
     let reponse = await loginFormJson.json();
-    if (reponse.error) {
-      document.getElementById("loginresult").textContent = reponse.error;
-      return reponse;
-    }
-    localStorage.clear();
-    localStorage.setItem("userId", reponse.userId);
-    localStorage.setItem("token", reponse.token);
-    document.getElementById("loginresult").style.color = "green";
-    document.getElementById("loginresult").textContent = "Connecté";
     return reponse;
   } catch (err) {
     let message = `Impossible de trouver l'API`;
