@@ -4,7 +4,6 @@
     <form id="login" v-on:submit.prevent="logIn">
       <label for="nickname">Nom d'utilisateur</label>
       <input
-        onfocus="this.value=''"
         @input="isNicknameValid(this.nickname)"
         id="nickname"
         type="text"
@@ -12,7 +11,6 @@
       />
       <label for="password">Mot de passe</label>
       <input
-        onfocus="this.value=''"
         @input="isPasswordValid(this.password)"
         id="password"
         type="password"
@@ -68,7 +66,7 @@ export default {
         this.showErrorLogin = false;
         this.isLogged = true;
         setTimeout(() => {
-          this.$router.push(`/userinfos/`);
+          this.$router.push(`/whatsnew/`);
           document.getElementById("loginSign").style.display = "none";
           document.getElementById("logged").style.display = "block";
         }, 1000);
