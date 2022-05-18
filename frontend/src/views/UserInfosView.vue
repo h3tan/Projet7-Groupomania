@@ -2,22 +2,44 @@
   <div id="userinfos">
     <h1>Vos Informations</h1>
     <UserInfos />
+    <UserButton
+      @click="goToLogIn"
+      buttonClass="logoutButton"
+      buttonText="Se Déconnecter"
+    />
   </div>
 </template>
 
 <script>
-import UserInfos from '@/components/UserInfos.vue'
+import UserButton from "@/components/UserButton.vue";
+import UserInfos from "@/components/UserInfos.vue";
+import { userLogOut } from "../functions/fetchUser.js";
+import { userLogged } from "../functions/fetchUser.js";
 
 export default {
-  name: 'UserInfosView',
+  name: "UserInfosView",
   components: {
-    UserInfos
-  }
-}
+    UserInfos,
+    UserButton
+  },
+  methods: {
+    userLogOut,
+    userLogged,
+    goToLogIn() {
+      document.getElementById("loginSign").style.display = "block";
+      document.getElementById("logged").style.display = "none";
+      if (userLogOut()) this.$router.push("/login");
+    },
+  },
+};
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 #userinfos {
   margin-top: 10%;
+}
+
+button {
+  margin-top: 40px;
 }
 </style>
