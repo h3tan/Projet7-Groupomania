@@ -1,10 +1,14 @@
 <template>
   <div class="signup">
-    <h2>{{ msg }}</h2>
-    <form id="signup" v-on:submit.prevent="sendSignUpForm(this.nickname, this.email, this.password)">
+    <h2>Veuillez créer un compte</h2>
+    <form
+      id="signup"
+      v-on:submit.prevent="
+        sendSignUpForm(this.nickname, this.email, this.password)
+      "
+    >
       <label for="nickname">Nom d'utilisateur</label>
       <input
-        onfocus="this.value=''"
         @input="isNicknameValid(this.nickname)"
         id="nickname"
         type="text"
@@ -12,7 +16,6 @@
       />
       <label for="email">E-Mail</label>
       <input
-        onfocus="this.value=''"
         @input="isEmailValid(this.email)"
         id="email"
         type="email"
@@ -20,16 +23,21 @@
       />
       <label for="password">Mot de passe</label>
       <input
-        onfocus="this.value=''"
         @input="isPasswordValid(this.password)"
         id="password"
         type="password"
         v-model="password"
       />
-      <UserButton class="formButton"
-        buttonName="Créer un compte"
-        disabled
-      />
+      <div class="submitForm">
+        <UserButton
+          v-if="!isLogged"
+          buttonClass="formButton"
+          buttonText="Créer un compte"
+          disabled
+        />
+        <p class="logged" v-if="isLogged">Compte Créé</p>
+        <p class="errorLog" v-if="showErrorAccount">{{ errorAccount }}</p>
+      </div>
     </form>
     <p id="signupresult"></p>
   </div>
@@ -50,20 +58,41 @@ export default {
       nickname: "",
       email: "",
       password: "",
+      showErrorAccount: "",
+      errorAccount: "",
+      isLogged: "",
     };
   },
   components: {
     UserButton,
-  },
-  props: {
-    msg: String,
   },
   methods: {
     isNicknameValid,
     isEmailValid,
     isPasswordValid,
     sendSignUpForm,
-    userLogged
+    userLogged,
+    async goToUserInfos() {
+      let reponse = await sendSignUpForm(
+        this.nickname,
+        this.email,
+        this.password
+      );
+      if (!reponse.error) {
+        this.showErrorLogin = false;
+        this.isLogged = true;
+        setTimeout(() => {
+          this.$router.push("/userinfos");
+          document.getElementById("loginSign").style.display = "none";
+          document.getElementById("logged").style.display = "block";
+        }, 1000);
+        return reponse;
+      } else {
+        this.showErrorLogin = true;
+        this.errorLogin = reponse.error;
+        return;
+      }
+    },
   },
 };
 </script>
