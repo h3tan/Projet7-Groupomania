@@ -2,7 +2,6 @@ const connexion = require("../mysql_connect");
 
 exports.post = async (req, res, next) => {
   try {
-    console.log(req.body);
     connexion.query(
       `INSERT INTO post (title, message, date_post, user_id)
         values ('${req.body.title}', '${req.body.text}', now(), 1)`,
@@ -14,6 +13,21 @@ exports.post = async (req, res, next) => {
         res.status(201).json({ message: "post publié !" });
       }
     );
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};
+
+exports.getAllPosts = async (req, res, next) => {
+  try {
+    connexion.query(`select * from post`, function (err, result) {
+      if (err) {
+        res.status(401).json({ error: "Les posts n'ont pu être récupérés!" });
+        return;
+      }
+      res.status(201).json(result);
+    });
   } catch (err) {
     let message = "Erreur avec les données";
     throw new Error(message);

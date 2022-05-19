@@ -19,3 +19,14 @@ export const sendPost = async (title, text) => {
     throw new Error(message);
   }
 };
+
+export const getAllPostsFromAPI = async () => {
+  try {
+    let postsJson = await fetch("http://localhost:3000/api/auth/post");
+    let reponse = await postsJson.json();
+    return reponse;
+  } catch (err) {
+    let message = "Impossible de trouver l'API";
+    throw new Error(message);
+  }
+};
