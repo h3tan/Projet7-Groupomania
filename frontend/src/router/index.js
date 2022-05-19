@@ -32,7 +32,7 @@ const routes = [
     component: WhatsNewView,
   },
   {
-    path: "/post",
+    path: "/post/:id",
     name: "post",
     component: ShowPostView,
   },

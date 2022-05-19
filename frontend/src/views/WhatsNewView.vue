@@ -4,13 +4,13 @@
     <div id="cards_container">
       <div class="post_card" v-for="post in posts" :key="post.id">
         <router-link :to="`/post/${post.id}`">
-          <h2>{{ post.title }}</h2>
+          <h3>{{ post.title }}</h3>
         </router-link>
         <!-- <div class="img_box">
         <span>Image</span>
     </div> -->
         <div class="posted_by">
-          <h3>Posté par : </h3>
+          <h4>Posté par :</h4>
           <span>{{ post.user_id }}</span>
         </div>
       </div>
@@ -45,7 +45,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 #cards_container {
   margin-top: 30px;
 }
@@ -54,16 +54,15 @@ export default {
   border: 1px solid red;
   margin-top: 10px;
 }
-h2 {
-  padding-top: 10px;
+h3 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 50px;
   color: black;
   margin-top: 0;
   margin-bottom: 0;
-  border: 1px solid red;
-  border-top: none;
-  border-left: none;
-  border-right: none;
+  border-bottom: 1px solid red;
 }
 a {
   text-decoration: none;
@@ -77,6 +76,7 @@ a {
   display: flex;
   align-items: center;
   padding-left: 10px;
+  height: 30px;
 }
 span {
   margin-left: 20px;

@@ -30,10 +30,14 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
+.title {
+  margin-top: 20px;
+}
 h1 {
   margin-top: 0;
   color: red;
+  font-size: 25px;
 }
 
 button {
@@ -41,6 +45,6 @@ button {
   width: 100px;
 }
 img {
-  width: 300px;
+  width: 200px;
 }
 </style>
