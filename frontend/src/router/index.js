@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
-/* import LoginFormView from "../views/LoginFormView.vue";
-import SignUpFormView from "../views/SignUpFormView.vue"; */
 import UserFormView from "../views/UserFormView.vue";
 import UserInfosView from "../views/UserInfosView.vue";
 import WhatsNewView from "../views/WhatsNewView.vue";
+import ShowPostView from "../views/ShowPostView.vue";
+import WritePostView from "../views/WritePostView.vue";
 
 const routes = [
   {
@@ -11,16 +11,6 @@ const routes = [
     name: "home",
     redirect: "/login",
   },
-  /*   {
-    path: "/login",
-    name: "login",
-    component: LoginFormView,
-  },
-  {
-    path: "/signup",
-    name: "signup",
-    component: SignUpFormView,
-  }, */
   {
     path: "/login",
     name: "login",
@@ -40,6 +30,16 @@ const routes = [
     path: "/whatsnew",
     name: "whatsnew",
     component: WhatsNewView,
+  },
+  {
+    path: "/post",
+    name: "post",
+    component: ShowPostView,
+  },
+  {
+    path: "/newpost",
+    name: "newpost",
+    component: WritePostView,
   },
 ];
 
