@@ -3,6 +3,7 @@ const helmet = require("helmet");
 const connexion = require("./mysql_connect");
 const app = express();
 const userRoutes = require("./routes/user.js");
+const postRoutes = require("./routes/post.js");
 
 connexion.connect(function (err) {
   if (err) throw err;
@@ -28,5 +29,6 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/auth", userRoutes);
+app.use("/api/auth", postRoutes);
 
 module.exports = app;
