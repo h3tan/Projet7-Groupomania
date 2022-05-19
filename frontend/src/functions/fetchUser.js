@@ -1,5 +1,5 @@
 export const sendLoginForm = async (nickname, password) => {
-  document.getElementById("loginresult").textContent = "";
+  document.querySelector(".errorLog").textContent = "";
   try {
     let loginFormJson = await fetch("http://localhost:3000/api/auth/login", {
       mode: "cors",

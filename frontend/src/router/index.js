@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
-import LoginFormView from "../views/LoginFormView.vue";
-import SignUpFormView from "../views/SignUpFormView.vue";
+/* import LoginFormView from "../views/LoginFormView.vue";
+import SignUpFormView from "../views/SignUpFormView.vue"; */
+import UserFormView from "../views/UserFormView.vue";
 import UserInfosView from "../views/UserInfosView.vue";
 import WhatsNewView from "../views/WhatsNewView.vue";
 
@@ -10,7 +11,7 @@ const routes = [
     name: "home",
     redirect: "/login",
   },
-  {
+  /*   {
     path: "/login",
     name: "login",
     component: LoginFormView,
@@ -19,6 +20,16 @@ const routes = [
     path: "/signup",
     name: "signup",
     component: SignUpFormView,
+  }, */
+  {
+    path: "/login",
+    name: "login",
+    component: UserFormView,
+  },
+  {
+    path: "/signup",
+    name: "signup",
+    component: UserFormView,
   },
   {
     path: "/userinfos",

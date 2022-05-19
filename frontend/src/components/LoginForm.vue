@@ -24,10 +24,9 @@
           disabled
         />
         <p class="logged" v-if="isLogged">Connecté</p>
-        <p class="errorLog" v-if="showErrorLogin">{{ errorLogin }}</p>
+        <p class="errorLog" v-show="showErrorLogin">{{ errorLogin }}</p>
       </div>
     </form>
-    <p id="loginresult"></p>
   </div>
 </template>
 
@@ -66,9 +65,9 @@ export default {
         this.showErrorLogin = false;
         this.isLogged = true;
         setTimeout(() => {
-          this.$router.push(`/whatsnew/`);
-          document.getElementById("loginSign").style.display = "none";
-          document.getElementById("logged").style.display = "block";
+          this.$router.push(`/whatsnew`);
+          //document.getElementById("loginSign").style.display = "none";
+          //document.getElementById("logged").style.display = "block";
         }, 1000);
       } else {
         this.showErrorLogin = true;
@@ -83,6 +82,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+.login {
+    margin-top: 40px;
+}
+
 h2 {
   font-size: 22px;
   padding-left: 20px;

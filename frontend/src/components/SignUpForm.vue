@@ -145,6 +145,10 @@ input {
   }
 }
 
+button {
+  margin-top: 40px;
+}
+
 #signupresult {
   margin-top: 20px;
   font-size: 20px;

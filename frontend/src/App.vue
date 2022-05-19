@@ -1,30 +1,35 @@
 <template>
   <div id="vue">
-    <nav v-show="!isLogged" id="loginSign">
-      <router-link to="/login/">Connexion</router-link> |
+    <nav
+      id="loginSign"
+      v-if="
+        $route.path == '/signup/' ||
+        $route.path == '/signup' ||
+        $route.path == '/login' ||
+        $route.path == '/login/'
+      "
+    >
+      <router-link to="/login">Connexion</router-link> |
       <router-link to="/signup">Création de compte</router-link>
     </nav>
-    <nav v-show="isLogged" id="logged">
-      <router-link to="/userinfos/">Vos Informations</router-link> |
+    <nav
+      id="logged"
+      v-if="
+        $route.path == '/userinfos' ||
+        $route.path == '/userinfos/' ||
+        $route.path == '/whatsnew' ||
+        $route.path == '/whatsnew/'
+      "
+    >
+      <router-link to="/userinfos">Vos Informations</router-link> |
       <router-link to="/whatsnew">Quoi de neuf</router-link>
     </nav>
-      <router-view />
+    <router-view />
   </div>
 </template>
 
 <script>
-import { userLogged } from "./functions/fetchUser.js";
-
-export default {
-  data() {
-    return {
-      isLogged: userLogged(),
-    };
-  },
-  methods: {
-    userLogged,
-  },
-};
+export default {};
 </script>
 
 <style lang="scss">
@@ -35,12 +40,6 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-
-h1 {
-  margin-top: 0;
-  color: red;
-}
-
 nav {
   padding: 10px;
 
@@ -52,12 +51,5 @@ nav {
       color: #e72113;
     }
   }
-}
-button {
-  height: 30px;
-  width: 100px;
-}
-img {
-  width: 300px;
 }
 </style>
