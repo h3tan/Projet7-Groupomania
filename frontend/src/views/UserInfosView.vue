@@ -26,8 +26,6 @@ export default {
     userLogOut,
     userLogged,
     goToLogIn() {
-      document.getElementById("loginSign").style.display = "block";
-      document.getElementById("logged").style.display = "none";
       if (userLogOut()) this.$router.push("/login");
     },
   },
