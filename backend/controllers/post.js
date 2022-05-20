@@ -54,6 +54,26 @@ exports.getPostFromAPI = async (req, res, next) => {
   }
 };
 
+exports.updatePost = async (req, res, next) => {
+  try {
+    connexion.query(
+      `update post set title = '${req.body.title}' where id = ${req.params.id};
+      update post set message = '${req.body.text}' where id = ${req.params.id};
+      update post set date_post = now() where id = ${req.params.id};`,
+      function (err, result) {
+        if (err) {
+          res.status(400).json({ message: "Impossible de modifier" });
+          return;
+        }
+        res.status(200).json({ message: "Post mis à jour!" });
+      }
+    );
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};
+
 exports.deletePost = async (req, res, next) => {
   try {
     connexion.query(

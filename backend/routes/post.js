@@ -13,6 +13,9 @@ router.get("/", auth, postCtrl.getAllPosts);
 // Route pour récupérer un message
 router.get("/:id", auth, postCtrl.getPostFromAPI);
 
+// Route pour modifier un message
+router.put("/:id", auth, postCtrl.updatePost);
+
 // Route pour supprimer un message
 router.delete("/:id", auth, postCtrl.deletePost);
 

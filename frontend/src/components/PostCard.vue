@@ -15,8 +15,8 @@
         <input
           class="modify_title"
           name="modify_title"
-          v-model="post_title"
-          v-if="sameUser == true"
+          v-model="modify_title"
+          v-if="sameUser"
         />
         <label for="input_area" v-if="!sameUser"
           ><h4>Votre commentaire</h4></label
@@ -24,10 +24,10 @@
         <label for="input_area" v-if="sameUser"
           ><h4>Modifier le texte</h4></label
         >
-        <textarea class="input_area" name="input_area" v-model="post_message" v-if="sameUser"></textarea>
+        <textarea class="input_area" name="input_area" v-model="modify_text" v-if="sameUser"></textarea>
         <textarea class="input_area" name="input_area" v-model="post_comment" v-if="!sameUser"></textarea>
-        <button @click="modifyPost" v-if="!sameUser">Publier</button>
-        <button @click="goToWhatsNew" v-if="sameUser">Modifier</button>
+        <button @click="postComment" v-if="!sameUser">Publier</button>
+        <button @click="updatePost" v-if="sameUser">Modifier</button>
       </div>
     </div>
     <div class="interact">
@@ -49,6 +49,7 @@
 
 <script>
 import { getPostFromAPI } from "@/functions/fetchPost.js";
+import { requestUpdatePostFromAPI } from "@/functions/fetchPost.js";
 import { requestDeletePostFromAPI } from "@/functions/fetchPost.js";
 
 export default {
@@ -59,12 +60,14 @@ export default {
       post_id: "",
       post_userId: "",
       post_title: "",
+      post_message:"",
       post_nickname: "",
-      post_message: "",
       post_comment: "",
       post_date: "",
       comment_container: false,
       commentButton: "Commenter",
+      modify_title: "",
+      modify_text: "",
       modifyButton: "Modifier",
       input_container: false,
       sameUser: false,
@@ -73,6 +76,7 @@ export default {
   methods: {
     getPostFromAPI,
     requestDeletePostFromAPI,
+    requestUpdatePostFromAPI,
     async deletePost() {
       let result = await requestDeletePostFromAPI(this.$route.params.id);
       this.$router.push("/whatsnew");
@@ -86,6 +90,8 @@ export default {
         this.post_title = post[0].title;
         this.post_nickname = post[0].nickname;
         this.post_message = post[0].message;
+        this.modify_title = this.post_title;
+        this.modify_text = this.post_message;
         let dateSQL = post[0].date_post.split("T");
         this.post_date = dateSQL[0];
         if (parseInt(this.userId) == parseInt(this.post_userId)) {
@@ -93,6 +99,11 @@ export default {
           return;
         }
       }
+    },
+    async updatePost() {
+        let result = await requestUpdatePostFromAPI(this.$route.params.id, this.modify_title, this.modify_text);
+        this.$router.push('/whatsnew');
+        return result;
     },
     toggleCommentArea() {
       if (this.input_container == true) {
