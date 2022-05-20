@@ -14,20 +14,20 @@
         class="input_area"
         placeholder="Entrez votre commentaire"
       ></textarea>
-      <button v-if="!sameUser">Publier</button>
-      <button v-if="sameUser">Modifier</button>
+      <button v-if="sameUser == false">Publier</button>
+      <button v-if="sameUser == true">Modifier</button>
     </div>
     <div class="interact">
-      <div class="like" v-if="!sameUser">
+      <div class="like" v-if="sameUser == false">
         <p>Like</p>
       </div>
-      <div class="delete_post" v-if="sameUser">
+      <div class="delete_post" v-if="sameUser == true">
         <p>Supprimer</p>
       </div>
-      <div class="comment" v-if="!sameUser">
+      <div class="comment" v-if="sameUser == false">
         <p @click="toggleCommentArea">{{ commentButton }}</p>
       </div>
-      <div class="modify_post" v-if="sameUser">
+      <div class="modify_post" v-if="sameUser == true">
         <p @click="toggleModifyPost">{{ modifyButton }}</p>
       </div>
     </div>
@@ -41,6 +41,8 @@ export default {
   name: "PostCard",
   data() {
     return {
+      userId: localStorage.getItem("userId"),
+      post_userId: "",
       post_title: "",
       post_nickname: "",
       post_message: "",
@@ -57,11 +59,16 @@ export default {
     async assignPostInformations() {
       let post = await getPostFromAPI(this.$route.params.id);
       if (!post.error) {
+        this.post_userId = post[0].user_id;
         this.post_title = post[0].title;
         this.post_nickname = post[0].nickname;
         this.post_message = post[0].message;
         let dateSQL = post[0].date_post.split("T");
         this.post_date = dateSQL[0];
+        if (parseInt(this.userId) == parseInt(this.post_userId)) {
+          this.sameUser = true;
+          return;
+        }
       }
     },
     toggleCommentArea() {
@@ -108,7 +115,7 @@ h2 {
   border-bottom: 1px solid red;
 }
 .posted_by {
-    border-bottom: 1px solid red;
+  border-bottom: 1px solid red;
 }
 .post_text {
   border-bottom: 1px solid red;

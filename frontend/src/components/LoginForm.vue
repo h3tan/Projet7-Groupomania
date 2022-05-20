@@ -60,6 +60,7 @@ export default {
       let reponse = await sendLoginForm(this.nickname, this.password);
       if (!reponse.error) {
         localStorage.clear();
+        localStorage.setItem("userId", reponse.userId);
         localStorage.setItem("token", `BEARER ${reponse.token}`);
         this.showErrorLogin = false;
         this.isLogged = true;

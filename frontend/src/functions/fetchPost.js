@@ -1,4 +1,4 @@
-export const sendPost = async (title, text) => {
+export const sendPost = async (userId, title, text) => {
   try {
     let postJson = await fetch("http://localhost:3000/api/auth/post", {
       mode: "cors",
@@ -9,6 +9,7 @@ export const sendPost = async (title, text) => {
         Authorization: localStorage.getItem("token"),
       },
       body: JSON.stringify({
+        userId: userId,
         title: title,
         text: text,
       }),
