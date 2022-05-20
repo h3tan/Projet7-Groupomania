@@ -26,7 +26,7 @@ exports.getAllPosts = async (req, res, next) => {
         res.status(401).json({ error: "Les posts n'ont pu être récupérés!" });
         return;
       }
-      res.status(201).json(result);
+      res.status(200).json(result);
     });
   } catch (err) {
     let message = "Erreur avec les données";
@@ -43,7 +43,7 @@ exports.getPostFromAPI = async (req, res, next) => {
           res.status(401).json({ error: "Le post n'existe pas!" });
           return;
         }
-        res.status(201).json(result);
+        res.status(200).json(result);
       }
     );
   } catch (err) {
