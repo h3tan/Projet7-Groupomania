@@ -20,13 +20,16 @@ exports.post = async (req, res, next) => {
 
 exports.getAllPosts = async (req, res, next) => {
   try {
-    connexion.query(`select * from post`, function (err, result) {
-      if (err) {
-        res.status(401).json({ error: "Les posts n'ont pu être récupérés!" });
-        return;
+    connexion.query(
+      `select post.id, post.title, user.nickname, post.date_post from post join user on post.user_id = user.id`,
+      function (err, result) {
+        if (err) {
+          res.status(401).json({ error: "Les posts n'ont pu être récupérés!" });
+          return;
+        }
+        res.status(200).json(result);
       }
-      res.status(200).json(result);
-    });
+    );
   } catch (err) {
     let message = "Erreur avec les données";
     throw new Error(message);

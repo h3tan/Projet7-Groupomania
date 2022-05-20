@@ -10,11 +10,13 @@
         <span>Image</span>
     </div> -->
         <div class="posted_by">
-          <h4>Posté par :</h4>
-          <span>{{ post.user_id }}</span>
+          <h4>Posté par :<span>{{ post.nickname }}</span></h4>
+
+          <span>{{ post.date_post }}</span>
         </div>
       </div>
     </div>
+    <router-link to="/newpost">Poster un nouveau message</router-link>
   </div>
 </template>
 
@@ -36,6 +38,10 @@ export default {
     getAllPostsFromAPI,
     async showAllPosts() {
       let reponse = await getAllPostsFromAPI();
+      for (let i = 0; i < reponse.length; i++) {
+        let dateSQL = reponse[i].date_post.split("T");
+        reponse[i].date_post = dateSQL[0];
+      }
       this.posts = reponse;
     },
   },
@@ -48,6 +54,7 @@ export default {
 <style scoped lang="scss">
 #cards_container {
   margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 .post_card {
@@ -71,14 +78,18 @@ a {
     color: red;
   }
 }
-
+h4 > span {
+  font-weight: lighter;
+}
 .posted_by {
   display: flex;
   align-items: center;
-  padding-left: 10px;
+  justify-content: space-between;
+  padding-left: 5px;
+  padding-right: 5px;
   height: 30px;
 }
 span {
-  margin-left: 20px;
+  margin-left: 5px;
 }
 </style>
