@@ -33,3 +33,21 @@ exports.getAllPosts = async (req, res, next) => {
     throw new Error(message);
   }
 };
+
+exports.getPostFromAPI = async (req, res, next) => {
+  try {
+    connexion.query(
+      `select * from post join user on user.id = post.user_id where post.id = ${req.params.id}`,
+      function (err, result) {
+        if (err) {
+          res.status(401).json({ error: "Le post n'existe pas!" });
+          return;
+        }
+        res.status(201).json(result);
+      }
+    );
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};

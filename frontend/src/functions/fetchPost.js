@@ -30,3 +30,14 @@ export const getAllPostsFromAPI = async () => {
     throw new Error(message);
   }
 };
+
+export const getPostFromAPI = async (idPost) => {
+  try {
+    let postJson = await fetch(`http://localhost:3000/api/auth/post/${idPost}`);
+    let reponse = await postJson.json();
+    return reponse;
+  } catch (err) {
+    let message = "Impossible de trouver l'API";
+    throw new Error(message);
+  }
+};

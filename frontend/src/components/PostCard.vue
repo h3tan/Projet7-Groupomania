@@ -1,12 +1,19 @@
 <template>
   <div id="post_card">
-    <h2>Titre du post</h2>
-    <div class="post_text">Texte du post</div>
+    <h2>{{ post_title }}</h2>
+    <div class="posted_by">
+      <h3>{{ post_nickname }}</h3>
+      <p>{{ post_date }}</p>
+    </div>
+    <div class="post_text">{{ post_message }}</div>
     <div class="comment_box" v-if="comment_box"></div>
     <!-- affichage des commentaire du post -->
     <div class="input_box" v-if="input_box">
       <!-- Affichage de la zone pour modifier ou commenter un post -->
-      <textarea class="input_area" placeholder="Entrez votre commentaire"></textarea>
+      <textarea
+        class="input_area"
+        placeholder="Entrez votre commentaire"
+      ></textarea>
       <button v-if="!sameUser">Publier</button>
       <button v-if="sameUser">Modifier</button>
     </div>
@@ -28,10 +35,16 @@
 </template>
 
 <script>
+import { getPostFromAPI } from "@/functions/fetchPost.js";
+
 export default {
   name: "PostCard",
   data() {
     return {
+      post_title: "",
+      post_nickname: "",
+      post_message: "",
+      post_date: "",
       comment_box: false,
       commentButton: "Commenter",
       modifyButton: "Modifier",
@@ -40,6 +53,17 @@ export default {
     };
   },
   methods: {
+    getPostFromAPI,
+    async assignPostInformations() {
+      let post = await getPostFromAPI(this.$route.params.id);
+      if (!post.error) {
+        this.post_title = post[0].title;
+        this.post_nickname = post[0].nickname;
+        this.post_message = post[0].message;
+        let dateSQL = post[0].date_post.split("T");
+        this.post_date = dateSQL[0];
+      }
+    },
     toggleCommentArea() {
       if (this.input_box == true) {
         this.input_box = false;
@@ -58,6 +82,9 @@ export default {
         this.modifyButton = "Annuler";
       }
     },
+  },
+  created() {
+    this.assignPostInformations();
   },
 };
 </script>
@@ -79,6 +106,9 @@ h2 {
   margin-top: 0;
   margin-bottom: 0;
   border-bottom: 1px solid red;
+}
+.posted_by {
+    border-bottom: 1px solid red;
 }
 .post_text {
   border-bottom: 1px solid red;
