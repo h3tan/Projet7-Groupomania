@@ -15,13 +15,13 @@
         placeholder="Entrez votre commentaire"
       ></textarea>
       <button v-if="sameUser == false">Publier</button>
-      <button v-if="sameUser == true">Modifier</button>
+      <button @click="goToWhatsNew" v-if="sameUser == true">Modifier</button>
     </div>
     <div class="interact">
       <div class="like" v-if="sameUser == false">
         <p>Like</p>
       </div>
-      <div class="delete_post" v-if="sameUser == true">
+      <div @click="deletePost" class="delete_post" v-if="sameUser == true">
         <p>Supprimer</p>
       </div>
       <div class="comment" v-if="sameUser == false">
@@ -36,12 +36,14 @@
 
 <script>
 import { getPostFromAPI } from "@/functions/fetchPost.js";
+import { requestDeletePostFromAPI } from "@/functions/fetchPost.js";
 
 export default {
   name: "PostCard",
   data() {
     return {
       userId: localStorage.getItem("userId"),
+      post_id: "",
       post_userId: "",
       post_title: "",
       post_nickname: "",
@@ -56,9 +58,16 @@ export default {
   },
   methods: {
     getPostFromAPI,
+    requestDeletePostFromAPI,
+    async deletePost() {
+      let result = await requestDeletePostFromAPI(this.$route.params.id);
+      this.$router.push('/whatsnew');
+      return result;
+    },
     async assignPostInformations() {
       let post = await getPostFromAPI(this.$route.params.id);
       if (!post.error) {
+        this.post_id = post[0].id;
         this.post_userId = post[0].user_id;
         this.post_title = post[0].title;
         this.post_nickname = post[0].nickname;

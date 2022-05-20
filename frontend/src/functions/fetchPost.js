@@ -48,3 +48,21 @@ export const getPostFromAPI = async (idPost) => {
     throw new Error(message);
   }
 };
+
+export const requestDeletePostFromAPI = async (idPost) => {
+  try {
+    let postJson = await fetch(
+      `http://localhost:3000/api/auth/post/${idPost}`,
+      {
+        mode: "cors",
+        method: "DELETE",
+        headers: { Authorization: localStorage.getItem("token") },
+      }
+    );
+    let reponse = await postJson.json();
+    return reponse;
+  } catch (err) {
+    let message = "Impossible de trouver l'API";
+    throw new Error(message);
+  }
+};
