@@ -2,12 +2,26 @@
   <div id="post_card">
     <h2>Titre du post</h2>
     <div class="post_text">Texte du post</div>
+    <div class="comment_box" v-if="comment_box"></div>
+    <!-- affichage des commentaire du post -->
+    <div class="input_box" v-if="input_box">
+      <!-- Affichage de la zone pour modifier ou commenter un post -->
+      <textarea class="input_area" placeholder="Entrez votre commentaire"></textarea>
+      <button v-if="!sameUser">Publier</button>
+      <button v-if="sameUser">Modifier</button>
+    </div>
     <div class="interact">
-      <div class="like">
-        <p>ici on va liker</p>
+      <div class="like" v-if="!sameUser">
+        <p>Like</p>
       </div>
-      <div class="comment">
-        <p>ici on va commenter</p>
+      <div class="delete_post" v-if="sameUser">
+        <p>Supprimer</p>
+      </div>
+      <div class="comment" v-if="!sameUser">
+        <p @click="toggleCommentArea">{{ commentButton }}</p>
+      </div>
+      <div class="modify_post" v-if="sameUser">
+        <p @click="toggleModifyPost">{{ modifyButton }}</p>
       </div>
     </div>
   </div>
@@ -16,6 +30,35 @@
 <script>
 export default {
   name: "PostCard",
+  data() {
+    return {
+      comment_box: false,
+      commentButton: "Commenter",
+      modifyButton: "Modifier",
+      input_box: false,
+      sameUser: false,
+    };
+  },
+  methods: {
+    toggleCommentArea() {
+      if (this.input_box == true) {
+        this.input_box = false;
+        this.commentButton = "Commenter";
+      } else {
+        this.input_box = true;
+        this.commentButton = "Annuler";
+      }
+    },
+    toggleModifyPost() {
+      if (this.input_box == true) {
+        this.input_box = false;
+        this.modifyButton = "Modifier";
+      } else {
+        this.input_box = true;
+        this.modifyButton = "Annuler";
+      }
+    },
+  },
 };
 </script>
 
@@ -25,7 +68,7 @@ export default {
   margin-top: 50px;
   border: 1px solid red;
   border-radius: 20px;
-  width: 80%;
+  width: 90%;
 }
 h2 {
   display: flex;
@@ -47,17 +90,32 @@ h2 {
   display: flex;
   height: 50px;
 }
-.like {
+.like,
+.delete_post {
   margin: auto;
   width: 50%;
 }
-.comment {
+.input_box {
   display: flex;
+  flex-direction: column;
   align-items: center;
+  border-bottom: 1px solid red;
+  padding-bottom: 20px;
+}
+.comment,
+.modify_post {
+  margin: auto;
+  width: 50%;
   border-left: 1px solid red;
   width: 50%;
 }
-p {
-  margin: 0;
+.input_area {
+  margin-top: 30px;
+  resize: vertical;
+  width: 80%;
+  height: 100px;
+  max-height: 200px;
+  margin-bottom: 10px;
+  padding-left: 5px;
 }
 </style>

@@ -59,11 +59,15 @@ label {
   padding-left: 0;
   text-align: start;
 }
-
+.send {
+  width: 100px;
+}
 #post_title {
   height: 30px;
 }
 #post_text {
+  resize: vertical;
+  max-height: 200px;
   height: 100px;
   margin-bottom: 20px;
 }
