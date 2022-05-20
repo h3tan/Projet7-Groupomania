@@ -60,14 +60,11 @@ export default {
       let reponse = await sendLoginForm(this.nickname, this.password);
       if (!reponse.error) {
         localStorage.clear();
-        localStorage.setItem("userId", reponse.userId);
-        localStorage.setItem("token", reponse.token);
+        localStorage.setItem("token", `BEARER ${reponse.token}`);
         this.showErrorLogin = false;
         this.isLogged = true;
         setTimeout(() => {
           this.$router.push(`/whatsnew`);
-          //document.getElementById("loginSign").style.display = "none";
-          //document.getElementById("logged").style.display = "block";
         }, 1000);
       } else {
         this.showErrorLogin = true;

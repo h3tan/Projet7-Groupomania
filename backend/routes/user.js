@@ -10,6 +10,6 @@ router.post("/signup", userCtrl.signup);
 router.post("/login", userCtrl.login);
 
 // Route pour obtenir les infos utilisateurs
-router.get("/:id", userCtrl.getUserInfos);
+router.get("/user/:id", userCtrl.getUserInfos);
 
 module.exports = router;

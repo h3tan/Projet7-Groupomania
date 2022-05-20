@@ -1,15 +1,16 @@
 const express = require("express");
 const router = express.Router();
+const auth = require("../middlewares/auth");
 
 const postCtrl = require("../controllers/post");
 
 // Route pour poster un message
-router.post("/", postCtrl.post);
+router.post("/", auth, postCtrl.post);
 
 // Route pour récupérer tous les messages
-router.get("/", postCtrl.getAllPosts);
+router.get("/", auth, postCtrl.getAllPosts);
 
 // Route pour récupérer un message
-router.get("/:id", postCtrl.getPostFromAPI);
+router.get("/:id", auth, postCtrl.getPostFromAPI);
 
 module.exports = router;
