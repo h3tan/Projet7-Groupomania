@@ -24,10 +24,12 @@ export default {
   methods: {
     sendPost,
     async publishPost() {
-      let reponse = await sendPost(this.post_title, this.post_text);
+      this.post_title = this.post_title.replace("'", "''"); // Permet d'autoriser les apostrophes dans la requête
+      this.post_text = this.post_text.replace("'", "''");
+      let reponse = await sendPost(parseInt(localStorage.getItem("userId")), this.post_title, this.post_text);
       if (!reponse.error) {
+        this.result = "Message posté !"
         setTimeout(() => {
-          this.result = "Message posté !";
           this.$router.push(`/whatsnew`);
         }, 1000);
       } else {
