@@ -66,3 +66,21 @@ exports.getUserInfos = async (req, res, next) => {
     }
   );
 };
+
+exports.deleteUser = async (req, res, next) => {
+  try {
+    connexion.query(
+      `delete from user where id = ${req.params.id}`,
+      function (err, result) {
+        if (err) {
+          res.status(400).json({ message: "Impossible de supprimer" });
+          return;
+        }
+      }
+    );
+    res.status(200).json({ message: "Compte supprimé!" });
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};
