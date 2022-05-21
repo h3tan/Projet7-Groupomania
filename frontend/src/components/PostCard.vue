@@ -1,6 +1,8 @@
 <template>
   <div id="post_card">
-    <h2>{{ post_title }}</h2>
+    <div class="id_container">
+      <h2>{{ post_title }}</h2>
+    </div>
     <div class="posted_by">
       <h3>{{ post_nickname }}</h3>
       <p>{{ post_date }}</p>
@@ -11,7 +13,9 @@
     <div class="input_container" v-if="input_container">
       <div class="input_box">
         <!-- Affichage de la zone pour modifier ou commenter un post -->
-        <label for="modify_title" v-if="sameUser"><h4>Modifier le titre</h4></label>
+        <label for="modify_title" v-if="sameUser"
+          ><h4>Modifier le titre</h4></label
+        >
         <input
           class="modify_title"
           name="modify_title"
@@ -24,24 +28,33 @@
         <label for="input_area" v-if="sameUser"
           ><h4>Modifier le texte</h4></label
         >
-        <textarea class="input_area" name="input_area" v-model="modify_text" v-if="sameUser"></textarea>
-        <textarea class="input_area" name="input_area" v-model="post_comment" v-if="!sameUser"></textarea>
+        <textarea
+          class="input_area"
+          name="input_area"
+          v-model="modify_text"
+          v-if="sameUser"
+        ></textarea>
+        <textarea
+          class="input_area"
+          name="input_area"
+          v-model="post_comment"
+          v-if="!sameUser"
+        ></textarea>
         <button @click="postComment" v-if="!sameUser">Publier</button>
         <button @click="updatePost" v-if="sameUser">Modifier</button>
       </div>
     </div>
     <div class="interact">
-      <div class="like" v-if="!sameUser">
-        <p>Like</p>
+      <div class="like_or_delete">
+        <div class="like" v-if="!sameUser" @click="modifyLike">
+          <i class="far fa-heart" ></i>
+          <i class="fas fa-heart" ></i>
+        </div>
+        <p @click="deletePost" v-if="sameUser">Supprimer</p>
       </div>
-      <div @click="deletePost" class="delete_post" v-if="sameUser">
-        <p>Supprimer</p>
-      </div>
-      <div class="comment" v-if="!sameUser">
-        <p @click="toggleCommentArea">{{ commentButton }}</p>
-      </div>
-      <div class="modify_post" v-if="sameUser">
-        <p @click="toggleModifyPost">{{ modifyButton }}</p>
+      <div class="toggle_input_box">
+        <p @click="toggleCommentArea" v-if="!sameUser">{{ commentButton }}</p>
+        <p @click="toggleModifyPost" v-if="sameUser">{{ modifyButton }}</p>
       </div>
     </div>
   </div>
@@ -60,7 +73,7 @@ export default {
       post_id: "",
       post_userId: "",
       post_title: "",
-      post_message:"",
+      post_message: "",
       post_nickname: "",
       post_comment: "",
       post_date: "",
@@ -71,6 +84,7 @@ export default {
       modifyButton: "Modifier",
       input_container: false,
       sameUser: false,
+      liked: false,
     };
   },
   methods: {
@@ -101,12 +115,16 @@ export default {
       }
     },
     async updatePost() {
-        let result = await requestUpdatePostFromAPI(this.$route.params.id, this.modify_title, this.modify_text);
-        this.$router.push('/whatsnew');
-        return result;
+      let result = await requestUpdatePostFromAPI(
+        this.$route.params.id,
+        this.modify_title,
+        this.modify_text
+      );
+      this.$router.push("/whatsnew");
+      return result;
     },
     toggleCommentArea() {
-      if (this.input_container == true) {
+      if (this.commentButton == "Annuler") {
         this.input_container = false;
         this.commentButton = "Commenter";
       } else {
@@ -115,7 +133,7 @@ export default {
       }
     },
     toggleModifyPost() {
-      if (this.input_container == true) {
+      if (this.modifyButton == "Annuler") {
         this.input_container = false;
         this.modifyButton = "Modifier";
       } else {
@@ -130,7 +148,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #post_card {
   margin: auto;
   margin-top: 50px;
@@ -138,15 +156,18 @@ export default {
   border-radius: 20px;
   width: 90%;
 }
+.id_container {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid red;
+}
 h2 {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 50px;
   color: black;
   margin-top: 0;
   margin-bottom: 0;
-  border-bottom: 1px solid red;
 }
 .posted_by {
   display: flex;
@@ -158,7 +179,7 @@ h2 {
   border-bottom: 1px solid red;
 }
 h3 {
-    font-size: 16px;
+  font-size: 16px;
 }
 .post_text {
   border-bottom: 1px solid red;
@@ -182,6 +203,7 @@ h4 {
   width: 100%;
   margin: auto;
 }
+
 .input_box {
   display: flex;
   flex-direction: column;
@@ -189,13 +211,11 @@ h4 {
   border-bottom: 1px solid red;
   padding-bottom: 20px;
 }
-.like,
-.delete_post {
+.like_or_delete {
   margin: auto;
   width: 50%;
 }
-.comment,
-.modify_post {
+.toggle_input_box {
   margin: auto;
   width: 50%;
   border-left: 1px solid red;
@@ -211,5 +231,43 @@ h4 {
   max-height: 200px;
   margin-bottom: 10px;
   padding-left: 5px;
+}
+.like {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-left: 18%;
+  margin-top: -12px;
+  height: 30px;
+  position: absolute;
+  width: 30px;
+
+  i {
+    color: black;
+    font-size: 25px;
+  }
+
+  i:nth-child(1) {
+    transition: all 500ms;
+  }
+
+  i:nth-child(2) {
+    background: red;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    position: absolute;
+    transform: scale(0);
+    transition: all 500ms;
+  }
+/* linear-gradient(to top left, #9356dc, #ff79da) */
+  &:active > i:nth-child(1) {
+    transform: scale(0);
+    transition: all 500ms;
+  }
+
+  &:active > i:nth-child(2) {
+    transform: scale(1);
+  }
 }
 </style>
