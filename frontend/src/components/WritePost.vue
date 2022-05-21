@@ -24,8 +24,8 @@ export default {
   methods: {
     sendPost,
     async publishPost() {
-      this.post_title = this.post_title.replace("'", "''"); // Permet d'autoriser les apostrophes dans la requête
-      this.post_text = this.post_text.replace("'", "''");
+      this.post_title = this.post_title.replace(/'/g,"''"); // Permet d'autoriser les apostrophes dans la requête
+      this.post_text = this.post_text.replace(/'/g,"''");
       let reponse = await sendPost(parseInt(localStorage.getItem("userId")), this.post_title, this.post_text);
       if (!reponse.error) {
         this.result = "Message posté !"

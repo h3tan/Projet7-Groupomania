@@ -2,7 +2,7 @@
   <header>
     <nav id="logged">
       <router-link to="/userinfos">Vos Informations</router-link> |
-      <router-link to="/whatsnew">Quoi de neuf</router-link> |
+      <router-link to="/whatsnew">Quoi de neuf</router-link>
     </nav>
   </header>
 </template>

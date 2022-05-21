@@ -115,6 +115,8 @@ export default {
       }
     },
     async updatePost() {
+      this.modify_title = this.modify_title.replace(/'/g,"''");
+      this.modify_text = this.modify_text.replace(/'/g,"''")
       let result = await requestUpdatePostFromAPI(
         this.$route.params.id,
         this.modify_title,
