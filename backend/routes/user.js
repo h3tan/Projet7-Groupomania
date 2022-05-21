@@ -12,4 +12,7 @@ router.post("/login", userCtrl.login);
 // Route pour obtenir les infos utilisateurs
 router.get("/user/:id", userCtrl.getUserInfos);
 
+// Route pour supprimer un utilisateur
+router.delete("/user/:id", userCtrl.deleteUser);
+
 module.exports = router;

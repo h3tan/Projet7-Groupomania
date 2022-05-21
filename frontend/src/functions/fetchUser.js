@@ -69,6 +69,23 @@ export const requestUserInfos = async (id) => {
   }
 };
 
+export const requestDeleteUserFromAPI = async (id) => {
+  try {
+    let userInfosJson = await fetch(
+      `http://localhost:3000/api/auth/user/${id}`,
+      { method: "DELETE" }
+    );
+    let reponse = await userInfosJson.json();
+    if (reponse.error) {
+      return reponse.error;
+    }
+    return reponse;
+  } catch (err) {
+    let message = `Impossible de trouver l'API`;
+    throw new Error(message);
+  }
+};
+
 export const userLogOut = () => {
   localStorage.clear();
   return true;
