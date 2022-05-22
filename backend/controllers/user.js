@@ -35,7 +35,7 @@ exports.login = (req, res, next) => {
         res.status(401).json({ error: "Nom d'utilisateur incorrect" });
         return;
       }
-      let userId = result[0].id;
+      let userId = result[0].id_user;
       let password = result[0].password;
       bcrypt
         .compare(req.body.password, password)

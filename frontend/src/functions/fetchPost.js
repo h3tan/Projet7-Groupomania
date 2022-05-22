@@ -1,6 +1,6 @@
 export const sendPost = async (userId, title, text) => {
   try {
-    let postJson = await fetch("http://localhost:3000/api/auth/post", {
+    let postJson = await fetch("http://localhost:3000/api/auth/posts", {
       mode: "cors",
       method: "POST",
       headers: {
@@ -24,7 +24,7 @@ export const sendPost = async (userId, title, text) => {
 
 export const getAllPostsFromAPI = async () => {
   try {
-    let postsJson = await fetch("http://localhost:3000/api/auth/post", {
+    let postsJson = await fetch("http://localhost:3000/api/auth/posts", {
       headers: { Authorization: localStorage.getItem("token") },
     });
     let reponse = await postsJson.json();
@@ -38,7 +38,7 @@ export const getAllPostsFromAPI = async () => {
 export const getPostFromAPI = async (idPost) => {
   try {
     let postJson = await fetch(
-      `http://localhost:3000/api/auth/post/${idPost}`,
+      `http://localhost:3000/api/auth/posts/${idPost}`,
       { headers: { Authorization: localStorage.getItem("token") } }
     );
     let reponse = await postJson.json();
@@ -52,7 +52,7 @@ export const getPostFromAPI = async (idPost) => {
 export const requestUpdatePostFromAPI = async (idPost, title, text) => {
   try {
     let postJson = await fetch(
-      `http://localhost:3000/api/auth/post/${idPost}`,
+      `http://localhost:3000/api/auth/posts/${idPost}`,
       {
         mode: "cors",
         method: "PUT",
@@ -78,7 +78,7 @@ export const requestUpdatePostFromAPI = async (idPost, title, text) => {
 export const requestDeletePostFromAPI = async (idPost) => {
   try {
     let postJson = await fetch(
-      `http://localhost:3000/api/auth/post/${idPost}`,
+      `http://localhost:3000/api/auth/posts/${idPost}`,
       {
         mode: "cors",
         method: "DELETE",

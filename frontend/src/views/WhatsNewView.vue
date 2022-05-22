@@ -6,12 +6,11 @@
         <router-link :to="`/post/${post.id}`">
           <h3>{{ post.title }}</h3>
         </router-link>
-        <!-- <div class="img_box">
-        <span>Image</span>
-    </div> -->
-        <div class="posted_by">
-          <h4>Posté par :<span>{{ post.nickname }}</span></h4>
-
+        <div class="posted">
+          <div class="posted__by_user">
+            <UserAvatar :avatar="`${post.picture}`" />
+            <h4>{{ post.nickname }}</h4>
+          </div>
           <span>{{ post.date_post }}</span>
         </div>
       </div>
@@ -22,6 +21,7 @@
 
 <script>
 import IsLogged from "@/components/IsLogged.vue";
+import UserAvatar from "@/components/UserAvatar";
 import { getAllPostsFromAPI } from "@/functions/fetchPost";
 
 export default {
@@ -33,6 +33,7 @@ export default {
   },
   components: {
     IsLogged,
+    UserAvatar,
   },
   methods: {
     getAllPostsFromAPI,
@@ -78,16 +79,25 @@ a {
     color: red;
   }
 }
-h4 > span {
+h4 {
   font-weight: lighter;
+  margin-left: 5px;
 }
-.posted_by {
+.posted {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding-left: 5px;
-  padding-right: 5px;
-  height: 30px;
+  padding-right: 10px;
+  height: 60px;
+
+  &__by_user {
+    display: flex;
+    height: 100%;
+  }
+}
+.avatar_container {
+  margin-top: 5px;
 }
 span {
   margin-left: 5px;

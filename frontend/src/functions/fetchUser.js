@@ -55,7 +55,7 @@ export const sendSignUpForm = async (nickname, email, password) => {
 export const requestUserInfos = async (id) => {
   try {
     let userInfosJson = await fetch(
-      `http://localhost:3000/api/auth/user/${id}`,
+      `http://localhost:3000/api/auth/users/${id}`,
       { method: "GET" }
     );
     let reponse = await userInfosJson.json();
@@ -72,7 +72,7 @@ export const requestUserInfos = async (id) => {
 export const requestDeleteUserFromAPI = async (id) => {
   try {
     let userInfosJson = await fetch(
-      `http://localhost:3000/api/auth/user/${id}`,
+      `http://localhost:3000/api/auth/users/${id}`,
       { method: "DELETE" }
     );
     let reponse = await userInfosJson.json();
@@ -92,7 +92,7 @@ export const sendProfilePictureToAPI = async (id, newFile, oldFile) => {
     formData.append("file", newFile); // clé 'file' doit correspondre au single('file') du middleware multer-config dans le backend
     formData.append("oldfile", oldFile);
     let modifyReponseJson = await fetch(
-      `http://localhost:3000/api/auth/user/${id}`,
+      `http://localhost:3000/api/auth/users/${id}`,
       {
         method: "PUT",
         /*         headers: {

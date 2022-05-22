@@ -16,7 +16,7 @@
         <div id="image_name">{{ image_name }}</div>
         <div id="image_type">{{ image_type }}</div>
       </div>
-      <button @click="modifyProfilePicture">Modifier l'image</button>
+      <button @click="modifyProfilePicture" v-if="pictureChoosen">Modifier l'image</button>
     </form>
     <div class="user_infos">
       <h3>

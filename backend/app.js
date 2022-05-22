@@ -30,7 +30,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/auth/", userRoutes);
-app.use("/api/auth/post", postRoutes);
+app.use("/api/auth/posts", postRoutes);
 
 // Envoie le fichier statique
 app.use("/images", express.static(path.join(__dirname, "images")));

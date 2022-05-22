@@ -12,12 +12,12 @@ router.post("/signup", userCtrl.signup);
 router.post("/login", userCtrl.login);
 
 // Route pour obtenir les infos utilisateurs
-router.get("/user/:id", userCtrl.getUserInfos);
+router.get("/users/:id", userCtrl.getUserInfos);
 
 // Route pour supprimer un utilisateur
-router.delete("/user/:id", userCtrl.deleteUser);
+router.delete("/users/:id", userCtrl.deleteUser);
 
 // Route pour modifier l'image d'un utilisateur
-router.put("/user/:id", multer, deleteOldFile, userCtrl.updatePicture);
+router.put("/users/:id", multer, deleteOldFile, userCtrl.updatePicture);
 
 module.exports = router;

@@ -3,11 +3,16 @@
     <div class="id_container">
       <h2>{{ post_title }}</h2>
     </div>
-    <div class="posted_by">
-      <h3>{{ post_nickname }}</h3>
-      <p>{{ post_date }}</p>
+    <div class="posted">
+      <div class="posted__by_user">
+        <UserAvatar :avatar="`${post_pictureUser}`" />
+        <h4 id="nickname">{{ post_nickname }}</h4>
+      </div>
+      <span>{{ post_date }}</span>
     </div>
-    <div class="post_text">{{ post_message }}</div>
+    <div class="post_text_container">
+      <p>{{ post_message }}</p>
+    </div>
     <div class="comment_container" v-if="comment_container"></div>
     <!-- affichage des commentaire du post -->
     <div class="input_container" v-if="input_container">
@@ -44,23 +49,37 @@
         <button @click="updatePost" v-if="sameUser">Modifier</button>
       </div>
     </div>
-    <div class="interact">
-      <div class="like_or_delete">
-        <div class="like" v-if="!sameUser" @click="modifyLike">
-          <i class="far fa-heart" ></i>
-          <i class="fas fa-heart" ></i>
+    <div class="show_interaction">
+      <div class="show_interaction_buttons">
+        <div class="like_or_delete">
+          <div class="like" v-if="!sameUser" @click="modifyLike">
+            <div class="like_icons">
+              <i class="far fa-heart"></i>
+              <i class="fas fa-heart"></i>
+            </div>
+            <span>J'aime</span>
+          </div>
+          <button @click="deletePost" v-if="sameUser">Supprimer</button>
         </div>
-        <p @click="deletePost" v-if="sameUser">Supprimer</p>
+        <div class="toggle_input_box">
+          <button @click="toggleCommentArea" v-if="!sameUser">
+            {{ commentButton }}
+          </button>
+          <button @click="toggleModifyPost" v-if="sameUser">
+            {{ modifyButton }}
+          </button>
+        </div>
       </div>
-      <div class="toggle_input_box">
-        <p @click="toggleCommentArea" v-if="!sameUser">{{ commentButton }}</p>
-        <p @click="toggleModifyPost" v-if="sameUser">{{ modifyButton }}</p>
+      <div class="like_and_comment">
+        <span class="num_likes">{{ num_likes }} likes</span>
+        <span class="num_comments">{{ num_comments }} commentaires</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import UserAvatar from "@/components/UserAvatar.vue";
 import { getPostFromAPI } from "@/functions/fetchPost.js";
 import { requestUpdatePostFromAPI } from "@/functions/fetchPost.js";
 import { requestDeletePostFromAPI } from "@/functions/fetchPost.js";
@@ -72,6 +91,7 @@ export default {
       userId: localStorage.getItem("userId"),
       post_id: "",
       post_userId: "",
+      post_pictureUser: "",
       post_title: "",
       post_message: "",
       post_nickname: "",
@@ -85,7 +105,12 @@ export default {
       input_container: false,
       sameUser: false,
       liked: false,
+      num_likes: 0,
+      num_comments: 0,
     };
+  },
+  components: {
+    UserAvatar,
   },
   methods: {
     getPostFromAPI,
@@ -101,6 +126,7 @@ export default {
       if (!post.error) {
         this.post_id = post[0].id;
         this.post_userId = post[0].user_id;
+        this.post_pictureUser = post[0].picture;
         this.post_title = post[0].title;
         this.post_nickname = post[0].nickname;
         this.post_message = post[0].message;
@@ -115,8 +141,8 @@ export default {
       }
     },
     async updatePost() {
-      this.modify_title = this.modify_title.replace(/'/g,"''");
-      this.modify_text = this.modify_text.replace(/'/g,"''")
+      this.modify_title = this.modify_title.replace(/'/g, "''");
+      this.modify_text = this.modify_text.replace(/'/g, "''");
       let result = await requestUpdatePostFromAPI(
         this.$route.params.id,
         this.modify_title,
@@ -171,25 +197,50 @@ h2 {
   margin-top: 0;
   margin-bottom: 0;
 }
-.posted_by {
+.posted {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 50px;
   padding-left: 5px;
-  padding-right: 5px;
-  border-bottom: 1px solid red;
+  padding-right: 10px;
+  height: 60px;
+
+  &__by_user {
+    display: flex;
+    height: 100%;
+  }
+}
+#nickname {
+  font-weight: lighter;
+  margin-left: 5px;
+}
+.avatar_container {
+  margin-top: 5px;
 }
 h3 {
   font-size: 16px;
 }
-.post_text {
+.post_text_container {
+  border-top: 1px solid red;
   border-bottom: 1px solid red;
   overflow-wrap: break-word;
   text-align: justify;
   padding: 10px;
 }
-.interact {
+.like_and_comment {
+  display: flex;
+  justify-content: space-around;
+  height: 20px;
+  margin-top: 5px;
+  margin-bottom: 8px;
+  font-size: 14px;
+
+  span {
+    margin-left: 35px;
+  }
+}
+
+.show_interaction_buttons {
   display: flex;
   height: 50px;
 }
@@ -220,7 +271,6 @@ h4 {
 .toggle_input_box {
   margin: auto;
   width: 50%;
-  border-left: 1px solid red;
   width: 50%;
 }
 .modify_title {
@@ -235,10 +285,18 @@ h4 {
   padding-left: 5px;
 }
 .like {
+  position: relative;
+
+  span {
+    position: absolute;
+    margin-top: -8px;
+  }
+}
+.like_icons {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-left: 18%;
+  margin-left: 27%;
   margin-top: -12px;
   height: 30px;
   position: absolute;
@@ -262,7 +320,7 @@ h4 {
     transform: scale(0);
     transition: all 500ms;
   }
-/* linear-gradient(to top left, #9356dc, #ff79da) */
+  /* linear-gradient(to top left, #9356dc, #ff79da) */
   &:active > i:nth-child(1) {
     transform: scale(0);
     transition: all 500ms;

@@ -1,5 +1,6 @@
 const connexion = require("../mysql_connect");
 
+// Contrôleur pour enregistrer un post dans la Base de données
 exports.post = async (req, res, next) => {
   try {
     connexion.query(
@@ -18,13 +19,14 @@ exports.post = async (req, res, next) => {
   }
 };
 
+// Contrôleur pour récupérer tous les posts de la base de données avec les informations du créateur et dans l'ordre inverse
 exports.getAllPosts = async (req, res, next) => {
   try {
     connexion.query(
-      `select post.id, post.title, user.nickname, post.date_post from post join user on post.user_id = user.id_user`,
+      `select * from post join user on post.user_id = user.id_user order by post.id desc` ,
       function (err, result) {
         if (err) {
-          res.status(401).json({ error: "Les posts n'ont pu être récupérés!" });
+          res.status(400).json({ error: "Les posts n'ont pu être récupérés!" });
           return;
         }
         res.status(200).json(result);
@@ -36,6 +38,7 @@ exports.getAllPosts = async (req, res, next) => {
   }
 };
 
+// Contrôleur pour récupérer un post à partir de son id
 exports.getPostFromAPI = async (req, res, next) => {
   try {
     connexion.query(
@@ -54,6 +57,7 @@ exports.getPostFromAPI = async (req, res, next) => {
   }
 };
 
+// Contrôleur pour mettre à jour un post dans la base de données
 exports.updatePost = async (req, res, next) => {
   try {
     connexion.query(
@@ -74,6 +78,7 @@ exports.updatePost = async (req, res, next) => {
   }
 };
 
+// Contrôleur pour supprimer un post de la base de données
 exports.deletePost = async (req, res, next) => {
   try {
     connexion.query(
