@@ -155,7 +155,8 @@ export default {
     },
     async assignLike() {
       let isLiked = await getLikeFromAPI(this.$route.params.id, this.userId);
-      if (isLiked == 1) {
+      this.num_likes = isLiked.countLikes;
+      if (isLiked.isLiked == 1) {
         this.liked = true;
       }
     },
@@ -163,9 +164,11 @@ export default {
       let reponse = await sendLikeToAPI(this.$route.params.id, this.userId);
       if (reponse.message == "post liké!") {
         this.liked = true;
+        this.num_likes++;
         return;
       }
       this.liked = false;
+      this.num_likes--;
     },
     toggleCommentArea() {
       if (this.commentButton == "Annuler") {

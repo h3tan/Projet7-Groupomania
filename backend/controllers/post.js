@@ -98,14 +98,12 @@ exports.deletePost = async (req, res, next) => {
 };
 
 exports.getLike = async (req, res, next) => {
-  res.status(200).json(req.like);
+  res.status(200).json({ isLiked: req.like, countLikes: req.count });
 };
 
 exports.updateLike = async (req, res, next) => {
   try {
     if (req.like == 0) {
-      console.log(req.params);
-      console.log(req.like);
       connexion.query(
         `insert into likes (id_post, id_user) values (${req.params.id_post}, ${req.params.id_user})`,
         function (err, result) {
