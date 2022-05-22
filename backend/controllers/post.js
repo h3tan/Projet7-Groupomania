@@ -21,7 +21,7 @@ exports.post = async (req, res, next) => {
 exports.getAllPosts = async (req, res, next) => {
   try {
     connexion.query(
-      `select post.id, post.title, user.nickname, post.date_post from post join user on post.user_id = user.id`,
+      `select post.id, post.title, user.nickname, post.date_post from post join user on post.user_id = user.id_user`,
       function (err, result) {
         if (err) {
           res.status(401).json({ error: "Les posts n'ont pu être récupérés!" });
@@ -39,7 +39,7 @@ exports.getAllPosts = async (req, res, next) => {
 exports.getPostFromAPI = async (req, res, next) => {
   try {
     connexion.query(
-      `select * from post join user on user.id = post.user_id where post.id = ${req.params.id}`,
+      `select * from post join user on user.id_user = post.user_id where post.id = ${req.params.id}`,
       function (err, result) {
         if (err) {
           res.status(401).json({ error: "Le post n'existe pas!" });

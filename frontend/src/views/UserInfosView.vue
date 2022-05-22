@@ -1,7 +1,7 @@
 <template>
   <div id="user_box">
     <isLogged />
-    <div id="userinfos">
+    <div id="user_infos">
       <h1>Vos Informations</h1>
       <UserInfos />
       <UserButton
@@ -50,11 +50,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
-#userinfos {
+#user_box {
+  padding-bottom: 30px;
+}
+#user_infos {
   margin-top: 10%;
 }
 
 button {
-  margin-top: 40px;
+  margin-top: 20px;
 }
 </style>

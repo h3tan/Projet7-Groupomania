@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
 const connexion = require("../mysql_connect");
 
 exports.signup = async (req, res, next) => {
@@ -28,7 +29,7 @@ exports.signup = async (req, res, next) => {
 
 exports.login = (req, res, next) => {
   connexion.query(
-    `SELECT user.id, user.nickname, user.password FROM user WHERE nickname = "${req.body.nickname}"`,
+    `SELECT user.id_user, user.nickname, user.password FROM user WHERE nickname = "${req.body.nickname}"`,
     function (err, result) {
       if (result[0] == undefined) {
         res.status(401).json({ error: "Nom d'utilisateur incorrect" });
@@ -56,7 +57,7 @@ exports.login = (req, res, next) => {
 
 exports.getUserInfos = async (req, res, next) => {
   connexion.query(
-    `SELECT user.id, user.nickname, user.email, user.privilege FROM user WHERE id = "${req.params.id}"`,
+    `SELECT user.id_user, user.nickname, user.email, user.privilege, user.picture FROM user WHERE id_user = "${req.params.id}"`,
     function (err, result) {
       if (result[0] == undefined) {
         res.status(401).json({ error: "Nom d'utilisateur incorrect" });
@@ -70,7 +71,7 @@ exports.getUserInfos = async (req, res, next) => {
 exports.deleteUser = async (req, res, next) => {
   try {
     connexion.query(
-      `delete from user where id = ${req.params.id}`,
+      `delete from user where id_user = ${req.params.id}`,
       function (err, result) {
         if (err) {
           res.status(400).json({ message: "Impossible de supprimer" });
@@ -79,6 +80,29 @@ exports.deleteUser = async (req, res, next) => {
       }
     );
     res.status(200).json({ message: "Compte supprimé!" });
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};
+
+exports.updatePicture = async (req, res, next) => {
+  try {
+    if (req.file) {
+      let imageUrl = `${req.protocol}://${req.get("host")}/images/${
+        req.file.filename
+      }`;
+      connexion.query(
+        `update user set picture = '${imageUrl}' where id_user = ${req.params.id};`,
+        function (err, result) {
+          if (err) {
+            res.status(400).json({ message: "Impossible de modifier l'image" });
+            return;
+          }
+          res.status(200).json({ result });
+        }
+      );
+    }
   } catch (err) {
     let message = "Erreur avec les données";
     throw new Error(message);
