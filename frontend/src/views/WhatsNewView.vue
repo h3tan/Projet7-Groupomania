@@ -2,8 +2,8 @@
   <div class="whatsnew">
     <isLogged />
     <div id="cards_container">
-      <div class="post_card" v-for="post in posts" :key="post.id">
-        <router-link :to="`/post/${post.id}`">
+      <div class="post_card" v-for="post in posts" :key="post.id_post">
+        <router-link :to="`/post/${post.id_post}`">
           <h3>{{ post.title }}</h3>
         </router-link>
         <div class="posted">

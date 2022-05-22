@@ -52,10 +52,10 @@
     <div class="show_interaction">
       <div class="show_interaction_buttons">
         <div class="like_or_delete">
-          <div class="like" v-if="!sameUser" @click="modifyLike">
-            <div class="like_icons">
-              <i class="far fa-heart"></i>
-              <i class="fas fa-heart"></i>
+          <div class="like" v-if="!sameUser">
+            <div class="like_icons" @click="modifyLike">
+              <i class="far fa-heart" v-if="!liked"></i>
+              <i class="fas fa-heart" v-if="liked"></i>
             </div>
             <span>J'aime</span>
           </div>
@@ -83,6 +83,8 @@ import UserAvatar from "@/components/UserAvatar.vue";
 import { getPostFromAPI } from "@/functions/fetchPost.js";
 import { requestUpdatePostFromAPI } from "@/functions/fetchPost.js";
 import { requestDeletePostFromAPI } from "@/functions/fetchPost.js";
+import { getLikeFromAPI } from "@/functions/fetchLike.js";
+import { sendLikeToAPI } from "@/functions/fetchLike.js";
 
 export default {
   name: "PostCard",
@@ -104,7 +106,7 @@ export default {
       modifyButton: "Modifier",
       input_container: false,
       sameUser: false,
-      liked: false,
+      liked: "",
       num_likes: 0,
       num_comments: 0,
     };
@@ -124,7 +126,7 @@ export default {
     async assignPostInformations() {
       let post = await getPostFromAPI(this.$route.params.id);
       if (!post.error) {
-        this.post_id = post[0].id;
+        this.post_id = post[0].id_post;
         this.post_userId = post[0].user_id;
         this.post_pictureUser = post[0].picture;
         this.post_title = post[0].title;
@@ -151,6 +153,20 @@ export default {
       this.$router.push("/whatsnew");
       return result;
     },
+    async assignLike() {
+      let isLiked = await getLikeFromAPI(this.$route.params.id, this.userId);
+      if (isLiked == 1) {
+        this.liked = true;
+      }
+    },
+    async modifyLike() {
+      let reponse = await sendLikeToAPI(this.$route.params.id, this.userId);
+      if (reponse.message == "post liké!") {
+        this.liked = true;
+        return;
+      }
+      this.liked = false;
+    },
     toggleCommentArea() {
       if (this.commentButton == "Annuler") {
         this.input_container = false;
@@ -172,6 +188,7 @@ export default {
   },
   created() {
     this.assignPostInformations();
+    this.assignLike();
   },
 };
 </script>

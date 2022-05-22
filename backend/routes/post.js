@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../middlewares/auth");
+const checkLike = require("../middlewares/checkLike");
 //const multer = require("../middlewares/multer-config");
 
 const postCtrl = require("../controllers/post");
@@ -19,5 +20,11 @@ router.put("/:id", auth, postCtrl.updatePost);
 
 // Route pour supprimer un message
 router.delete("/:id", auth, postCtrl.deletePost);
+
+// Route pour récupérer un like
+router.get("/:id_post/likes/:id_user", auth, checkLike, postCtrl.getLike);
+
+// Route pour modifier un like
+router.put("/:id_post/likes/:id_user", auth, checkLike, postCtrl.updateLike);
 
 module.exports = router;
