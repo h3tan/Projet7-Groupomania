@@ -12,11 +12,18 @@
         accept="image/png, image/jpeg"
         @change="handleFileUpload($event)"
       />
-      <div class="picture_choosen" v-if="pictureChoosen">
+      <div class="picture_choosen" v-if="pictureChosen">
         <div id="image_name">{{ image_name }}</div>
         <div id="image_type">{{ image_type }}</div>
       </div>
-      <button @click="modifyProfilePicture" v-if="pictureChoosen">Modifier l'image</button>
+      <div class="profile_buttons">
+        <button @click="modifyProfilePicture" v-if="pictureChosen">
+          Modifier l'image
+        </button>
+        <button @click="cancelProfilePictureChosen" v-if="pictureChosen">
+          Annuler
+        </button>
+      </div>
     </form>
     <div class="user_infos">
       <h3>
@@ -43,7 +50,7 @@ export default {
       image_name: "nom image",
       image_type: "type image",
       picture_upload: "",
-      pictureChoosen: false,
+      pictureChosen: false,
       nickname: "",
       email: "",
       privilege: "",
@@ -57,7 +64,7 @@ export default {
         this.image_name = e.target.files[0].name;
         this.image_type = e.target.files[0].type;
         this.picture_upload = e.target.files[0];
-        this.pictureChoosen = true;
+        this.pictureChosen = true;
       }
     },
     async assignUserInfos() {
@@ -76,6 +83,9 @@ export default {
       if (!reponse.error) {
         location.reload();
       }
+    },
+    cancelProfilePictureChosen() {
+      this.pictureChosen = false;
     },
   },
   created() {
@@ -148,6 +158,11 @@ export default {
   border-left: 1px solid grey;
   padding-left: 15px;
   padding-right: 15px;
+}
+.profile_buttons {
+  display: flex;
+  justify-content: space-around;
+  width: 200px;
 }
 .user_infos {
   padding-left: 10px;
