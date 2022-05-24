@@ -9,13 +9,19 @@
         type="text"
         v-model="nickname"
       />
-      <label for="password">Mot de passe</label>
-      <input
-        @input="isPasswordValid(this.password)"
-        id="password"
-        type="password"
-        v-model="password"
-      />
+      <div class="password_box">
+        <label for="password">Mot de passe</label>
+        <input
+          @input="isPasswordValid(this.password)"
+          id="password"
+          type="password"
+          v-model="password"
+        />
+        <div id="show_password" @click="toggleShowPassword">
+          <i class="fas fa-eye-slash" v-if="!password_showed"></i>
+          <i class="fas fa-eye" v-if="password_showed"></i>
+        </div>
+      </div>
       <div class="submitForm">
         <UserButton
           v-if="!isLogged"
@@ -46,6 +52,7 @@ export default {
       isLogged: "",
       showErrorLogin: "",
       errorLogin: "",
+      password_showed: false,
     };
   },
   components: {
@@ -56,16 +63,26 @@ export default {
     isPasswordValid,
     sendLoginForm,
     userLogged,
+    toggleShowPassword() {
+      if (!this.password_showed) {
+        this.password_showed = true;
+        document.getElementById("password").setAttribute("type", "text");
+      } else {
+        this.password_showed = false;
+        document.getElementById("password").setAttribute("type", "password");
+      }
+    },
     async logIn() {
       let reponse = await sendLoginForm(this.nickname, this.password);
       if (!reponse.error) {
         localStorage.clear();
         localStorage.setItem("userId", reponse.userId);
         localStorage.setItem("token", `BEARER ${reponse.token}`);
+        localStorage.setItem("nickname", this.nickname);
         this.showErrorLogin = false;
         this.isLogged = true;
         setTimeout(() => {
-          this.$router.push(`/whatsnew`);
+          this.$router.push(`/whatsnew/`);
         }, 1000);
       } else {
         this.showErrorLogin = true;
@@ -81,9 +98,21 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .login {
-    margin-top: 40px;
+  margin-top: 40px;
 }
-
+.password_box {
+  position: relative;
+}
+#show_password {
+  font-size: 25px;
+  position: absolute;
+  right: 25px;
+  width: 30px;
+  bottom: 27px;
+}
+i {
+  position: absolute;
+}
 h2 {
   font-size: 22px;
   padding-left: 20px;
