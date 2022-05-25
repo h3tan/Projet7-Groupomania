@@ -3,15 +3,22 @@ const connexion = require("../mysql_connect");
 // Contrôleur pour enregistrer un post dans la Base de données
 exports.post = async (req, res, next) => {
   try {
+    let imageUrl = null;
+    if (req.file) {
+      imageUrl = `${req.protocol}://${req.get("host")}/images/${
+        req.file.filename
+      }`;
+    }
     connexion.query(
-      `insert into post (title, message, date_post, user_id) values (? , ?, now(), ?);`,
-      [req.body.title, req.body.text, req.body.userId],
+      `insert into post (title, message, post_picture, date_post, user_id) values (?, ?, ?, now(), ?);`,
+      [req.body.title, req.body.text, imageUrl, req.body.userId],
       function (err, result) {
         if (err) {
           res.status(400).json({ error: "Le post n'a pas pu être créé" });
           return;
         }
         res.status(201).json({ message: "post publié !" });
+        return;
       }
     );
   } catch (err) {
@@ -39,24 +46,8 @@ exports.getAllPosts = async (req, res, next) => {
   }
 };
 
-// Contrôleur pour récupérer un post à partir de son id
 exports.getPostFromAPI = async (req, res, next) => {
-  try {
-    connexion.query(
-      `select * from post join user on user.id_user = post.user_id where post.id_post = ?`,
-      [req.params.id],
-      function (err, result) {
-        if (err) {
-          res.status(401).json({ error: "Le post n'existe pas!" });
-          return;
-        }
-        res.status(200).json(result);
-      }
-    );
-  } catch (err) {
-    let message = "Erreur avec les données";
-    throw new Error(message);
-  }
+  res.status(200).json(req.post);
 };
 
 // Contrôleur pour mettre à jour un post dans la base de données

@@ -2,24 +2,25 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../middlewares/auth");
 const checkLike = require("../middlewares/checkLike");
-//const multer = require("../middlewares/multer-config");
-
+const checkPost = require("../middlewares/checkPost");
+const multer = require("../middlewares/multer-config");
+const deleteOldFile = require("../middlewares/deleteOldFile");
 const postCtrl = require("../controllers/post");
 
 // Route pour poster un message
-router.post("/", auth, postCtrl.post);
+router.post("/", auth, multer, postCtrl.post);
 
 // Route pour récupérer tous les messages
 router.get("/", auth, postCtrl.getAllPosts);
 
 // Route pour récupérer un message
-router.get("/:id", auth, postCtrl.getPostFromAPI);
+router.get("/:id", auth, checkPost.checkPost, postCtrl.getPostFromAPI);
 
 // Route pour modifier un message
 router.put("/:id", auth, postCtrl.updatePost);
 
 // Route pour supprimer un message
-router.delete("/:id", auth, postCtrl.deletePost);
+router.delete("/:id", auth, deleteOldFile, postCtrl.deletePost);
 
 // Route pour récupérer un like
 router.get(

@@ -11,8 +11,13 @@
         </div>
         <span>{{ post_date }}</span>
       </div>
-      <div class="post_text_container">
-        <p>{{ post_message }}</p>
+      <div class="post_body">
+        <div class="post_body__picture" v-if="pictureExists">
+          <img :src="`${post_picture}`" />
+        </div>
+        <div class="post_body__text_container">
+          <p>{{ post_message }}</p>
+        </div>
       </div>
       <div class="comment_container" v-if="comment_container"></div>
       <!-- affichage des commentaire du post -->
@@ -107,6 +112,7 @@ export default {
       post_userId: "",
       post_pictureUser: "",
       post_title: "",
+      post_picture: "",
       post_message: "",
       post_nickname: "",
       post_comment: "",
@@ -117,6 +123,7 @@ export default {
       modify_text: "",
       modifyButton: "Modifier",
       input_container: false,
+      pictureExists: false,
       sameUser: false,
       liked: "",
       num_likes: 0,
@@ -139,12 +146,16 @@ export default {
     // Récupère les informations du post de l'API pour les afficher
     async assignPostInformations() {
       let post = await getPostFromAPI(this.$route.params.id);
+      if (post[0].post_picture) {
+        this.pictureExists = true;
+      }
       if (!post.error) {
         this.post_id = post[0].id_post;
         this.post_userId = post[0].user_id;
+        this.post_nickname = post[0].nickname;
         this.post_pictureUser = post[0].picture;
         this.post_title = post[0].title;
-        this.post_nickname = post[0].nickname;
+        this.post_picture = post[0].post_picture;
         this.post_message = post[0].message;
         this.modify_title = this.post_title;
         this.modify_text = this.post_message;
@@ -158,8 +169,8 @@ export default {
     },
     // Prépare le post pour l'envoyer à l'API puis redirige vers whatsnew
     async updatePost() {
-      this.modify_title = this.modify_title.replace(/'/g, "''");
-      this.modify_text = this.modify_text.replace(/'/g, "''");
+      //this.modify_title = this.modify_title.replace(/'/g, "''");
+      //this.modify_text = this.modify_text.replace(/'/g, "''");
       let result = await requestUpdatePostFromAPI(
         this.$route.params.id,
         this.modify_title,
@@ -261,10 +272,29 @@ h2 {
 h3 {
   font-size: 16px;
 }
-.post_text_container {
-  overflow-wrap: break-word;
-  text-align: justify;
-  padding: 10px;
+.post_body {
+  &__picture {
+    margin: auto;
+    margin-top: 30px;
+    width: 250px;
+
+    border: 1px solid red;
+    border-radius: 5px;
+    overflow: hidden;
+    padding: 5px;
+
+    img {
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    object-fit: cover;
+  }
+  }
+  &__text_container {
+    overflow-wrap: break-word;
+    text-align: justify;
+    padding: 10px;
+  }
 }
 .like_and_comment {
   display: flex;

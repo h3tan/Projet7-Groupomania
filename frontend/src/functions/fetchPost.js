@@ -1,4 +1,4 @@
-export const sendPost = async (userId, title, text) => {
+/* export const sendPost = async (userId, title, text, picture) => {
   try {
     let postJson = await fetch("http://localhost:3000/api/auth/posts", {
       mode: "cors",
@@ -12,9 +12,38 @@ export const sendPost = async (userId, title, text) => {
         userId: userId,
         title: title,
         text: text,
+        picture: picture,
       }),
     });
     let reponse = await postJson.json();
+    return reponse;
+  } catch (err) {
+    let message = `Impossible de trouver l'API`;
+    throw new Error(message);
+  }
+}; */
+
+export const sendNewPostToAPI = async (userId, title, text, picture) => {
+  try {
+    let formData = new FormData();
+    formData.append("userId", userId);
+    formData.append("title", title);
+    formData.append("text", text);
+    formData.append("file", picture); // clé 'file' doit correspondre au single('file') du middleware multer-config dans le backend
+    let postInfosSentJson = await fetch(
+      `http://localhost:3000/api/auth/posts/`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+        body: formData,
+      }
+    );
+    let reponse = await postInfosSentJson.json();
+    if (reponse.error) {
+      return reponse.error;
+    }
     return reponse;
   } catch (err) {
     let message = `Impossible de trouver l'API`;
