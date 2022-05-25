@@ -4,7 +4,8 @@ const connexion = require("../mysql_connect");
 exports.post = async (req, res, next) => {
   try {
     connexion.query(
-      `insert into post (title, message, date_post, user_id) values ('${req.body.title}', '${req.body.text}', now(), ${req.body.userId});`,
+      `insert into post (title, message, date_post, user_id) values (? , ?, now(), ?);`,
+      [req.body.title, req.body.text, req.body.userId],
       function (err, result) {
         if (err) {
           res.status(400).json({ error: "Le post n'a pas pu être créé" });
@@ -42,7 +43,8 @@ exports.getAllPosts = async (req, res, next) => {
 exports.getPostFromAPI = async (req, res, next) => {
   try {
     connexion.query(
-      `select * from post join user on user.id_user = post.user_id where post.id_post = ${req.params.id}`,
+      `select * from post join user on user.id_user = post.user_id where post.id_post = ?`,
+      [req.params.id],
       function (err, result) {
         if (err) {
           res.status(401).json({ error: "Le post n'existe pas!" });
@@ -61,9 +63,8 @@ exports.getPostFromAPI = async (req, res, next) => {
 exports.updatePost = async (req, res, next) => {
   try {
     connexion.query(
-      `update post set title = '${req.body.title}' where id_post = ${req.params.id};
-      update post set message = '${req.body.text}' where id_post = ${req.params.id};
-      update post set date_post = now() where id_post = ${req.params.id};`,
+      `update post set title = ?, message = ?, date_post = now() where id_post = ?`,
+      [req.body.title, req.body.text, req.params.id],
       function (err, result) {
         if (err) {
           res.status(400).json({ message: "Impossible de modifier" });
@@ -82,7 +83,8 @@ exports.updatePost = async (req, res, next) => {
 exports.deletePost = async (req, res, next) => {
   try {
     connexion.query(
-      `delete from post where id_post = ${req.params.id}`,
+      `delete from post where id_post = ?`,
+      [req.params.id],
       function (err, result) {
         if (err) {
           res.status(400).json({ message: "impossible de supprimer" });
@@ -105,7 +107,8 @@ exports.updateLike = async (req, res, next) => {
   try {
     if (req.like == 0) {
       connexion.query(
-        `insert into likes (id_post, id_user) values (${req.params.id_post}, ${req.params.id_user})`,
+        `insert into likes (id_post, id_user) values (?, ?)`,
+        [req.params.id_post, req.params.id_user],
         function (err, result) {
           if (err) {
             res
@@ -119,7 +122,8 @@ exports.updateLike = async (req, res, next) => {
     }
     if (req.like == 1) {
       connexion.query(
-        `delete from likes where id_post = ${req.params.id_post} and id_user = ${req.params.id_user}`,
+        `delete from likes where id_post = ? and id_user = ?`,
+        [req.params.id_post, req.params.id_user],
         function (err, result) {
           if (err) {
             res
