@@ -1,10 +1,11 @@
 const connexion = require("../mysql_connect");
 
-// Contrôleur pour récupérer un like
+// Contrôleur pour vérifier si un utilisateur a liké un post
 exports.checkUserLike = async (req, res, next) => {
   try {
     connexion.query(
-      `select count(*) from likes where id_post = ${req.params.id_post} and id_user = ${req.params.id_user};`,
+      `select count(*) from likes where id_post = ? and id_user = ?;`,
+      [req.params.id_post, req.params.id_user],
       function (err, result) {
         if (err) {
           res
@@ -22,10 +23,12 @@ exports.checkUserLike = async (req, res, next) => {
   }
 };
 
+// Compte le nombre de likes d'un post
 exports.countPostLike = async (req, res, next) => {
   try {
     connexion.query(
-      `select count(1) from likes where id_post = ${req.params.id_post}`,
+      `select count(1) from likes where id_post = ?`,
+      [req.params.id_post],
       function (err, result) {
         if (err) {
           res
