@@ -82,9 +82,8 @@ export default {
         this.showErrorLogin = false;
         this.isLogged = true;
         setTimeout(() => {
+          this.$store.dispatch("changeLogState");
           this.$router.push("/userinfos");
-          document.getElementById("loginSign").style.display = "none";
-          document.getElementById("logged").style.display = "block";
         }, 1000);
         return reponse;
       } else {

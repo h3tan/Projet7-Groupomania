@@ -1,5 +1,5 @@
 <template>
-<div class="post_container">
+<div class="post_page">
     <router-link to="/whatsnew">Back</router-link>
     <PostCard />
 </div>

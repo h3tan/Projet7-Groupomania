@@ -1,12 +1,10 @@
 <template>
   <div id="userform">
-    <NotLogged />
     <div class="title">
-      <img alt="Groupomania logo" src="../assets/Groupomania-logo-red.png" />
       <h1>Réseau social interne</h1>
     </div>
-    <LoginForm v-if="$route.path == '/login'" />
-    <SignUpForm v-if="$route.path == '/signup'" />
+    <LoginForm v-if="$route.path == '/login' || $route.path == '/login/'" />
+    <SignUpForm v-if="$route.path == '/signup' || $route.path == '/signup/'" />
   </div>
 </template>
 
@@ -15,14 +13,12 @@
 import { userLogged } from "@/functions/fetchUser.js";
 import LoginForm from "@/components/LoginForm.vue";
 import SignUpForm from "@/components/SignUpForm.vue";
-import NotLogged from "@/components/NotLogged.vue";
 
 export default {
   name: "UserFormView",
   components: {
     LoginForm,
     SignUpForm,
-    NotLogged,
   },
   beforeCreate() {
     if (userLogged()) this.$router.push("/whatsnew");

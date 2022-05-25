@@ -1,10 +1,8 @@
 <template>
-  <header>
-    <nav id="loginSign">
-      <router-link to="/login">Connexion</router-link> |
-      <router-link to="/signup">Création de compte</router-link>
-    </nav>
-  </header>
+  <nav id="loginSign">
+    <router-link to="/login">Connexion</router-link> |
+    <router-link to="/signup">Création de compte</router-link>
+  </nav>
 </template>
 
 <script>

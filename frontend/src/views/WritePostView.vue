@@ -1,6 +1,5 @@
 <template>
   <div class="write_post">
-    <isLogged />
     <h1>Ecrire un nouveau post</h1>
     <div id="write_post_container">
       <WritePost />
@@ -9,13 +8,11 @@
 </template>
 
 <script>
-import IsLogged from "@/components/IsLogged.vue";
 import WritePost from "@/components/WritePost.vue";
 
 export default {
   name: "WritePostView",
   components: {
-    IsLogged,
     WritePost,
   },
 };

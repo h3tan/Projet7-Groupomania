@@ -1,17 +1,14 @@
 <template>
-  <header>
     <nav id="logged">
-      <router-link to="/userinfos" >Vos Informations</router-link> |
+      <router-link to="/userinfos">Vos Informations</router-link> |
       <router-link to="/whatsnew">Quoi de neuf</router-link>
     </nav>
-  </header>
 </template>
 
 <script>
-
 export default {
   name: "IsLogged",
-  }
+};
 </script>
 
 <style scoped lang="scss">

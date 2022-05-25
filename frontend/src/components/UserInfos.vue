@@ -12,7 +12,7 @@
         accept="image/png, image/jpeg"
         @change="handleFileUpload($event)"
       />
-      <div class="picture_choosen" v-if="pictureChosen">
+      <div class="picture_chosen" v-if="pictureChosen">
         <div id="image_name">{{ image_name }}</div>
         <div id="image_type">{{ image_type }}</div>
       </div>
@@ -59,7 +59,9 @@ export default {
   },
   methods: {
     sendProfilePictureToAPI,
+    // Récupération des informations d'image pour changer un avatar
     handleFileUpload(e) {
+      this.pictureChosen = false;
       if (e.target.files[0]) {
         this.image_name = e.target.files[0].name;
         this.image_type = e.target.files[0].type;
@@ -67,13 +69,15 @@ export default {
         this.pictureChosen = true;
       }
     },
+    // Initialisation des informations de l'utilisateur connecté
     async assignUserInfos() {
       let reponse = await requestUserInfos(localStorage.getItem("userId"));
-      this.nickname = reponse[0].nickname;
+      this.nickname = localStorage.getItem("nickname");
       this.email = reponse[0].email;
       this.privilege = reponse[0].privilege;
       this.picture = reponse[0].picture ? reponse[0].picture : this.picture;
     },
+    // Met à jour la page lorsque l'avatar est modifié
     async modifyProfilePicture() {
       let reponse = await sendProfilePictureToAPI(
         localStorage.getItem("userId"),
@@ -139,7 +143,7 @@ export default {
     object-fit: cover;
   }
 }
-.picture_choosen {
+.picture_chosen {
   display: flex;
   width: 250px;
   height: 30px;

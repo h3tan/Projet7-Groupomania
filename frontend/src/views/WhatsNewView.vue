@@ -1,6 +1,5 @@
 <template>
   <div class="whatsnew">
-    <isLogged />
     <div id="cards_container">
       <div class="post_card" v-for="post in posts" :key="post.id_post">
         <router-link :to="`/post/${post.id_post}`">
@@ -20,7 +19,6 @@
 </template>
 
 <script>
-import IsLogged from "@/components/IsLogged.vue";
 import UserAvatar from "@/components/UserAvatar";
 import { getAllPostsFromAPI } from "@/functions/fetchPost";
 
@@ -32,7 +30,6 @@ export default {
     };
   },
   components: {
-    IsLogged,
     UserAvatar,
   },
   methods: {

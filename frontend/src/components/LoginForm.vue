@@ -24,12 +24,12 @@
       </div>
       <div class="submitForm">
         <UserButton
-          v-if="!isLogged"
+          v-if="!confirmLogin"
           buttonClass="formButton"
           buttonText="Se Connecter"
           disabled
         />
-        <p class="logged" v-if="isLogged">Connecté</p>
+        <p class="logged" v-if="confirmLogin">Connecté</p>
         <p class="errorLog" v-show="showErrorLogin">{{ errorLogin }}</p>
       </div>
     </form>
@@ -49,7 +49,7 @@ export default {
     return {
       nickname: "",
       password: "",
-      isLogged: "",
+      confirmLogin: "",
       showErrorLogin: "",
       errorLogin: "",
       password_showed: false,
@@ -80,8 +80,9 @@ export default {
         localStorage.setItem("token", `BEARER ${reponse.token}`);
         localStorage.setItem("nickname", this.nickname);
         this.showErrorLogin = false;
-        this.isLogged = true;
+        this.confirmLogin = true;
         setTimeout(() => {
+          this.$store.dispatch("changeLogState");
           this.$router.push(`/whatsnew/`);
         }, 1000);
       } else {
@@ -104,11 +105,11 @@ export default {
   position: relative;
 }
 #show_password {
-  font-size: 25px;
+  font-size: 20px;
   position: absolute;
-  right: 25px;
+  right: 20px;
   width: 30px;
-  bottom: 27px;
+  bottom: 24px;
 }
 i {
   position: absolute;

@@ -1,6 +1,5 @@
 <template>
   <div id="user_box">
-    <isLogged />
     <div id="user_infos">
       <h1>Vos Informations</h1>
       <UserInfos />
@@ -22,7 +21,6 @@
 import UserButton from "@/components/UserButton.vue";
 import UserInfos from "@/components/UserInfos.vue";
 import { userLogged } from "../functions/fetchUser.js";
-import IsLogged from "@/components/IsLogged.vue";
 import { requestDeleteUserFromAPI } from "../functions/fetchUser.js";
 
 export default {
@@ -30,18 +28,19 @@ export default {
   components: {
     UserInfos,
     UserButton,
-    IsLogged,
   },
   methods: {
     userLogged,
     requestDeleteUserFromAPI,
     goToLogIn() {
       localStorage.clear();
+      this.$store.dispatch("changeLogState");
       this.$router.push("/login");
     },
     async goToSignUp() {
       let result = await requestDeleteUserFromAPI(localStorage.getItem("userId"));
       localStorage.clear();
+      this.$store.dispatch("changeLogState");
       this.$router.push("/signup");
       return result;
     }
