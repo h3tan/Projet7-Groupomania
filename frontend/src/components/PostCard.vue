@@ -1,80 +1,92 @@
 <template>
   <div id="post_card">
-    <div class="id_container">
+    <div class="title_container">
       <h2>{{ post_title }}</h2>
     </div>
-    <div class="posted">
-      <div class="posted__by_user">
-        <UserAvatar :avatar="`${post_pictureUser}`" />
-        <h4 id="nickname">{{ post_nickname }}</h4>
+    <div class="post_informations">
+      <div class="posted">
+        <div class="posted__by_user">
+          <UserAvatar :avatar="`${post_pictureUser}`" />
+          <h4 id="nickname">{{ post_nickname }}</h4>
+        </div>
+        <span>{{ post_date }}</span>
       </div>
-      <span>{{ post_date }}</span>
-    </div>
-    <div class="post_text_container">
-      <p>{{ post_message }}</p>
-    </div>
-    <div class="comment_container" v-if="comment_container"></div>
-    <!-- affichage des commentaire du post -->
-    <div class="input_container" v-if="input_container">
-      <div class="input_box">
-        <!-- Affichage de la zone pour modifier ou commenter un post -->
-        <label for="modify_title" v-if="sameUser"
-          ><h4>Modifier le titre</h4></label
-        >
-        <input
-          class="modify_title"
-          name="modify_title"
-          v-model="modify_title"
-          v-if="sameUser"
-        />
-        <label for="input_area" v-if="!sameUser"
-          ><h4>Votre commentaire</h4></label
-        >
-        <label for="input_area" v-if="sameUser"
-          ><h4>Modifier le texte</h4></label
-        >
-        <textarea
-          class="input_area"
-          name="input_area"
-          v-model="modify_text"
-          v-if="sameUser"
-        ></textarea>
-        <textarea
-          class="input_area"
-          name="input_area"
-          v-model="post_comment"
-          v-if="!sameUser"
-        ></textarea>
-        <button @click="postComment" v-if="!sameUser">Publier</button>
-        <button @click="updatePost" v-if="sameUser">Modifier</button>
+      <div class="post_text_container">
+        <p>{{ post_message }}</p>
       </div>
+      <div class="comment_container" v-if="comment_container"></div>
+      <!-- affichage des commentaire du post -->
     </div>
-    <div class="show_interaction">
-      <div class="show_interaction_buttons">
-        <div class="like_or_delete">
-          <div class="like" v-if="!sameUser">
-            <div class="like_icons" @click="modifyLike">
-              <i class="far fa-heart" v-if="!liked"></i>
-              <i class="fas fa-heart" v-if="liked"></i>
-            </div>
-            <span>J'aime</span>
+    <transition name="input_collapse">
+      <div class="input_container" v-if="input_container">
+        <transition name="appear">
+          <div class="input_box">
+            <!-- Affichage de la zone pour modifier ou commenter un post -->
+            <label for="modify_title" v-if="sameUser"
+              ><h4>Modifier le titre</h4></label
+            >
+            <input
+              class="modify_title"
+              name="modify_title"
+              v-model="modify_title"
+              v-if="sameUser"
+            />
+            <label for="input_area" v-if="!sameUser"
+              ><h4>Votre commentaire</h4></label
+            >
+            <label for="input_area" v-if="sameUser"
+              ><h4>Modifier le texte</h4></label
+            >
+            <textarea
+              class="input_area"
+              name="input_area"
+              v-model="modify_text"
+              v-if="sameUser"
+            ></textarea>
+            <textarea
+              class="input_area"
+              name="input_area"
+              v-model="post_comment"
+              v-if="!sameUser"
+            ></textarea>
+            <button @click="postComment" v-if="!sameUser">Publier</button>
+            <button @click="updatePost" v-if="sameUser">Modifier</button>
           </div>
-          <button @click="deletePost" v-if="sameUser">Supprimer</button>
+        </transition>
+      </div>
+    </transition>
+    <transition name="slide_interaction">
+      <div class="show_interaction">
+        <div class="show_interaction_buttons">
+          <div class="like_or_delete">
+            <div class="like" v-if="!sameUser">
+              <div class="like_icons" @click="modifyLike">
+                <transition name="cancel_like">
+                  <i id="empty_heart" class="far fa-heart" v-if="!liked"></i>
+                </transition>
+                <transition name="display_like">
+                  <i id="filled_heart" class="fas fa-heart" v-if="liked"></i>
+                </transition>
+              </div>
+              <span>J'aime</span>
+            </div>
+            <button @click="deletePost" v-if="sameUser">Supprimer</button>
+          </div>
+          <div class="toggle_input_box">
+            <button @click="toggleCommentArea" v-if="!sameUser">
+              {{ commentButton }}
+            </button>
+            <button @click="toggleModifyPost" v-if="sameUser">
+              {{ modifyButton }}
+            </button>
+          </div>
         </div>
-        <div class="toggle_input_box">
-          <button @click="toggleCommentArea" v-if="!sameUser">
-            {{ commentButton }}
-          </button>
-          <button @click="toggleModifyPost" v-if="sameUser">
-            {{ modifyButton }}
-          </button>
+        <div class="like_and_comment">
+          <span class="num_likes">{{ num_likes }} likes</span>
+          <span class="num_comments">{{ num_comments }} commentaires</span>
         </div>
       </div>
-      <div class="like_and_comment">
-        <span class="num_likes">{{ num_likes }} likes</span>
-        <span class="num_comments">{{ num_comments }} commentaires</span>
-      </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -118,11 +130,13 @@ export default {
     getPostFromAPI,
     requestDeletePostFromAPI,
     requestUpdatePostFromAPI,
+    // Demande à l'API de supprimer le post dans la base de données
     async deletePost() {
       let result = await requestDeletePostFromAPI(this.$route.params.id);
       this.$router.push("/whatsnew");
       return result;
     },
+    // Récupère les informations du post de l'API pour les afficher
     async assignPostInformations() {
       let post = await getPostFromAPI(this.$route.params.id);
       if (!post.error) {
@@ -142,6 +156,7 @@ export default {
         }
       }
     },
+    // Prépare le post pour l'envoyer à l'API puis redirige vers whatsnew
     async updatePost() {
       this.modify_title = this.modify_title.replace(/'/g, "''");
       this.modify_text = this.modify_text.replace(/'/g, "''");
@@ -153,6 +168,7 @@ export default {
       this.$router.push("/whatsnew");
       return result;
     },
+    // Récupère le nombre de likes du post ainsi que si l'utilisateur connecté a liké ce post
     async assignLike() {
       let isLiked = await getLikeFromAPI(this.$route.params.id, this.userId);
       this.num_likes = isLiked.countLikes;
@@ -160,6 +176,7 @@ export default {
         this.liked = true;
       }
     },
+    // Demande à l'API de modifier le like de l'utilisateur connecté
     async modifyLike() {
       let reponse = await sendLikeToAPI(this.$route.params.id, this.userId);
       if (reponse.message == "post liké!") {
@@ -199,15 +216,18 @@ export default {
 <style scoped lang="scss">
 #post_card {
   margin: auto;
-  margin-top: 50px;
-  border: 1px solid red;
-  border-radius: 20px;
   width: 90%;
 }
-.id_container {
+.post_informations {
+  margin-top: 50px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border: 2px solid red;
+}
+.title_container {
+  margin-top: 30px;
   padding-top: 5px;
   padding-bottom: 5px;
-  border-bottom: 1px solid red;
 }
 h2 {
   display: flex;
@@ -221,6 +241,7 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-bottom: 2px solid red;
   padding-left: 5px;
   padding-right: 10px;
   height: 60px;
@@ -241,8 +262,6 @@ h3 {
   font-size: 16px;
 }
 .post_text_container {
-  border-top: 1px solid red;
-  border-bottom: 1px solid red;
   overflow-wrap: break-word;
   text-align: justify;
   padding: 10px;
@@ -259,7 +278,15 @@ h3 {
     margin-left: 35px;
   }
 }
-
+.show_interaction {
+  border-top: 2px solid red;
+  border-left: 2px solid red;
+  border-right: 2px solid red;
+  border-bottom: 2px solid red;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  margin-top: -2px;
+}
 .show_interaction_buttons {
   display: flex;
   height: 50px;
@@ -275,13 +302,15 @@ h4 {
 .input_container {
   width: 100%;
   margin: auto;
+  border-left: 2px solid red;
+  border-right: 2px solid red;
+  transform-origin: top;
 }
 
 .input_box {
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-bottom: 1px solid red;
   padding-bottom: 20px;
 }
 .like_or_delete {
@@ -309,7 +338,7 @@ h4 {
 
   span {
     position: absolute;
-    margin-top: -8px;
+    margin-top: -6px;
   }
 }
 .like_icons {
@@ -323,31 +352,69 @@ h4 {
   width: 30px;
 
   i {
-    color: black;
+    color: red;
     font-size: 25px;
-  }
-
-  i:nth-child(1) {
-    transition: all 500ms;
-  }
-
-  i:nth-child(2) {
     background: red;
     background-clip: text;
     -webkit-background-clip: text;
-    color: transparent;
     position: absolute;
-    transform: scale(0);
-    transition: all 500ms;
   }
-  /* linear-gradient(to top left, #9356dc, #ff79da) */
-  &:active > i:nth-child(1) {
-    transform: scale(0);
-    transition: all 500ms;
+  #empty_heart {
+    color: black;
   }
+}
+// Animation du conteneur pour modifier
+.input_collapse-enter-active,
+.input_collapse-leave-active {
+  transition: transform 0.5s ease;
+}
+.input_collapse-enter-from,
+.input_collapse-leave-to {
+  transform: scaleY(0);
+}
 
-  &:active > i:nth-child(2) {
-    transform: scale(1);
-  }
+// Animation pour les inputs de la modification ou du commentaire
+.appear-enter-active {
+  transition-delay: 1s;
+}
+.appear-enter-from,
+.appear-leave-to {
+  opacity: 0;
+}
+.appear-enter-active,
+.appear-leave-active {
+  transition: opacity 1s ease;
+}
+
+// Animation pour le conteneur des likes et du bouton pour afficher le conteneur de modification
+.slide_interaction-enter-active,
+.slide_interaction-leave-active {
+  transition: transform 0.5s;
+}
+.slide_interaction-enter-from,
+.slide_interaction-leave-to {
+  transform: translateY(0px);
+}
+.slide_interaction-enter-to,
+.slide_interaction-leave-from {
+  transform: translateY(258px);
+}
+// Animation des coeurs
+.display_like-enter-from,
+.display_like-leave-to {
+  transform: scale(0);
+}
+.display_like-enter-active,
+.display_like-leave-active {
+  transition: all 0.5s ease;
+}
+
+.cancel_like-enter-from,
+.cancel_like-leave-to {
+  transform: scale(0);
+}
+.cancel_like-enter-active,
+.cancel-like-leave-active {
+  transition: all 0.5s ease;
 }
 </style>
