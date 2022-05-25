@@ -8,7 +8,8 @@ exports.signup = async (req, res, next) => {
     let passwordHash = await bcrypt.hash(req.body.password, 10);
     connexion.query(
       `INSERT INTO user (nickname, email, password)
-        values ('${req.body.nickname}', '${req.body.email}', '${passwordHash}')`,
+        values (?, ?, ?)`,
+      [req.body.nickname, req.body.email, passwordHash],
       function (err, result) {
         if (err) {
           res.status(401).json({ error: "Nom ou email déjà utilisé" });
@@ -29,7 +30,8 @@ exports.signup = async (req, res, next) => {
 
 exports.login = (req, res, next) => {
   connexion.query(
-    `SELECT user.id_user, user.nickname, user.password FROM user WHERE nickname = "${req.body.nickname}"`,
+    `SELECT user.id_user, user.nickname, user.password FROM user WHERE nickname = ?`,
+    [req.body.nickname],
     function (err, result) {
       if (result[0] == undefined) {
         res.status(401).json({ error: "Nom d'utilisateur incorrect" });
@@ -57,7 +59,8 @@ exports.login = (req, res, next) => {
 
 exports.getUserInfos = async (req, res, next) => {
   connexion.query(
-    `SELECT user.id_user, user.nickname, user.email, user.privilege, user.picture FROM user WHERE id_user = "${req.params.id}"`,
+    `SELECT user.id_user, user.nickname, user.email, user.privilege, user.picture FROM user WHERE id_user = ?`,
+    [req.params.id],
     function (err, result) {
       if (result[0] == undefined) {
         res.status(401).json({ error: "Nom d'utilisateur incorrect" });
@@ -71,7 +74,8 @@ exports.getUserInfos = async (req, res, next) => {
 exports.deleteUser = async (req, res, next) => {
   try {
     connexion.query(
-      `delete from user where id_user = ${req.params.id}`,
+      `delete from user where id_user = ?`,
+      [req.params.id],
       function (err, result) {
         if (err) {
           res.status(400).json({ message: "Impossible de supprimer" });
@@ -93,7 +97,8 @@ exports.updatePicture = async (req, res, next) => {
         req.file.filename
       }`;
       connexion.query(
-        `update user set picture = '${imageUrl}' where id_user = ${req.params.id};`,
+        `update user set picture = ? where id_user = ?;`,
+        [imageUrl, req.params.id],
         function (err, result) {
           if (err) {
             res.status(400).json({ message: "Impossible de modifier l'image" });
