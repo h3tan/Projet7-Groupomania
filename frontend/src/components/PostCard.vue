@@ -19,17 +19,6 @@
           <p>{{ post_message }}</p>
         </div>
       </div>
-      <div class="comment_container" v-if="comment_container">
-        <h3>Commentaires:</h3>
-        <CommentBox
-          v-for="comment in comments"
-          :key="comment.id_comment"
-          :id_comment="comment.id_comment"
-          :comment_nickname="`${comment.nickname}`"
-          :comment_message="comment.comment_message"
-        />
-      </div>
-      <!-- affichage des commentaire du post -->
     </div>
     <transition name="input_collapse">
       <div class="input_container" v-if="input_container">
@@ -105,7 +94,7 @@
 </template>
 
 <script>
-import CommentBox from "@/components/CommentBox.vue";
+//import CommentBox from "@/components/CommentBox.vue";
 import UserAvatar from "@/components/UserAvatar.vue";
 import { getPostFromAPI } from "@/functions/fetchPost.js";
 import { requestUpdatePostFromAPI } from "@/functions/fetchPost.js";
@@ -140,15 +129,12 @@ export default {
       liked: "",
       num_likes: 0,
       num_comments: 0,
-      id_comment: "",
-      comment_nickname: "",
-      comment_message: "",
       comments: [],
     };
   },
   components: {
     UserAvatar,
-    CommentBox,
+    //CommentBox,
   },
   methods: {
     getPostFromAPI,

@@ -1,21 +1,25 @@
 <template>
-<div class="post_page">
+  <div class="post_page" :data-id="$route.params.id">
     <router-link to="/whatsnew">Back</router-link>
     <PostCard />
-</div>
+    <CommentSection />
+  </div>
 </template>
 
 <script>
-import PostCard from '../components/PostCard.vue'
+import PostCard from "../components/PostCard.vue";
+import CommentSection from "@/components/CommentSection.vue";
 
 export default {
-    name: "ShowPostView",
-    components: {
-        PostCard
-    }
-}
+  name: "ShowPostView",
+  data() {
+    return {};
+  },
+  components: {
+    PostCard,
+    CommentSection,
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

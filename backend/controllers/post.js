@@ -158,7 +158,7 @@ exports.saveComment = async (req, res, next) => {
 exports.getAllCommentsOfPost = async (req, res, next) => {
   try {
     connexion.query(
-      `select id_comment, comment_message, date_comment, nickname from comment join user on comment.id_user = user.id_user where id_post = ?`,
+      `select id_comment, comment_message, date_comment, nickname, picture from comment join user on comment.id_user = user.id_user where id_post = ?`,
       [req.params.id_post],
       function (err, result) {
         if (err) {
@@ -167,7 +167,6 @@ exports.getAllCommentsOfPost = async (req, res, next) => {
             .json({ error: "Les comments n'ont pu être récupérés!" });
           return;
         }
-        console.log(result);
         res.status(200).json(result);
       }
     );
