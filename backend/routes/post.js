@@ -46,11 +46,9 @@ router.put(
 );
 
 // Route pour afficher tous les commentaires d'un post
-router.get(
-  "/:id_post/comments",
-  auth,
-  checkLike.checkUserLike,
-  postCtrl.updateLike
-);
+router.get("/:id_post/comments", auth, postCtrl.getAllCommentsOfPost);
+
+// Route pour poster un commentaire
+router.post("/:id_post/comments", auth, postCtrl.saveComment);
 
 module.exports = router;

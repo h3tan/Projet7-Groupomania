@@ -19,7 +19,16 @@
           <p>{{ post_message }}</p>
         </div>
       </div>
-      <div class="comment_container" v-if="comment_container"></div>
+      <div class="comment_container" v-if="comment_container">
+        <h3>Commentaires:</h3>
+        <CommentBox
+          v-for="comment in comments"
+          :key="comment.id_comment"
+          :id_comment="comment.id_comment"
+          :comment_nickname="`${comment.nickname}`"
+          :comment_message="comment.comment_message"
+        />
+      </div>
       <!-- affichage des commentaire du post -->
     </div>
     <transition name="input_collapse">
@@ -96,12 +105,15 @@
 </template>
 
 <script>
+import CommentBox from "@/components/CommentBox.vue";
 import UserAvatar from "@/components/UserAvatar.vue";
 import { getPostFromAPI } from "@/functions/fetchPost.js";
 import { requestUpdatePostFromAPI } from "@/functions/fetchPost.js";
 import { requestDeletePostFromAPI } from "@/functions/fetchPost.js";
 import { getLikeFromAPI } from "@/functions/fetchLike.js";
 import { sendLikeToAPI } from "@/functions/fetchLike.js";
+import { sendNewCommentToAPI } from "@/functions/fetchComment.js";
+import { requestAllCommentsFromAPI } from "@/functions/fetchComment.js";
 
 export default {
   name: "PostCard",
@@ -128,15 +140,29 @@ export default {
       liked: "",
       num_likes: 0,
       num_comments: 0,
+      id_comment: "",
+      comment_nickname: "",
+      comment_message: "",
+      comments: [],
     };
   },
   components: {
     UserAvatar,
+    CommentBox,
   },
   methods: {
     getPostFromAPI,
     requestDeletePostFromAPI,
     requestUpdatePostFromAPI,
+    sendNewCommentToAPI,
+    requestAllCommentsFromAPI,
+    async showAllComments() {
+      let reponse = await requestAllCommentsFromAPI(this.$route.params.id);
+      if (reponse.length != 0) {
+        this.comment_container = true;
+      }
+      this.comments = reponse;
+    },
     // Demande à l'API de supprimer le post dans la base de données
     async deletePost() {
       let result = await requestDeletePostFromAPI(this.$route.params.id);
@@ -171,13 +197,13 @@ export default {
     async updatePost() {
       //this.modify_title = this.modify_title.replace(/'/g, "''");
       //this.modify_text = this.modify_text.replace(/'/g, "''");
-      let result = await requestUpdatePostFromAPI(
+      let reponse = await requestUpdatePostFromAPI(
         this.$route.params.id,
         this.modify_title,
         this.modify_text
       );
       this.$router.push("/whatsnew");
-      return result;
+      return reponse;
     },
     // Récupère le nombre de likes du post ainsi que si l'utilisateur connecté a liké ce post
     async assignLike() {
@@ -197,6 +223,16 @@ export default {
       }
       this.liked = false;
       this.num_likes--;
+    },
+    // Demande à l'API de créer un commentaire
+    async postComment() {
+      console.log(this.post_comment);
+      let reponse = await sendNewCommentToAPI(
+        this.post_id,
+        this.post_comment,
+        this.userId
+      );
+      return reponse;
     },
     toggleCommentArea() {
       if (this.commentButton == "Annuler") {
@@ -219,6 +255,7 @@ export default {
   },
   created() {
     this.assignPostInformations();
+    this.showAllComments();
     this.assignLike();
   },
 };
@@ -284,11 +321,11 @@ h3 {
     padding: 5px;
 
     img {
-    width: 100%;
-    height: 100%;
-    border-radius: 15px;
-    object-fit: cover;
-  }
+      width: 100%;
+      height: 100%;
+      border-radius: 15px;
+      object-fit: cover;
+    }
   }
   &__text_container {
     overflow-wrap: break-word;
