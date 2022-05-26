@@ -4,7 +4,7 @@ const auth = require("../middlewares/auth");
 const checkLike = require("../middlewares/checkLike");
 const checkPost = require("../middlewares/checkPost");
 const multer = require("../middlewares/multer-config");
-const deleteOldFile = require("../middlewares/deleteOldFile");
+const fileCtrl = require("../middlewares/fileCtrl");
 const postCtrl = require("../controllers/post");
 
 // Route pour poster un message
@@ -20,7 +20,13 @@ router.get("/:id", auth, checkPost.checkPost, postCtrl.getPostFromAPI);
 router.put("/:id", auth, postCtrl.updatePost);
 
 // Route pour supprimer un message
-router.delete("/:id", auth, deleteOldFile, postCtrl.deletePost);
+router.delete(
+  "/:id",
+  auth,
+  checkPost.checkPost,
+  fileCtrl.deleteFile,
+  postCtrl.deletePost
+);
 
 // Route pour récupérer un like
 router.get(
@@ -34,6 +40,14 @@ router.get(
 // Route pour modifier un like
 router.put(
   "/:id_post/likes/:id_user",
+  auth,
+  checkLike.checkUserLike,
+  postCtrl.updateLike
+);
+
+// Route pour afficher tous les commentaires d'un post
+router.get(
+  "/:id_post/comments",
   auth,
   checkLike.checkUserLike,
   postCtrl.updateLike
