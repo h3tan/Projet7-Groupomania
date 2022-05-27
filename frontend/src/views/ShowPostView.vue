@@ -22,4 +22,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.post_page {
+    margin-top: 30px;
+}
+</style>

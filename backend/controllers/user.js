@@ -30,7 +30,7 @@ exports.signup = async (req, res, next) => {
 
 exports.login = (req, res, next) => {
   connexion.query(
-    `SELECT user.id_user, user.nickname, user.password FROM user WHERE nickname = ?`,
+    `SELECT user.id_user, user.nickname, user.password, user.picture FROM user WHERE nickname = ?`,
     [req.body.nickname],
     function (err, result) {
       if (result[0] == undefined) {
@@ -39,6 +39,7 @@ exports.login = (req, res, next) => {
       }
       let userId = result[0].id_user;
       let password = result[0].password;
+      let avatar = result[0].picture;
       bcrypt
         .compare(req.body.password, password)
         .then((valid) => {
@@ -50,6 +51,7 @@ exports.login = (req, res, next) => {
             token: jwt.sign({ userId: userId }, "RANDOM_TOKEN_SECRET", {
               expiresIn: "24h",
             }),
+            avatar: avatar,
           });
         })
         .catch((error) => res.status(500).json({ error }));
