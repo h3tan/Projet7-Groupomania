@@ -50,6 +50,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.whatsnew {
+  width: 95%;
+  margin: auto;
+}
 #cards_container {
   margin-top: 30px;
   margin-bottom: 30px;
