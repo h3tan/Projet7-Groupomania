@@ -11,15 +11,15 @@ export const isNicknameValid = (nickname) => {
   }
 };
 
-export const isPasswordValid = (password) => {
+export const isPasswordValid = (password, element) => {
   const button = document.querySelector(".formButton");
   //Comporte 10 caractères, 1 minuscule, 1 majuscule, 1 chiffre et un caractère spécial
   const regex = /^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/;
   if (!regex.test(password)) {
-    document.getElementById("password").style.background = "red";
+    document.getElementById(element).style.background = "red";
     button.setAttribute("disabled", "true");
   } else {
-    document.getElementById("password").style.background = "lightgreen";
+    document.getElementById(element).style.background = "lightgreen";
     button.removeAttribute("disabled");
     areInputsEmpty();
   }

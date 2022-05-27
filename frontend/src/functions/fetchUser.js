@@ -1,5 +1,4 @@
 export const sendLoginForm = async (nickname, password) => {
-  document.querySelector(".errorLog").textContent = "";
   try {
     let loginFormJson = await fetch("http://localhost:3000/api/auth/login", {
       mode: "cors",
@@ -22,7 +21,6 @@ export const sendLoginForm = async (nickname, password) => {
 };
 
 export const sendSignUpForm = async (nickname, email, password) => {
-  document.getElementById("signupresult").textContent = "";
   try {
     let signUpFormJson = await fetch("http://localhost:3000/api/auth/signup", {
       mode: "cors",

@@ -120,9 +120,6 @@ nav {
 .hideMenu-enter-active {
   transition-delay: 0.5s;
 }
-.hideMenu-enter-to,
-.hideMenu-leave-from {
-}
 .hideMenu-enter-from,
 .hideMenu-leave-to {
   opacity: 0;

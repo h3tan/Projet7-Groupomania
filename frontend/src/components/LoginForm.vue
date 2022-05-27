@@ -1,6 +1,7 @@
 <template>
-  <div class="login">
+  <div class="login_page">
     <h2>Veuillez vous connecter</h2>
+    <!-- <form id="login"> -->
     <form id="login" v-on:submit.prevent="logIn">
       <label for="nickname">Nom d'utilisateur</label>
       <input
@@ -12,7 +13,7 @@
       <div class="password_box">
         <label for="password">Mot de passe</label>
         <input
-          @input="isPasswordValid(this.password)"
+          @input="isPasswordValid(this.password, 'password')"
           id="password"
           type="password"
           v-model="password"
@@ -21,16 +22,35 @@
           <i class="fas fa-eye-slash" v-if="!password_showed"></i>
           <i class="fas fa-eye" v-if="password_showed"></i>
         </div>
-      </div>
-      <div class="submitForm">
-        <UserButton
-          v-if="!confirmLogin"
-          buttonClass="formButton"
-          buttonText="Se Connecter"
-          disabled
+        <label for="confirm_password">Confirmez le mot de passe</label>
+        <input
+          @input="isPasswordValid(this.confirm_password, 'confirm_password')"
+          id="confirm_password"
+          type="password"
+          v-model="confirm_password"
         />
-        <p class="logged" v-if="confirmLogin">Connecté</p>
-        <p class="errorLog" v-show="showErrorLogin">{{ errorLogin }}</p>
+        <div id="show_confirm_password" @click="toggleShowConfirmPassword">
+          <i class="fas fa-eye-slash" v-if="!confirm_password_showed"></i>
+          <i class="fas fa-eye" v-if="confirm_password_showed"></i>
+        </div>
+      </div>
+      <div class="submit_form">
+        <transition name="fadeButton">
+          <UserButton
+            v-if="!confirmLogin"
+            buttonClass="formButton"
+            buttonText="Se Connecter"
+            disabled
+          />
+        </transition>
+        <div class="login_result">
+          <transition name="successAppear">
+            <span class="logged" v-if="confirmLogin">Connecté</span>
+          </transition>
+          <transition name="errorAppear">
+            <span class="errorLog" v-if="showErrorLogin">{{ errorLogin }}</span>
+          </transition>
+        </div>
       </div>
     </form>
   </div>
@@ -49,10 +69,12 @@ export default {
     return {
       nickname: "",
       password: "",
+      confirm_password: "",
       confirmLogin: "",
       showErrorLogin: "",
       errorLogin: "",
       password_showed: false,
+      confirm_password_showed: false,
     };
   },
   components: {
@@ -72,19 +94,39 @@ export default {
         document.getElementById("password").setAttribute("type", "password");
       }
     },
+    toggleShowConfirmPassword() {
+      if (!this.confirm_password_showed) {
+        this.confirm_password_showed = true;
+        document
+          .getElementById("confirm_password")
+          .setAttribute("type", "text");
+      } else {
+        this.confirm_password_showed = false;
+        document
+          .getElementById("confirm_password")
+          .setAttribute("type", "password");
+      }
+    },
     async logIn() {
-      let reponse = await sendLoginForm(this.nickname, this.password);
+      this.showErrorLogin = false;
+      if (this.password != this.confirm_password) {
+        this.showErrorLogin = true;
+        this.errorLogin = "Veuillez reconfirmez votre mot de passe";
+        return;
+      }
+      let reponse = await sendLoginForm(this.nickname, this.confirm_password);
       if (!reponse.error) {
         localStorage.clear();
         localStorage.setItem("userId", reponse.userId);
         localStorage.setItem("token", `BEARER ${reponse.token}`);
         localStorage.setItem("nickname", this.nickname);
+        localStorage.setItem("avatar", reponse.avatar);
         this.showErrorLogin = false;
         this.confirmLogin = true;
         setTimeout(() => {
           this.$store.dispatch("changeLogState");
           this.$router.push(`/whatsnew/`);
-        }, 1000);
+        }, 2000);
       } else {
         this.showErrorLogin = true;
         this.errorLogin = reponse.error;
@@ -98,13 +140,21 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.login {
+.login_page {
   margin-top: 40px;
+  margin-bottom: 90px;
 }
 .password_box {
   position: relative;
 }
 #show_password {
+  font-size: 20px;
+  position: absolute;
+  right: 20px;
+  width: 30px;
+  bottom: 97px;
+}
+#show_confirm_password {
   font-size: 20px;
   position: absolute;
   right: 20px;
@@ -154,26 +204,78 @@ input {
     background-color: lightblue;
   }
 }
+.submit_form {
+  position: relative;
+  width: 80%;
+  margin: auto;
+  height: 50px;
+}
+button {
+  width: 50px;
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+.login_result {
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
 .logged {
   color: green;
   position: absolute;
-  left: 145px;
-  margin-top: 45px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  bottom: 13px;
   font-weight: bold;
   font-size: 20px;
 }
 
 .errorLog {
-  margin-top: 40px;
-}
-
-button {
-  margin-top: 40px;
-}
-
-#loginresult {
-  margin-top: 40px;
-  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
   color: red;
+  font-size: 20px;
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  height: 50px;
+  left: 0;
+  right: 0;
+  bottom: -65px;
+}
+
+.successAppear-enter-active,
+.successAppear-leave-active {
+  transition: all 0.5s;
+  transition-delay: 0.5s;
+}
+.successAppear-enter-from {
+  opacity: 0;
+}
+
+.errorAppear-enter-active,
+.errorAppear-leave-active {
+  transition: all 0.5s;
+}
+.errorAppear-enter-from {
+  opacity: 0;
+}
+
+.fadeButton-enter-active,
+.fadeButton-leave-active {
+  transition: all 0.5s;
+}
+.fadeButton-leave-to {
+  opacity: 0;
 }
 </style>
