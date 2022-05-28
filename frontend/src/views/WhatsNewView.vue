@@ -53,6 +53,7 @@ export default {
 .whatsnew {
   width: 95%;
   margin: auto;
+  margin-bottom: 50px;
 }
 #cards_container {
   margin-top: 30px;

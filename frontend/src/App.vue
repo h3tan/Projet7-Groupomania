@@ -1,12 +1,14 @@
 <template>
   <div id="main_vue">
-    <header>
-      <div id="logo">
-        <img alt="Groupomania logo" src="./assets/Groupomania-logo-red.png" />
-      </div>
-      <IsLogged v-if="$store.state.logState == true" />
-      <NotLogged v-if="$store.state.logState == false" />
-    </header>
+    <transition name="toggleNavBar">
+      <header id="navbar">
+        <div id="logo">
+          <img alt="Groupomania logo" src="./assets/Groupomania-logo-red.png" />
+        </div>
+        <IsLogged v-if="$store.state.logState == true" />
+        <NotLogged v-if="$store.state.logState == false" />
+      </header>
+    </transition>
     <main>
       <router-view />
     </main>
@@ -19,33 +21,31 @@ import IsLogged from "./components/IsLogged.vue";
 import NotLogged from "./components/NotLogged.vue";
 export default {
   data() {
-    return {
-      show_nav: false,
-      rotateIcon: false,
-    };
+    return {};
   },
   components: {
     NotLogged,
     IsLogged,
   },
   methods: {
-    toggleNav() {
-      if (!this.show_nav) {
-        this.show_nav = true;
-        document.querySelector(".nav_menu__icon").style.backgroundColor =
-          "rgb(27, 27, 110)";
-        this.isClicked = !this.isClicked;
-        this.rotateIcon = true;
-      } else {
-        this.show_nav = false;
-        document.querySelector(".nav_menu__icon").style.backgroundColor =
-          "white";
-        this.rotateIcon = false;
-      }
+    toggleHeaderOnScroll() {
+      var prevScrollpos = window.pageYOffset;
+      window.onscroll = function () {
+        var currentScrollPos = window.pageYOffset;
+        if (prevScrollpos > currentScrollPos) {
+          document.getElementById("navbar").style.top = "0";
+        } else {
+          document.getElementById("navbar").style.top = "-60px";
+        }
+        prevScrollpos = currentScrollPos;
+      };
     },
   },
   beforeCreate() {
     this.$store.dispatch("changeLogState");
+  },
+   mounted() {
+    this.toggleHeaderOnScroll();
   },
 };
 </script>
@@ -69,6 +69,7 @@ header {
   padding-right: 10px;
   z-index: 5;
   background-color: white;
+  transition: top 0.3s;
 }
 
 #logo {

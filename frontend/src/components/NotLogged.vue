@@ -7,9 +7,9 @@
       <h3 v-if="!show_nav">Menu</h3>
     </transition>
     <transition name="SlideNav">
-      <nav id="loginSign" v-if="show_nav">
+      <nav id="login_sign" v-if="show_nav">
         <router-link to="/login">Connexion</router-link>
-        <router-link to="/signup">Création de compte</router-link>
+        <router-link to="/signup">S'inscrire</router-link>
       </nav>
     </transition>
     <div class="nav_menu__icon">
@@ -37,12 +37,10 @@ export default {
       if (!this.show_nav) {
         this.show_nav = true;
         document.querySelector(".nav_menu__icon").style.backgroundColor = "red";
-        this.isClicked = !this.isClicked;
         this.rotateIcon = true;
       } else {
         this.show_nav = false;
-        document.querySelector(".nav_menu__icon").style.backgroundColor =
-          "white";
+        document.querySelector(".nav_menu__icon").style.backgroundColor = "white";
         this.rotateIcon = false;
       }
     },

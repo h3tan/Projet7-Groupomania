@@ -1,7 +1,6 @@
 <template>
   <div class="login_page">
     <h2>Veuillez vous connecter</h2>
-    <!-- <form id="login"> -->
     <form id="login" v-on:submit.prevent="logIn">
       <label for="nickname">Nom d'utilisateur</label>
       <input
