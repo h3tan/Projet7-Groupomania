@@ -1,10 +1,10 @@
 <template>
   <div class="nav_menu" @click="toggleNav">
     <transition name="textAppear">
-      <h3 v-if="!show_nav">Menu</h3>
+      <h3 v-if="!show_nav_menu">Menu</h3>
     </transition>
     <transition name="SlideNav">
-      <nav id="login_sign" v-if="show_nav">
+      <nav id="login_sign" v-if="show_nav_menu">
         <router-link to="/login">Connexion</router-link>
         <router-link to="/signup">S'inscrire</router-link>
       </nav>
@@ -25,18 +25,18 @@ export default {
   name: "NotLogged",
   data() {
     return {
-      show_nav: false,
+      show_nav_menu: false,
       rotateIcon: false,
     };
   },
   methods: {
     toggleNav() {
-      if (!this.show_nav) {
-        this.show_nav = true;
+      if (!this.show_nav_menu) {
+        this.show_nav_menu = true;
         document.querySelector(".nav_menu__icon").style.backgroundColor = "red";
         this.rotateIcon = true;
       } else {
-        this.show_nav = false;
+        this.show_nav_menu = false;
         document.querySelector(".nav_menu__icon").style.backgroundColor =
           "white";
         this.rotateIcon = false;

@@ -1,15 +1,28 @@
 <template>
-  <div class="nav_menu" @click="toggleNav" v-if="$store.state.logState == true">
-    <div class="nav_menu__user" @click="toggleUserMenu">
+  <div
+    class="nav_section"
+    @click="toggleNav"
+    v-if="$store.state.logState == true"
+  >
+    <div class="nav_section__post" @click="togglePostMenu">
+      <div class="nav_section__post__bar">
+        <i class="fas fa-bars"></i>
+      </div>
+      <transition name="SlideNav">
+        <nav class="nav_section__post__menu" v-if="show_nav_post">
+          <router-link to="/whatsnew">Sujets récents</router-link>
+        </nav>
+      </transition>
+    </div>
+    <div class="nav_section__user" @click="toggleUserMenu">
       <h4>{{ nickname }}</h4>
       <div class="avatar_box">
         <UserAvatar :avatar="avatar" v-if="$store.state.logState == true" />
       </div>
     </div>
     <transition name="SlideNav">
-      <nav id="logged" v-if="show_nav">
+      <nav class="nav_section__user__menu" v-if="show_nav_user">
         <router-link to="/userinfos">Vos Informations</router-link>
-        <router-link to="/whatsnew">Quoi de neuf</router-link>
         <div class="logout">
           <i class="fas fa-sign-out-alt"></i>
           <router-link class="logout__link" to="/login" @click="logOut"
@@ -30,7 +43,8 @@ export default {
     return {
       nickname: "",
       avatar: "",
-      show_nav: false,
+      show_nav_user: false,
+      show_nav_post: false,
     };
   },
   components: {
@@ -38,12 +52,19 @@ export default {
   },
   methods: {
     toggleUserMenu() {
-      if (!this.show_nav) {
-        this.show_nav = true;
+      if (!this.show_nav_user) {
+        this.show_nav_user = true;
         document.querySelector(".avatar_box").style.backgroundColor = "red";
       } else {
-        this.show_nav = false;
+        this.show_nav_user = false;
         document.querySelector(".avatar_box").style.backgroundColor = "white";
+      }
+    },
+    togglePostMenu() {
+      if (!this.show_nav_post) {
+        this.show_nav_post = true;
+      } else {
+        this.show_nav_post = false;
       }
     },
     logOut() {
@@ -61,7 +82,8 @@ export default {
       if (document.querySelector(".avatar_box") != null) {
         // If the clicked element is not a child of #sideNav..
         if (event.target.closest("#navbar") === null) {
-          this.show_nav = false;
+          this.show_nav_user = false;
+          this.show_nav_post = false;
           document.querySelector(".avatar_box").style.backgroundColor = "white";
         }
       }
@@ -71,19 +93,61 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.nav_menu {
+.nav_section {
   display: flex;
-  h3 {
-    margin-right: 15px;
+  justify-content: space-between;
+
+  &__post__bar {
+    position: absolute;
+    width: 30px;
+    font-size: 25px;
+    height: 30px;
+    left: 60px;
+    top: 15px;
   }
+  &__post__menu {
+    padding: 10px;
+    left: 0px;
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    text-align: start;
+    top: 60px;
+    line-height: 30px;
+    background-color: #333;
+
+    a {
+      font-weight: bold;
+      color: white;
+      text-decoration: none;
+    }
+  }
+
   &__user {
     display: flex;
     align-items: center;
     h4 {
       margin-right: 10px;
     }
+    &__menu {
+      padding: 10px;
+      right: 0px;
+      display: flex;
+      position: absolute;
+      flex-direction: column;
+      text-align: start;
+      top: 60px;
+      line-height: 30px;
+      background-color: #333;
+
+      a {
+        font-weight: bold;
+        color: white;
+        text-decoration: none;
+      }
+    }
   }
-  &__icon {
+  /*   &__icon {
     font-size: 25px;
     position: relative;
     width: 50px;
@@ -92,8 +156,9 @@ export default {
     justify-content: center;
     align-items: center;
     border-bottom: 1px solid red;
-  }
+  } */
 }
+
 .avatar_box {
   display: flex;
   border-bottom: 1px solid red;
@@ -101,24 +166,6 @@ export default {
   height: 60px;
   justify-content: center;
   align-items: center;
-}
-
-nav {
-  padding: 10px;
-  right: 0px;
-  display: flex;
-  position: absolute;
-  flex-direction: column;
-  text-align: start;
-  top: 60px;
-  line-height: 30px;
-  background-color: #333;
-
-  a {
-    font-weight: bold;
-    color: white;
-    text-decoration: none;
-  }
 }
 
 .logout {
