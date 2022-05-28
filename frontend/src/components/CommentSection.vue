@@ -1,9 +1,22 @@
 <template>
-  <div class="comment_section" :data-comment_for="$route.params.id" v-if="show_comment">
+  <div
+    class="comment_section"
+    :data-comment_for="$route.params.id"
+    v-if="show_comment"
+  >
     <div class="title">
       <i class="fas fa-comments"></i>
       <h3>Commentaires</h3>
     </div>
+    <form class="input_comment" v-on:submit.prevent="postComment">
+      <label for="input_comment__area"><h4>Ajouter un commentaire</h4></label>
+      <textarea
+        class="input_comment__area"
+        name="input_comment__area"
+        v-model="post_comment"
+      ></textarea>
+      <button id="post_comment" >Publier</button>
+    </form>
     <div class="comment_container">
       <div
         class="comment-card"
@@ -12,7 +25,7 @@
         :key="comment.id_comment"
       >
         <div class="commented_by">
-          <UserAvatar :avatar="`${comment.picture}`"  />
+          <UserAvatar :avatar="`${comment.picture}`" />
           <p>{{ comment.nickname }}</p>
         </div>
         <div class="comment_text">
@@ -26,20 +39,32 @@
 <script>
 import UserAvatar from "@/components/UserAvatar";
 import { requestAllCommentsFromAPI } from "@/functions/fetchComment.js";
+import { sendNewCommentToAPI } from "@/functions/fetchComment.js";
 
 export default {
   name: "CommentBox",
   data() {
     return {
       comments: [],
-      show_comment: false
+      show_comment: false,
+      post_comment: "Dites quelque chose..."
     };
   },
   components: {
-    UserAvatar
+    UserAvatar,
   },
   methods: {
     requestAllCommentsFromAPI,
+    sendNewCommentToAPI,
+    // Demande à l'API de créer un commentaire
+    async postComment() {
+      let reponse = await sendNewCommentToAPI(
+        this.post_id,
+        this.post_comment,
+        localStorage.getItem("userId")
+      );
+      return reponse;
+    },
     async showAllComments() {
       let reponse = await requestAllCommentsFromAPI(this.$route.params.id);
       if (reponse.length != 0) {
@@ -75,14 +100,29 @@ export default {
     margin-left: 10px;
   }
 }
-
+.input_comment {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: auto;
+  margin-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  &__area {
+    width: 100%;
+    max-width: 100%;
+    max-height: 200px;
+    min-height: 100px;
+    margin-bottom: 15px;
+  }
+}
 .comment-card {
   margin: auto;
-  margin-top: 20px;
-  border-bottom: 1px dotted red;
+  border-top: 1px dashed red;
+  padding-top: 10px;
   padding-bottom: 20px;
 }
-
 .commented_by {
   display: flex;
   align-items: center;
@@ -112,5 +152,4 @@ export default {
   margin: auto;
   border-radius: 5px;
 }
-
 </style>

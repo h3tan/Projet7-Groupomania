@@ -24,7 +24,7 @@
       <div class="input_container" v-if="input_container">
         <transition name="appear">
           <div class="input_box">
-            <!-- Affichage de la zone pour modifier ou commenter un post -->
+            <!-- Affichage de la zone pour modifier un post -->
             <label for="modify_title" v-if="sameUser"
               ><h4>Modifier le titre</h4></label
             >
@@ -34,9 +34,6 @@
               v-model="modify_title"
               v-if="sameUser"
             />
-            <label for="input_area" v-if="!sameUser"
-              ><h4>Votre commentaire</h4></label
-            >
             <label for="input_area" v-if="sameUser"
               ><h4>Modifier le texte</h4></label
             >
@@ -46,13 +43,6 @@
               v-model="modify_text"
               v-if="sameUser"
             ></textarea>
-            <textarea
-              class="input_area"
-              name="input_area"
-              v-model="post_comment"
-              v-if="!sameUser"
-            ></textarea>
-            <button @click="postComment" v-if="!sameUser">Publier</button>
             <button @click="updatePost" v-if="sameUser">Modifier</button>
           </div>
         </transition>
@@ -76,9 +66,6 @@
             <button @click="deletePost" v-if="sameUser">Supprimer</button>
           </div>
           <div class="toggle_input_box">
-            <button @click="toggleCommentArea" v-if="!sameUser">
-              {{ commentButton }}
-            </button>
             <button @click="toggleModifyPost" v-if="sameUser">
               {{ modifyButton }}
             </button>
@@ -86,7 +73,6 @@
         </div>
         <div class="like_and_comment">
           <span class="num_likes">{{ num_likes }} likes</span>
-          <span class="num_comments">{{ num_comments }} commentaires</span>
         </div>
       </div>
     </transition>
@@ -94,15 +80,12 @@
 </template>
 
 <script>
-//import CommentBox from "@/components/CommentBox.vue";
 import UserAvatar from "@/components/UserAvatar.vue";
 import { getPostFromAPI } from "@/functions/fetchPost.js";
 import { requestUpdatePostFromAPI } from "@/functions/fetchPost.js";
 import { requestDeletePostFromAPI } from "@/functions/fetchPost.js";
 import { getLikeFromAPI } from "@/functions/fetchLike.js";
 import { sendLikeToAPI } from "@/functions/fetchLike.js";
-import { sendNewCommentToAPI } from "@/functions/fetchComment.js";
-import { requestAllCommentsFromAPI } from "@/functions/fetchComment.js";
 
 export default {
   name: "PostCard",
@@ -116,10 +99,7 @@ export default {
       post_picture: "",
       post_message: "",
       post_nickname: "",
-      post_comment: "",
       post_date: "",
-      comment_container: false,
-      commentButton: "Commenter",
       modify_title: "",
       modify_text: "",
       modifyButton: "Modifier",
@@ -128,27 +108,15 @@ export default {
       sameUser: false,
       liked: "",
       num_likes: 0,
-      num_comments: 0,
-      comments: [],
     };
   },
   components: {
     UserAvatar,
-    //CommentBox,
   },
   methods: {
     getPostFromAPI,
     requestDeletePostFromAPI,
     requestUpdatePostFromAPI,
-    sendNewCommentToAPI,
-    requestAllCommentsFromAPI,
-    async showAllComments() {
-      let reponse = await requestAllCommentsFromAPI(this.$route.params.id);
-      if (reponse.length != 0) {
-        this.comment_container = true;
-      }
-      this.comments = reponse;
-    },
     // Demande à l'API de supprimer le post dans la base de données
     async deletePost() {
       let result = await requestDeletePostFromAPI(this.$route.params.id);
@@ -210,25 +178,6 @@ export default {
       this.liked = false;
       this.num_likes--;
     },
-    // Demande à l'API de créer un commentaire
-    async postComment() {
-      console.log(this.post_comment);
-      let reponse = await sendNewCommentToAPI(
-        this.post_id,
-        this.post_comment,
-        this.userId
-      );
-      return reponse;
-    },
-    toggleCommentArea() {
-      if (this.commentButton == "Annuler") {
-        this.input_container = false;
-        this.commentButton = "Commenter";
-      } else {
-        this.input_container = true;
-        this.commentButton = "Annuler";
-      }
-    },
     toggleModifyPost() {
       if (this.modifyButton == "Annuler") {
         this.input_container = false;
@@ -241,7 +190,6 @@ export default {
   },
   created() {
     this.assignPostInformations();
-    this.showAllComments();
     this.assignLike();
   },
 };
