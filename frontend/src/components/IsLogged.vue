@@ -10,6 +10,12 @@
       <nav id="logged" v-if="show_nav">
         <router-link to="/userinfos">Vos Informations</router-link>
         <router-link to="/whatsnew">Quoi de neuf</router-link>
+        <div class="logout">
+          <i class="fas fa-sign-out-alt"></i>
+          <router-link class="logout__link" to="/login" @click="logOut"
+            >Se déconnecter</router-link
+          >
+        </div>
       </nav>
     </transition>
   </div>
@@ -38,18 +44,26 @@ export default {
       } else {
         this.show_nav = false;
         document.querySelector(".avatar_box").style.backgroundColor = "white";
-      }}
+      }
     },
+    logOut() {
+      localStorage.clear();
+      this.$store.dispatch("changeLogState");
+      this.$router.push("/login");
+    },
+  },
   created() {
     this.nickname = localStorage.getItem("nickname");
     this.avatar = localStorage.getItem("avatar");
   },
-   mounted() {
+  mounted() {
     document.addEventListener("click", (event) => {
-      // If the clicked element is not a child of #sideNav..
-      if (event.target.closest("#navbar") === null) {
-        this.show_nav = false;
-        document.querySelector(".avatar_box").style.backgroundColor = "white";
+      if (document.querySelector(".avatar_box") != null) {
+        // If the clicked element is not a child of #sideNav..
+        if (event.target.closest("#navbar") === null) {
+          this.show_nav = false;
+          document.querySelector(".avatar_box").style.backgroundColor = "white";
+        }
       }
     });
   },
@@ -88,10 +102,6 @@ export default {
   justify-content: center;
   align-items: center;
 }
-i {
-  position: absolute;
-  top: 15px;
-}
 
 nav {
   padding: 10px;
@@ -108,6 +118,15 @@ nav {
     font-weight: bold;
     color: white;
     text-decoration: none;
+  }
+}
+
+.logout {
+  display: flex;
+  align-items: center;
+  color: white;
+  &__link {
+    margin-left: 5px;
   }
 }
 

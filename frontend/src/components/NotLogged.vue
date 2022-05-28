@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="nav_menu"
-    @click="toggleNav"
-  >
+  <div class="nav_menu" @click="toggleNav">
     <transition name="textAppear">
       <h3 v-if="!show_nav">Menu</h3>
     </transition>
@@ -40,10 +37,23 @@ export default {
         this.rotateIcon = true;
       } else {
         this.show_nav = false;
-        document.querySelector(".nav_menu__icon").style.backgroundColor = "white";
+        document.querySelector(".nav_menu__icon").style.backgroundColor =
+          "white";
         this.rotateIcon = false;
       }
     },
+  },
+  mounted() {
+    document.addEventListener("click", (event) => {
+      if (document.querySelector(".nav_menu__icon") != null) {
+        // If the clicked element is not a child of #sideNav..
+        if (event.target.closest("#navbar") === null) {
+          this.show_nav = false;
+          this.rotateIcon = false;
+          document.querySelector(".nav_menu__icon").style.backgroundColor = "white";
+        }
+      }
+    });
   },
 };
 </script>

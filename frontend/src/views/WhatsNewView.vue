@@ -41,7 +41,6 @@ export default {
     async showAllPosts() {
       let reponse = await getAllPostsFromAPI();
       for (let i = 0; i < reponse.length; i++) {
-        console.log(reponse[i]);
         let count = await requestCountCommentsPostFromAPI(reponse[i].id_post);
         reponse[i].count_comments = count.value; // Création d'une clé count_comments pour affecter le nombre de commentaires
         let dateSQL = reponse[i].date_post.split("T");

@@ -4,11 +4,6 @@
       <h1>Vos Informations</h1>
       <UserInfos />
       <UserButton
-        @click="goToLogIn"
-        buttonClass="logoutButton"
-        buttonText="Se Déconnecter"
-      />
-      <UserButton
         @click="goToSignUp"
         buttonClass="logoutButton"
         buttonText="Supprimer ce compte"
@@ -32,11 +27,6 @@ export default {
   methods: {
     userLogged,
     requestDeleteUserFromAPI,
-    goToLogIn() {
-      localStorage.clear();
-      this.$store.dispatch("changeLogState");
-      this.$router.push("/login");
-    },
     async goToSignUp() {
       let result = await requestDeleteUserFromAPI(localStorage.getItem("userId"));
       localStorage.clear();

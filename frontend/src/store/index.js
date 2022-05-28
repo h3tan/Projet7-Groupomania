@@ -3,7 +3,7 @@ import { createStore } from "vuex";
 
 export default createStore({
   state: {
-    logState: false,
+    logState: false, // Indique si l'utilisateur est connecté
   },
   getters: {},
   mutations: {
