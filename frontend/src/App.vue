@@ -2,11 +2,14 @@
   <div id="main_vue">
     <transition name="toggleNavBar">
       <header id="navbar">
-        <div id="logo">
+        <div id="logo_not_logged" v-if="$store.state.logState == false">
           <img alt="Groupomania logo" src="./assets/Groupomania-logo-red.png" />
         </div>
-        <IsLogged v-if="$store.state.logState == true" />
+        <div id="logo_logged" v-if="$store.state.logState == true">
+          <img alt="Groupomania logo" src="./assets/icon.png" />
+        </div>
         <NotLogged v-if="$store.state.logState == false" />
+        <IsLogged v-if="$store.state.logState == true" />
       </header>
     </transition>
     <main>
@@ -44,7 +47,7 @@ export default {
   beforeCreate() {
     this.$store.dispatch("changeLogState");
   },
-   mounted() {
+  mounted() {
     this.toggleHeaderOnScroll();
   },
 };
@@ -72,8 +75,14 @@ header {
   transition: top 0.3s;
 }
 
-#logo {
+#logo_not_logged {
   height: 50px;
+}
+
+#logo_logged {
+  img {
+    width: 50px;
+  }
 }
 
 #app {
