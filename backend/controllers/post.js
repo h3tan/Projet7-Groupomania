@@ -175,3 +175,26 @@ exports.getAllCommentsOfPost = async (req, res, next) => {
     throw new Error(message);
   }
 };
+
+// Compte le nombre de commentaires d'un post
+exports.getCountPostComments = async (req, res, next) => {
+  try {
+    connexion.query(
+      `select count(1) from comment where id_post = ?`,
+      [req.params.id_post],
+      function (err, result) {
+        if (err) {
+          res
+            .status(400)
+            .json({ message: "impossible de récupérer l'information" });
+          return;
+        }
+        res.status(200).json({ value: result[0]["count(1)"] });
+        next();
+      }
+    );
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};

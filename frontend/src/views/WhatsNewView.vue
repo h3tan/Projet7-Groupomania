@@ -12,6 +12,7 @@
           </div>
           <span>{{ post.date_post }}</span>
         </div>
+        <div>{{ post.count_comments }} commentaires</div>
       </div>
     </div>
     <router-link to="/newpost">Poster un nouveau message</router-link>
@@ -21,12 +22,15 @@
 <script>
 import UserAvatar from "@/components/UserAvatar";
 import { getAllPostsFromAPI } from "@/functions/fetchPost";
+import { requestCountCommentsPostFromAPI } from "@/functions/fetchComment";
 
 export default {
   name: "WhatsNewView",
   data() {
     return {
       posts: [],
+      comments: [],
+      count_comments: "",
     };
   },
   components: {
@@ -37,6 +41,9 @@ export default {
     async showAllPosts() {
       let reponse = await getAllPostsFromAPI();
       for (let i = 0; i < reponse.length; i++) {
+        console.log(reponse[i]);
+        let count = await requestCountCommentsPostFromAPI(reponse[i].id_post);
+        reponse[i].count_comments = count.value; // Création d'une clé count_comments pour affecter le nombre de commentaires
         let dateSQL = reponse[i].date_post.split("T");
         reponse[i].date_post = dateSQL[0];
       }
