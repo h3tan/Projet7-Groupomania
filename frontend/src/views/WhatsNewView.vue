@@ -1,7 +1,10 @@
 <template>
   <div class="whatsnew">
+    <h1>Sujet récents</h1>
+    <router-link to="/newpost">Poster un nouveau message</router-link>
     <div id="cards_container">
-      <div class="post_card" v-for="post in posts" :key="post.id_post">
+      <transition-group name="fade">
+      <div class="post_card" :data-count="post.count_post" v-for="post in posts" :key="post.id_post">
         <router-link :to="`/post/${post.id_post}`">
           <h3>{{ post.title }}</h3>
         </router-link>
@@ -14,8 +17,8 @@
         </div>
         <div>{{ post.count_comments }} commentaires</div>
       </div>
+      </transition-group>
     </div>
-    <router-link to="/newpost">Poster un nouveau message</router-link>
   </div>
 </template>
 
@@ -31,6 +34,7 @@ export default {
       posts: [],
       comments: [],
       count_comments: "",
+      total_post: "",
     };
   },
   components: {
@@ -41,6 +45,8 @@ export default {
     async showAllPosts() {
       let reponse = await getAllPostsFromAPI();
       for (let i = 0; i < reponse.length; i++) {
+        this.total_post = reponse.length;
+        reponse[i].count_post = i+1;
         let count = await requestCountCommentsPostFromAPI(reponse[i].id_post);
         reponse[i].count_comments = count.value; // Création d'une clé count_comments pour affecter le nombre de commentaires
         let dateSQL = reponse[i].date_post.split("T");
@@ -69,7 +75,22 @@ export default {
 .post_card {
   border: 1px solid red;
   margin-top: 10px;
+  border-radius: 10px;
 }
+
+.fade-enter-active .post_card {
+  transition-delay: 0.5s;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 1s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
 h3 {
   display: flex;
   justify-content: center;
