@@ -1,35 +1,33 @@
 <template>
-  <div
-    class="comment_section"
-    :data-comment_for="$route.params.id"
-    v-if="show_comment"
-  >
-    <div class="title">
-      <i class="fas fa-comments"></i>
-      <h3>Commentaires</h3>
-    </div>
-    <form class="input_comment" v-on:submit.prevent="postComment">
-      <label for="input_comment__area"><h4>Ajouter un commentaire</h4></label>
-      <textarea
-        class="input_comment__area"
-        name="input_comment__area"
-        v-model="post_comment"
-      ></textarea>
-      <button id="post_comment" >Publier</button>
-    </form>
-    <div class="comment_container">
-      <div
-        class="comment-card"
-        :data-id_comment="comment.id_comment"
-        v-for="comment in comments"
-        :key="comment.id_comment"
-      >
-        <div class="commented_by">
-          <UserAvatar :avatar="`${comment.picture}`" />
-          <p>{{ comment.nickname }}</p>
-        </div>
-        <div class="comment_text">
-          <p>{{ comment.comment_message }}</p>
+  <div class="comment_page">
+    <div class="comment_section" :data-comment_for="$route.params.id">
+      <div class="title">
+        <i class="fas fa-comments"></i>
+        <h3>{{ title_comment }}</h3>
+      </div>
+      <form class="input_comment" v-on:submit.prevent="postComment">
+        <label for="input_comment__area"><h4>Ajouter un commentaire</h4></label>
+        <textarea
+          class="input_comment__area"
+          name="input_comment__area"
+          v-model="post_comment"
+        ></textarea>
+        <button id="post_comment">Publier</button>
+      </form>
+      <div class="comment_container" v-if="show_comment">
+        <div
+          class="comment-card"
+          :data-id_comment="comment.id_comment"
+          v-for="comment in comments"
+          :key="comment.id_comment"
+        >
+          <div class="commented_by">
+            <UserAvatar :avatar="`${comment.picture}`" />
+            <p>{{ comment.nickname }}</p>
+          </div>
+          <div class="comment_text">
+            <p>{{ comment.comment_message }}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -47,7 +45,8 @@ export default {
     return {
       comments: [],
       show_comment: false,
-      post_comment: "Dites quelque chose..."
+      post_comment: "Dites quelque chose...",
+      title_comment: "Pas de commentaires",
     };
   },
   components: {
@@ -69,6 +68,7 @@ export default {
       let reponse = await requestAllCommentsFromAPI(this.$route.params.id);
       if (reponse.length != 0) {
         this.show_comment = true;
+        this.title_comment = "Commentaires";
       }
       this.comments = reponse;
     },
@@ -80,6 +80,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.comment_empty {
+  width: 90%;
+  border: 2px solid red;
+  border-radius: 10px;
+  margin: auto;
+  margin-top: 30px;
+}
 .comment_section {
   width: 90%;
   border: 2px solid red;
