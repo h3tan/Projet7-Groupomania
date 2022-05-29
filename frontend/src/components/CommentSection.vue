@@ -47,6 +47,7 @@ export default {
       show_comment: false,
       post_comment: "Dites quelque chose...",
       title_comment: "Pas de commentaires",
+      new_comment: false,
     };
   },
   components: {
@@ -55,15 +56,6 @@ export default {
   methods: {
     requestAllCommentsFromAPI,
     sendNewCommentToAPI,
-    // Demande à l'API de créer un commentaire
-    async postComment() {
-      let reponse = await sendNewCommentToAPI(
-        this.post_id,
-        this.post_comment,
-        localStorage.getItem("userId")
-      );
-      return reponse;
-    },
     async showAllComments() {
       let reponse = await requestAllCommentsFromAPI(this.$route.params.id);
       if (reponse.length != 0) {
@@ -71,6 +63,20 @@ export default {
         this.title_comment = "Commentaires";
       }
       this.comments = reponse;
+    },
+    // Demande à l'API de créer un commentaire
+    async postComment() {
+      this.show_comment = false;
+      let reponse = await sendNewCommentToAPI(
+        this.$route.params.id,
+        this.post_comment,
+        localStorage.getItem("userId")
+      );
+      // Mettre à jour le DOM sans actualiser la page
+      // 1: Appeler showAllComments
+      // 2: $forceupdate()
+      this.showAllComments();
+      return reponse;
     },
   },
   created() {

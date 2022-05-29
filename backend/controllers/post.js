@@ -145,7 +145,10 @@ exports.saveComment = async (req, res, next) => {
           res.status(400).json({ error: "Commentaire non publié" });
           return;
         }
-        res.status(201).json({ message: "commentaire publié !" });
+        res.status(201).json({
+          message: "commentaire publié !",
+          id_comment: result.insertId,
+        });
         return;
       }
     );
