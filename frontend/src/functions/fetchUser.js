@@ -20,7 +20,13 @@ export const sendLoginForm = async (nickname, password) => {
   }
 };
 
-export const sendSignUpForm = async (nickname, email, password) => {
+export const sendSignUpForm = async (
+  nickname,
+  lastName,
+  firstName,
+  email,
+  password
+) => {
   try {
     let signUpFormJson = await fetch("http://localhost:3000/api/auth/signup", {
       mode: "cors",
@@ -31,18 +37,13 @@ export const sendSignUpForm = async (nickname, email, password) => {
       },
       body: JSON.stringify({
         nickname: `${nickname}`,
+        lastName: `${lastName}`,
+        firstName: `${firstName}`,
         email: `${email}`,
         password: `${password}`,
       }),
     });
     let reponse = await signUpFormJson.json();
-    if (reponse.error) {
-      document.getElementById("signupresult").textContent = reponse.error;
-      return;
-    }
-    document.getElementById("signupresult").style.color = "green";
-    document.getElementById("signupresult").textContent =
-      "Création du compte réussie";
     return reponse;
   } catch (err) {
     let message = `Impossible de trouver l'API`;
@@ -108,11 +109,6 @@ export const sendProfilePictureToAPI = async (id, newFile, oldFile) => {
     let message = `Impossible de trouver l'API`;
     throw new Error(message);
   }
-};
-
-export const userLogOut = () => {
-  localStorage.clear();
-  return true;
 };
 
 export const userLogged = () => {

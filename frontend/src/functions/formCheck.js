@@ -1,11 +1,37 @@
-export const isNicknameValid = (nickname) => {
+export const isNicknameValid = (nickname, element) => {
   const button = document.querySelector(".formButton");
-  const regex = /^[a-zA-Z]\w*$/;
+  const regex = /^[a-z ,.'-]+$/i;
   if (!regex.test(nickname)) {
-    document.getElementById("nickname").style.background = "red";
+    document.getElementById(element).style.background = "red";
     button.setAttribute("disabled", "true");
   } else {
-    document.getElementById("nickname").style.background = "lightgreen";
+    document.getElementById(element).style.background = "lightgreen";
+    button.removeAttribute("disabled");
+    areInputsEmpty();
+  }
+};
+
+export const isLastNameValid = (lastName, element) => {
+  const button = document.querySelector(".formButton");
+  const regex = /^[a-z ,.'-]+$/i;
+  if (!regex.test(lastName)) {
+    document.getElementById(element).style.background = "red";
+    button.setAttribute("disabled", "true");
+  } else {
+    document.getElementById(element).style.background = "lightgreen";
+    button.removeAttribute("disabled");
+    areInputsEmpty();
+  }
+};
+
+export const isFirstNameValid = (firstName, element) => {
+  const button = document.querySelector(".formButton");
+  const regex = /^[a-z ,.'-]+$/i;
+  if (!regex.test(firstName)) {
+    document.getElementById(element).style.background = "red";
+    button.setAttribute("disabled", "true");
+  } else {
+    document.getElementById(element).style.background = "lightgreen";
     button.removeAttribute("disabled");
     areInputsEmpty();
   }
@@ -26,16 +52,16 @@ export const isPasswordValid = (password, element) => {
 };
 
 // Vérifie si "email" est bien de type "email"
-export const isEmailValid = (email) => {
+export const isEmailValid = (email, element) => {
   const button = document.querySelector(".formButton");
   // Permet d'utiliser
   //eslint-disable-next-line
   const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
   if (!regex.test(email)) {
-    document.getElementById("email").style.background = "red";
+    document.getElementById(element).style.background = "red";
     button.setAttribute("disabled", "true");
   } else {
-    document.getElementById("email").style.background = "lightgreen";
+    document.getElementById(element).style.background = "lightgreen";
     button.removeAttribute("disabled");
     areInputsEmpty();
   }

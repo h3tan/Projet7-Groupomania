@@ -1,45 +1,72 @@
 <template>
   <div class="signup">
     <h2>Veuillez créer un compte</h2>
-    <form
-      id="signup"
-      v-on:submit.prevent="
-        sendSignUpForm(this.nickname, this.email, this.password)
-      "
-    >
-      <label for="nickname">Nom d'utilisateur</label>
+    <form id="signup" v-on:submit.prevent="goToLogin">
+      <label for="nickname">Pseudo</label>
       <input
-        @input="isNicknameValid(this.nickname)"
+        @input="isNicknameValid(this.nickname, 'nickname')"
         id="nickname"
         type="text"
         v-model="nickname"
       />
+      <label for="last_name">Nom</label>
+      <input
+        @input="isLastNameValid(this.last_name, 'last_name')"
+        id="last_name"
+        type="text"
+        v-model="last_name"
+      />
+      <label for="first_name">Prénom</label>
+      <input
+        @input="isFirstNameValid(this.first_name, 'first_name')"
+        id="first_name"
+        type="text"
+        v-model="first_name"
+      />
       <label for="email">E-Mail</label>
       <input
-        @input="isEmailValid(this.email)"
+        @input="isEmailValid(this.email, 'email')"
         id="email"
         type="email"
         v-model="email"
       />
-      <label for="password">Mot de passe</label>
-      <input
-        @input="isPasswordValid(this.password)"
-        id="password"
-        type="password"
-        v-model="password"
-      />
-      <div class="submitForm">
-        <UserButton
-          v-if="!isLogged"
-          buttonClass="formButton"
-          buttonText="Créer un compte"
-          disabled
+      <div class="password_box">
+        <label for="password">Mot de passe</label>
+        <input
+          @input="isPasswordValid(this.password, 'password')"
+          id="password"
+          type="password"
+          v-model="password"
         />
-        <p class="logged" v-if="isLogged">Compte Créé</p>
-        <p class="errorLog" v-if="showErrorAccount">{{ errorAccount }}</p>
+        <div id="show_password" @click="toggleShowPassword">
+          <i class="fas fa-eye-slash" v-if="!password_showed"></i>
+          <i class="fas fa-eye" v-if="password_showed"></i>
+        </div>
+      </div>
+      <div class="submitForm">
+        <transition name="fadeButton">
+          <UserButton
+            v-if="!confirmSignup"
+            buttonClass="formButton"
+            buttonText="Valider"
+            disabled
+          />
+        </transition>
+        <div class="signup_result">
+          <transition name="successAppear">
+            <span class="signed" v-if="confirmSignup">
+              <p>Création du compte réussie</p>
+              <p>Veuillez vous connecter avec vos identifiants</p>
+            </span>
+          </transition>
+          <transition name="errorAppear">
+            <span class="errorSign" v-if="showErrorSignup">{{
+              errorSignup
+            }}</span>
+          </transition>
+        </div>
       </div>
     </form>
-    <p id="signupresult"></p>
   </div>
 </template>
 
@@ -47,20 +74,24 @@
 import UserButton from "./UserButton.vue";
 import { isNicknameValid } from "../functions/formCheck.js";
 import { isPasswordValid } from "../functions/formCheck.js";
+import { isFirstNameValid } from "../functions/formCheck.js";
+import { isLastNameValid } from "../functions/formCheck.js";
 import { isEmailValid } from "../functions/formCheck.js";
 import { sendSignUpForm } from "../functions/fetchUser.js";
-import { userLogged } from "../functions/fetchUser.js";
 
 export default {
   name: "SignUpForm",
   data() {
     return {
       nickname: "",
+      last_name: "",
+      first_name: "",
       email: "",
       password: "",
-      showErrorAccount: "",
-      errorAccount: "",
-      isLogged: "",
+      confirmSignup: false,
+      showErrorSignup: false,
+      errorSignup: "Placeholder",
+      password_showed: false,
     };
   },
   components: {
@@ -68,29 +99,40 @@ export default {
   },
   methods: {
     isNicknameValid,
+    isLastNameValid,
+    isFirstNameValid,
     isEmailValid,
     isPasswordValid,
     sendSignUpForm,
-    userLogged,
-    async goToUserInfos() {
+    toggleShowPassword() {
+      if (!this.password_showed) {
+        this.password_showed = true;
+        document.getElementById("password").setAttribute("type", "text");
+      } else {
+        this.password_showed = false;
+        document.getElementById("password").setAttribute("type", "password");
+      }
+    },
+    async goToLogin() {
+      this.showErrorSignup = false;
       let reponse = await sendSignUpForm(
         this.nickname,
+        this.last_name,
+        this.first_name,
         this.email,
         this.password
       );
       if (!reponse.error) {
-        this.showErrorLogin = false;
-        this.isLogged = true;
+        this.showErrorSignup = false;
+        this.confirmSignup = true;
         setTimeout(() => {
-          this.$store.dispatch("changeLogState");
-          this.$router.push("/userinfos");
-        }, 1000);
-        return reponse;
-      } else {
-        this.showErrorLogin = true;
-        this.errorLogin = reponse.error;
+          this.$router.push(`/login`);
+        }, 2000);
         return;
       }
+      this.showErrorSignup = true;
+      this.errorSignup = reponse.error;
+      return;
     },
   },
 };
@@ -101,7 +143,20 @@ export default {
 .signup {
   margin-top: 40px;
 }
+.password_box {
+  position: relative;
+}
+#show_password {
+  font-size: 20px;
+  position: absolute;
+  right: 20px;
+  width: 30px;
+  bottom: 24px;
+}
 
+i {
+  position: absolute;
+}
 h2 {
   font-size: 22px;
   padding-left: 20px;
@@ -144,13 +199,82 @@ input {
   }
 }
 
+.submit_form {
+  position: relative;
+  width: 80%;
+  margin: auto;
+  height: 50px;
+}
+
 button {
   margin-top: 40px;
 }
 
-#signupresult {
-  margin-top: 20px;
+.signup_result {
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+.signed {
+  color: green;
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  bottom: -7px;
+  width: 300px;
+  height: 100px;
+  font-weight: bold;
   font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  p {
+    margin: 0;
+  }
+}
+
+.errorSign {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
   color: red;
+  font-size: 20px;
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  height: 50px;
+  left: 0;
+  right: 0;
+  bottom: -55px;
+}
+
+.successAppear-enter-active,
+.successAppear-leave-active {
+  transition: all 0.5s;
+  transition-delay: 0.5s;
+}
+.successAppear-enter-from {
+  opacity: 0;
+}
+
+.errorAppear-enter-active,
+.errorAppear-leave-active {
+  transition: all 0.5s;
+}
+.errorAppear-enter-from {
+  opacity: 0;
+}
+
+.fadeButton-enter-active,
+.fadeButton-leave-active {
+  transition: all 0.5s;
+}
+.fadeButton-leave-to {
+  opacity: 0;
 }
 </style>

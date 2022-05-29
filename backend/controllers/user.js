@@ -7,9 +7,15 @@ exports.signup = async (req, res, next) => {
   try {
     let passwordHash = await bcrypt.hash(req.body.password, 10);
     connexion.query(
-      `INSERT INTO user (nickname, email, password)
-        values (?, ?, ?)`,
-      [req.body.nickname, req.body.email, passwordHash],
+      `INSERT INTO user (nickname, last_name, first_name, email, password)
+        values (?, ?, ?, ?, ?)`,
+      [
+        req.body.nickname,
+        req.body.lastName,
+        req.body.firstName,
+        req.body.email,
+        passwordHash,
+      ],
       function (err, result) {
         if (err) {
           res.status(401).json({ error: "Nom ou email déjà utilisé" });
