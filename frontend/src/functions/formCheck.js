@@ -69,7 +69,7 @@ export const isEmailValid = (email, element) => {
 
 const areInputsEmpty = () => {
   const button = document.querySelector(".formButton");
-  let inputs = document.querySelectorAll("input");
+  let inputs = document.querySelectorAll(".input_form");
   inputs.forEach((input) => {
     if (input.value == "") button.setAttribute("disabled", "true");
   });

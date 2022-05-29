@@ -21,20 +21,55 @@
           <button @click="modifyProfilePicture" v-if="pictureChosen">
             Modifier l'image
           </button>
-          <button @click="cancelProfilePictureChosen" v-if="pictureChosen">Annuler</button>
+          <button @click="cancelProfilePictureChosen" v-if="pictureChosen">
+            Annuler
+          </button>
         </div>
       </form>
     </div>
     <div class="user_infos">
-      <h3>
-        Pseudo: <span>{{ nickname }}</span>
-      </h3>
-      <h3>
-        E-mail: <span>{{ email }}</span>
-      </h3>
-      <h3>
-        Privilège: <span>{{ privilege }}</span>
-      </h3>
+      <form id="change_user_infos" v-on:submit.prevent="changeUserInfos">
+        <label for="nickname">Pseudo</label>
+        <input
+          @input="isNicknameValid(this.nickname, 'nickname')"
+          class="input_form"
+          id="nickname"
+          type="text"
+          v-model="nickname"
+        />
+        <label for="last_name">Nom</label>
+        <input
+          @input="isLastNameValid(this.last_name, 'last_name')"
+          class="input_form"
+          id="last_name"
+          type="last_name"
+          v-model="last_name"
+        />
+        <label for="first_name">Prénom</label>
+        <input
+          @input="isFirstNameValid(this.first_name, 'first_name')"
+          class="input_form"
+          id="first_name"
+          type="first_name"
+          v-model="first_name"
+        />
+        <label for="email">E-mail</label>
+        <input
+          @input="isEmailValid(this.email, 'email')"
+          class="input_form"
+          id="email"
+          type="email"
+          v-model="email"
+        />
+        <div class="modify_button">
+          <UserButton
+            id="modify_user_infos"
+            buttonClass="formButton"
+            buttonText="Modifier"
+            disabled
+          />
+        </div>
+      </form>
     </div>
   </div>
 </template>
@@ -42,13 +77,21 @@
 <script>
 import { requestUserInfos } from "../functions/fetchUser.js";
 import { sendProfilePictureToAPI } from "../functions/fetchUser.js";
+import { isNicknameValid } from "../functions/formCheck.js";
+import { isPasswordValid } from "../functions/formCheck.js";
+import { isFirstNameValid } from "../functions/formCheck.js";
+import { isLastNameValid } from "../functions/formCheck.js";
+import { isEmailValid } from "../functions/formCheck.js";
 import UserAvatar from "@/components/UserAvatar";
+import UserButton from "@/components/UserButton";
+import { requestUpdateUserFromAPI } from "@/functions/fetchUser.js";
 //require('../assets/No-Image.png')
 
 export default {
   name: "UserInfos",
   components: {
     UserAvatar,
+    UserButton,
   },
   data() {
     return {
@@ -57,13 +100,22 @@ export default {
       picture_upload: "",
       pictureChosen: false,
       nickname: "",
+      last_name: "",
+      first_name: "",
       email: "",
+      password: "",
       privilege: "",
       picture: "",
     };
   },
   methods: {
+    isNicknameValid,
+    isLastNameValid,
+    isFirstNameValid,
+    isEmailValid,
+    isPasswordValid,
     sendProfilePictureToAPI,
+    requestUpdateUserFromAPI,
     // Récupération des informations d'image pour changer un avatar
     handleFileUpload(e) {
       this.pictureChosen = false;
@@ -78,6 +130,8 @@ export default {
     async assignUserInfos() {
       let reponse = await requestUserInfos(localStorage.getItem("userId"));
       this.nickname = localStorage.getItem("nickname");
+      this.last_name = reponse[0].last_name;
+      this.first_name = reponse[0].first_name;
       this.email = reponse[0].email;
       this.privilege = reponse[0].privilege;
       this.picture = reponse[0].picture ? reponse[0].picture : this.picture;
@@ -97,6 +151,16 @@ export default {
     cancelProfilePictureChosen() {
       this.pictureChosen = false;
     },
+    async changeUserInfos() {
+      //let newNickname = this.nickname
+      let reponse = await requestUpdateUserFromAPI(localStorage.getItem("userId"), this.nickname, this.last_name, this.first_name, this.email);
+      if (!reponse.error) {
+        console.log(reponse);
+        //localStorage.setItem("nickname", newNickname);
+        //location.reload();
+      }
+      return reponse;
+    }
   },
   created() {
     this.assignUserInfos();
@@ -106,9 +170,10 @@ export default {
 
 <style scoped lang="scss">
 .infos {
-  margin-top: 20px;
+  margin: auto;
   border: 1px solid red;
   border-radius: 20px;
+  width: 95%;
 }
 
 .avatar_section {
@@ -198,7 +263,30 @@ export default {
   width: 200px;
 }
 .user_infos {
-  padding-left: 10px;
-  text-align: start;
+  width: 95%;
+}
+#change_user_infos {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 15px;
+}
+#nickname,
+#last_name,
+#first_name,
+#email {
+  width: 95%;
+  height: 30px;
+  margin-top: 3px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+.modify_button {
+  width: 90%;
+  margin: auto;
+  margin: 20px;
+}
+#modify_user_infos {
+  margin: auto;
 }
 </style>

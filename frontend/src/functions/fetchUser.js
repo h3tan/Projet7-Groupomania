@@ -55,7 +55,12 @@ export const requestUserInfos = async (id) => {
   try {
     let userInfosJson = await fetch(
       `http://localhost:3000/api/auth/users/${id}`,
-      { method: "GET" }
+      {
+        method: "GET",
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      }
     );
     let reponse = await userInfosJson.json();
     if (reponse.error) {
@@ -68,11 +73,47 @@ export const requestUserInfos = async (id) => {
   }
 };
 
+export const requestUpdateUserFromAPI = async (
+  id,
+  nickname,
+  last_name,
+  first_name,
+  email
+) => {
+  try {
+    let postJson = await fetch(`http://localhost:3000/api/auth/users/${id}`, {
+      mode: "cors",
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token"),
+      },
+      body: JSON.stringify({
+        nickname: nickname,
+        last_name: last_name,
+        first_name: first_name,
+        email: email,
+      }),
+    });
+    let reponse = await postJson.json();
+    return reponse;
+  } catch (err) {
+    let message = `Impossible de trouver l'API`;
+    throw new Error(message);
+  }
+};
+
 export const requestDeleteUserFromAPI = async (id) => {
   try {
     let userInfosJson = await fetch(
       `http://localhost:3000/api/auth/users/${id}`,
-      { method: "DELETE" }
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      }
     );
     let reponse = await userInfosJson.json();
     if (reponse.error) {
@@ -91,7 +132,7 @@ export const sendProfilePictureToAPI = async (id, newFile, oldFile) => {
     formData.append("file", newFile); // clé 'file' doit correspondre au single('file') du middleware multer-config dans le backend
     formData.append("oldfile", oldFile);
     let modifyReponseJson = await fetch(
-      `http://localhost:3000/api/auth/users/${id}`,
+      `http://localhost:3000/api/auth/users/${id}/avatar`,
       {
         method: "PUT",
         headers: {

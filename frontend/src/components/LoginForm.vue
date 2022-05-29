@@ -4,7 +4,8 @@
     <form id="login" v-on:submit.prevent="logIn">
       <label for="nickname">Nom d'utilisateur</label>
       <input
-        @input="isNicknameValid(this.nickname)"
+        @input="isNicknameValid(this.nickname, 'nickname')"
+        class="input_form"
         id="nickname"
         type="text"
         v-model="nickname"
@@ -13,6 +14,7 @@
         <label for="password">Mot de passe</label>
         <input
           @input="isPasswordValid(this.password, 'password')"
+          class="input_form"
           id="password"
           type="password"
           v-model="password"
@@ -24,6 +26,7 @@
         <label for="confirm_password">Confirmez le mot de passe</label>
         <input
           @input="isPasswordValid(this.confirm_password, 'confirm_password')"
+          class="input_form"
           id="confirm_password"
           type="password"
           v-model="confirm_password"

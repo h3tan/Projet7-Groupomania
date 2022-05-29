@@ -5,6 +5,7 @@
       <label for="nickname">Pseudo</label>
       <input
         @input="isNicknameValid(this.nickname, 'nickname')"
+        class="input_form"
         id="nickname"
         type="text"
         v-model="nickname"
@@ -12,6 +13,7 @@
       <label for="last_name">Nom</label>
       <input
         @input="isLastNameValid(this.last_name, 'last_name')"
+        class="input_form"
         id="last_name"
         type="text"
         v-model="last_name"
@@ -19,6 +21,7 @@
       <label for="first_name">Prénom</label>
       <input
         @input="isFirstNameValid(this.first_name, 'first_name')"
+        class="input_form"
         id="first_name"
         type="text"
         v-model="first_name"
@@ -26,6 +29,7 @@
       <label for="email">E-Mail</label>
       <input
         @input="isEmailValid(this.email, 'email')"
+        class="input_form"
         id="email"
         type="email"
         v-model="email"
@@ -34,6 +38,7 @@
         <label for="password">Mot de passe</label>
         <input
           @input="isPasswordValid(this.password, 'password')"
+          class="input_form"
           id="password"
           type="password"
           v-model="password"

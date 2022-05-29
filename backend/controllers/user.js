@@ -67,7 +67,7 @@ exports.login = (req, res, next) => {
 
 exports.getUserInfos = async (req, res, next) => {
   connexion.query(
-    `SELECT user.id_user, user.nickname, user.email, user.privilege, user.picture FROM user WHERE id_user = ?`,
+    `SELECT user.id_user, user.nickname, user.last_name, user.first_name, user.email, user.privilege, user.picture FROM user WHERE id_user = ?`,
     [req.params.id],
     function (err, result) {
       if (result[0] == undefined) {
@@ -116,6 +116,34 @@ exports.updatePicture = async (req, res, next) => {
         }
       );
     }
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};
+
+exports.updateUserInfos = async (req, res, next) => {
+  try {
+    console.log(req.body);
+    connexion.query(
+      `update user set nickname = ?, last_name = ?, first_name = ?, email = ? where id_user = ?;`,
+      [
+        req.body.nickname,
+        req.body.last_name,
+        req.body.first_name,
+        req.body.email,
+        req.params.id,
+      ],
+      function (err, result) {
+        if (err) {
+          res.status(400).json({ message: "Impossible de modifier l'image" });
+          return;
+        }
+        res
+          .status(200)
+          .json({ message: "Vos informations ont bien été modifiées" });
+      }
+    );
   } catch (err) {
     let message = "Erreur avec les données";
     throw new Error(message);
