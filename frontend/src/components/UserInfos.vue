@@ -1,30 +1,30 @@
 <template>
   <div class="infos">
-    <div class="img_container">
-      <img :src="picture" />
+    <div class="avatar_section">
+      <div class="avatar_box">
+        <UserAvatar :avatar="`${picture}`" />
+      </div>
+      <form class="modify_avatar" @click="cancelProfilePictureChosen">
+        <label id="label_avatar" for="input_avatar">Choisir</label>
+        <input
+          type="file"
+          id="input_avatar"
+          name="avatar"
+          accept="image/png, image/jpeg"
+          @change="handleFileUpload($event)"
+        />
+        <div class="picture_chosen" v-if="pictureChosen">
+          <div id="image_name">{{ image_name }}</div>
+          <div id="image_type">{{ image_type }}</div>
+        </div>
+        <div class="profile_buttons">
+          <button @click="modifyProfilePicture" v-if="pictureChosen">
+            Modifier l'image
+          </button>
+          <button @click="cancelProfilePictureChosen" v-if="pictureChosen">Annuler</button>
+        </div>
+      </form>
     </div>
-    <form class="modify_avatar">
-      <label id="label_avatar" for="input_avatar">Choisir</label>
-      <input
-        type="file"
-        id="input_avatar"
-        name="avatar"
-        accept="image/png, image/jpeg"
-        @change="handleFileUpload($event)"
-      />
-      <div class="picture_chosen" v-if="pictureChosen">
-        <div id="image_name">{{ image_name }}</div>
-        <div id="image_type">{{ image_type }}</div>
-      </div>
-      <div class="profile_buttons">
-        <button @click="modifyProfilePicture" v-if="pictureChosen">
-          Modifier l'image
-        </button>
-        <button @click="cancelProfilePictureChosen" v-if="pictureChosen">
-          Annuler
-        </button>
-      </div>
-    </form>
     <div class="user_infos">
       <h3>
         Pseudo: <span>{{ nickname }}</span>
@@ -42,9 +42,14 @@
 <script>
 import { requestUserInfos } from "../functions/fetchUser.js";
 import { sendProfilePictureToAPI } from "../functions/fetchUser.js";
+import UserAvatar from "@/components/UserAvatar";
+//require('../assets/No-Image.png')
 
 export default {
   name: "UserInfos",
+  components: {
+    UserAvatar,
+  },
   data() {
     return {
       image_name: "nom image",
@@ -85,6 +90,7 @@ export default {
         this.picture
       );
       if (!reponse.error) {
+        localStorage.setItem("avatar", reponse.imageUrl);
         location.reload();
       }
     },
@@ -98,12 +104,35 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .infos {
-  text-align: start;
   margin-top: 20px;
   border: 1px solid red;
   border-radius: 20px;
+}
+
+.avatar_section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+.avatar_box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 150px;
+  height: 150px;
+  border-radius: 20px;
+  border: 1px solid red;
+  margin-bottom: 20px;
+}
+.avatar_container {
+  overflow: hidden;
+  border-radius: 10%;
+  width: 120px;
+  height: 120px;
 }
 .modify_avatar {
   display: flex;
@@ -170,5 +199,6 @@ export default {
 }
 .user_infos {
   padding-left: 10px;
+  text-align: start;
 }
 </style>

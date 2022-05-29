@@ -94,9 +94,9 @@ export const sendProfilePictureToAPI = async (id, newFile, oldFile) => {
       `http://localhost:3000/api/auth/users/${id}`,
       {
         method: "PUT",
-        /*         headers: {
-    //Authorization: localStorage.getItem("token") ,
-  }, */
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
         body: formData,
       }
     );

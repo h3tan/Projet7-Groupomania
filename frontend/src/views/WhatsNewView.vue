@@ -127,6 +127,7 @@ h4 {
 }
 .avatar_container {
   margin-top: 5px;
+  border-radius: 50%;
 }
 span {
   margin-left: 5px;

@@ -112,7 +112,7 @@ exports.updatePicture = async (req, res, next) => {
             res.status(400).json({ message: "Impossible de modifier l'image" });
             return;
           }
-          res.status(200).json({ result });
+          res.status(200).json({ imageUrl: imageUrl });
         }
       );
     }

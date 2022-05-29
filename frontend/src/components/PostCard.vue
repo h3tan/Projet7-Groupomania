@@ -231,14 +231,19 @@ h2 {
   &__by_user {
     display: flex;
     height: 100%;
+    align-items: center;
   }
 }
 #nickname {
   font-weight: lighter;
   margin-left: 5px;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 .avatar_container {
-  margin-top: 5px;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
 }
 h3 {
   font-size: 16px;
