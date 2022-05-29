@@ -20,62 +20,58 @@
         </div>
       </div>
     </div>
-    <transition name="input_collapse">
-      <div class="input_container" v-if="input_container">
-        <transition name="appear">
-          <div class="input_box">
-            <!-- Affichage de la zone pour modifier un post -->
-            <label for="modify_title" v-if="sameUser"
-              ><h4>Modifier le titre</h4></label
-            >
-            <input
-              class="modify_title"
-              name="modify_title"
-              v-model="modify_title"
-              v-if="sameUser"
-            />
-            <label for="input_area" v-if="sameUser"
-              ><h4>Modifier le texte</h4></label
-            >
-            <textarea
-              class="input_area"
-              name="input_area"
-              v-model="modify_text"
-              v-if="sameUser"
-            ></textarea>
-            <button @click="updatePost" v-if="sameUser">Modifier</button>
-          </div>
-        </transition>
-      </div>
-    </transition>
-    <transition name="slide_interaction">
-      <div class="show_interaction">
-        <div class="show_interaction_buttons">
-          <div class="like_or_delete">
-            <div class="like" v-if="!sameUser">
-              <div class="like_icons" @click="modifyLike">
-                <transition name="cancel_like">
-                  <i id="empty_heart" class="far fa-heart" v-if="!liked"></i>
-                </transition>
-                <transition name="display_like">
-                  <i id="filled_heart" class="fas fa-heart" v-if="liked"></i>
-                </transition>
-              </div>
-              <span>J'aime</span>
+    <div class="input_container">
+      <transition name="appear">
+        <div class="input_box" v-if="input_container">
+          <!-- Affichage de la zone pour modifier un post -->
+          <label for="modify_title" v-if="sameUser"
+            ><h4>Modifier le titre</h4></label
+          >
+          <input
+            class="modify_title"
+            name="modify_title"
+            v-model="modify_title"
+            v-if="sameUser"
+          />
+          <label for="input_area" v-if="sameUser"
+            ><h4>Modifier le texte</h4></label
+          >
+          <textarea
+            class="input_area"
+            name="input_area"
+            v-model="modify_text"
+            v-if="sameUser"
+          ></textarea>
+          <button @click="updatePost" v-if="sameUser">Modifier</button>
+        </div>
+      </transition>
+    </div>
+    <div class="show_interaction">
+      <div class="show_interaction_buttons">
+        <div class="like_or_delete">
+          <div class="like" v-if="!sameUser">
+            <div class="like_icons" @click="modifyLike">
+              <transition name="cancel_like">
+                <i id="empty_heart" class="far fa-heart" v-if="!liked"></i>
+              </transition>
+              <transition name="display_like">
+                <i id="filled_heart" class="fas fa-heart" v-if="liked"></i>
+              </transition>
             </div>
-            <button @click="deletePost" v-if="sameUser">Supprimer</button>
+            <span>J'aime</span>
           </div>
-          <div class="toggle_input_box">
-            <button @click="toggleModifyPost" v-if="sameUser">
-              {{ modifyButton }}
-            </button>
-          </div>
+          <button @click="deletePost" v-if="sameUser">Supprimer</button>
         </div>
-        <div class="like_and_comment">
-          <span class="num_likes">{{ num_likes }} likes</span>
+        <div class="toggle_input_box">
+          <button @click="toggleModifyPost" v-if="sameUser">
+            {{ modifyButton }}
+          </button>
         </div>
       </div>
-    </transition>
+      <div class="like_and_comment">
+        <span class="num_likes">{{ num_likes }} likes</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -369,15 +365,6 @@ h4 {
     color: black;
   }
 }
-// Animation du conteneur pour modifier
-.input_collapse-enter-active,
-.input_collapse-leave-active {
-  transition: transform 0.5s ease;
-}
-.input_collapse-enter-from,
-.input_collapse-leave-to {
-  transform: scaleY(0);
-}
 
 // Animation pour les inputs de la modification ou du commentaire
 .appear-enter-active {
@@ -392,19 +379,6 @@ h4 {
   transition: opacity 1s ease;
 }
 
-// Animation pour le conteneur des likes et du bouton pour afficher le conteneur de modification
-.slide_interaction-enter-active,
-.slide_interaction-leave-active {
-  transition: transform 0.5s;
-}
-.slide_interaction-enter-from,
-.slide_interaction-leave-to {
-  transform: translateY(0px);
-}
-.slide_interaction-enter-to,
-.slide_interaction-leave-from {
-  transform: translateY(258px);
-}
 // Animation des coeurs
 .display_like-enter-from,
 .display_like-leave-to {
