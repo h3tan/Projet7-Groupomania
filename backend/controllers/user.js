@@ -86,8 +86,7 @@ exports.deleteUser = async (req, res, next) => {
       [req.params.id],
       function (err, result) {
         if (err) {
-          res.status(400).json({ message: "Impossible de supprimer" });
-          return;
+          return res.status(400).json({ message: "Impossible de supprimer" });
         }
       }
     );
@@ -141,6 +140,34 @@ exports.updateUserInfos = async (req, res, next) => {
         res
           .status(200)
           .json({ message: "Vos informations ont bien été modifiées" });
+      }
+    );
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};
+
+exports.updatePassword = async (req, res, next) => {
+  try {
+    let valid = await bcrypt.compare(req.body.actualPassword, req.password);
+    if (!valid) {
+      return res.status(401).json({ error: "Mot de passe incorrect" });
+    }
+    let passwordHash = await bcrypt.hash(req.body.newPassword, 10);
+    connexion.query(
+      `update user set password = ? where id_user = ?;`,
+      [passwordHash, req.auth.userId],
+      function (err, result) {
+        if (err) {
+          res
+            .status(400)
+            .json({ error: "Impossible de modifier le mot de passe" });
+          return;
+        }
+        res
+          .status(200)
+          .json({ message: "Votre mot de passe a bien été modifié" });
       }
     );
   } catch (err) {

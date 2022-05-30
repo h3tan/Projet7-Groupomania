@@ -74,3 +74,26 @@ const areInputsEmpty = () => {
     if (input.value == "") button.setAttribute("disabled", "true");
   });
 };
+
+// Pour formulaire du changement de mot de passe
+export const isPasswordChangeValid = (password, element) => {
+  const button = document.getElementById("modify_password");
+  //Comporte 10 caractères, 1 minuscule, 1 majuscule, 1 chiffre et un caractère spécial
+  const regex = /^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/;
+  if (!regex.test(password)) {
+    document.getElementById(element).style.background = "red";
+    button.setAttribute("disabled", "true");
+  } else {
+    document.getElementById(element).style.background = "lightgreen";
+    button.removeAttribute("disabled");
+    arePasswordInputsEmpty();
+  }
+};
+
+const arePasswordInputsEmpty = () => {
+  const button = document.getElementById("modify_password");
+  let inputs = document.querySelectorAll(".input_password");
+  inputs.forEach((input) => {
+    if (input.value == "") button.setAttribute("disabled", "true");
+  });
+};

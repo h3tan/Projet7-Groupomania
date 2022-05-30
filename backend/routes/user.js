@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../middlewares/auth");
+const pwdCheck = require("../middlewares/checkPassword");
 const userCtrl = require("../controllers/user");
 const multer = require("../middlewares/multer-config");
 const fileCtrl = require("../middlewares/fileCtrl");
@@ -28,5 +29,8 @@ router.put(
 
 // Route pour modifier les infos d'un utilisateur
 router.put("/users/:id", auth, userCtrl.updateUserInfos);
+
+// Route pour modifier le mot de passe d'un utilisateur
+router.put("/users/:id/password", auth, pwdCheck, userCtrl.updatePassword);
 
 module.exports = router;

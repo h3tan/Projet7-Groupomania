@@ -1,5 +1,7 @@
 <template>
   <div class="infos">
+    <h2>{{ nickname }}</h2>
+    <h3 id="privilege">{{ privilege }}</h3>
     <div class="avatar_section">
       <div class="avatar_box">
         <UserAvatar :avatar="`${picture}`" />
@@ -70,6 +72,7 @@
           />
         </div>
       </form>
+      <ModifyPassword />
     </div>
   </div>
 </template>
@@ -84,6 +87,7 @@ import { isLastNameValid } from "../functions/formCheck.js";
 import { isEmailValid } from "../functions/formCheck.js";
 import UserAvatar from "@/components/UserAvatar";
 import UserButton from "@/components/UserButton";
+import ModifyPassword from "@/components/ModifyPassword";
 import { requestUpdateUserFromAPI } from "@/functions/fetchUser.js";
 //require('../assets/No-Image.png')
 
@@ -92,6 +96,7 @@ export default {
   components: {
     UserAvatar,
     UserButton,
+    ModifyPassword
   },
   data() {
     return {
@@ -103,7 +108,6 @@ export default {
       last_name: "",
       first_name: "",
       email: "",
-      password: "",
       privilege: "",
       picture: "",
     };
@@ -135,6 +139,15 @@ export default {
       this.email = reponse[0].email;
       this.privilege = reponse[0].privilege;
       this.picture = reponse[0].picture ? reponse[0].picture : this.picture;
+      if (this.privilege == "normal") {
+        this.privilege = "Membre";
+        document.getElementById("privilege").style.color = "green";
+        return;
+      }
+      if (this.privilege == "admin") {
+        this.privilege = "Modérateur";
+        document.getElementById("privilege").style.color = "red";
+      }
     },
     // Met à jour la page lorsque l'avatar est modifié
     async modifyProfilePicture() {
@@ -152,15 +165,20 @@ export default {
       this.pictureChosen = false;
     },
     async changeUserInfos() {
-      //let newNickname = this.nickname
-      let reponse = await requestUpdateUserFromAPI(localStorage.getItem("userId"), this.nickname, this.last_name, this.first_name, this.email);
+      let newNickname = this.nickname;
+      let reponse = await requestUpdateUserFromAPI(
+        localStorage.getItem("userId"),
+        this.nickname,
+        this.last_name,
+        this.first_name,
+        this.email
+      );
       if (!reponse.error) {
-        console.log(reponse);
-        //localStorage.setItem("nickname", newNickname);
-        //location.reload();
+        localStorage.setItem("nickname", newNickname);
+        location.reload();
       }
       return reponse;
-    }
+    },
   },
   created() {
     this.assignUserInfos();
@@ -264,6 +282,7 @@ export default {
 }
 .user_infos {
   width: 95%;
+  margin: auto;
 }
 #change_user_infos {
   display: flex;
@@ -289,4 +308,44 @@ export default {
 #modify_user_infos {
   margin: auto;
 }
+/* .password_container {
+  margin: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 15px;
+}
+.password_change {
+  display: flex;
+  position: relative;
+  margin: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.password_box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  input {
+    width: 300px;
+    height: 30px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    margin-top: 3px;
+  }
+}
+.password_icon {
+  position: absolute;
+  right: 32px;
+  margin-top: 25px;
+  font-size: 20px;
+}
+.password_submit {
+  width: 95%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+} */
 </style>

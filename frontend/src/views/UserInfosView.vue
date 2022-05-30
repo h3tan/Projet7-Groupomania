@@ -47,6 +47,6 @@ export default {
 }
 
 button {
-  margin-top: 20px;
+  margin-top: 30px;
 }
 </style>

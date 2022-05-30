@@ -126,7 +126,7 @@ export default {
         this.showErrorLogin = false;
         this.confirmLogin = true;
         setTimeout(() => {
-          this.$store.dispatch("changeLogState");
+          this.$store.dispatch("changeLogState"); // Indique au store que l'utilisateur est connecté
           this.$router.push(`/whatsnew/`);
         }, 2000);
       } else {

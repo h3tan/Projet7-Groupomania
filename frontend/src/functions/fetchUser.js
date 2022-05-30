@@ -104,6 +104,37 @@ export const requestUpdateUserFromAPI = async (
   }
 };
 
+export const requestUpdatePasswordFromAPI = async (
+  id_user,
+  actualPassword,
+  newPassword
+) => {
+  try {
+    let postJson = await fetch(
+      `http://localhost:3000/api/auth/users/${id_user}/password`,
+      {
+        mode: "cors",
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: localStorage.getItem("token"),
+        },
+        body: JSON.stringify({
+          id_user: id_user,
+          actualPassword: actualPassword,
+          newPassword: newPassword,
+        }),
+      }
+    );
+    let reponse = await postJson.json();
+    return reponse;
+  } catch (err) {
+    let message = `Impossible de trouver l'API`;
+    throw new Error(message);
+  }
+};
+
 export const requestDeleteUserFromAPI = async (id) => {
   try {
     let userInfosJson = await fetch(
