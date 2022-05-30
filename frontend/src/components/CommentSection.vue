@@ -2,8 +2,10 @@
   <div class="comment_page">
     <div class="comment_section" :data-comment_for="$route.params.id">
       <div class="title">
-        <i class="fas fa-comments"></i>
-        <h3>{{ title_comment }}</h3>
+        <h3>
+          <i class="fas fa-comments"></i><span>{{ title_comment }}</span>
+        </h3>
+        <span>{{ count_comments }}</span>
       </div>
       <form class="input_comment" v-on:submit.prevent="postComment">
         <label for="input_comment__area"><h4>Ajouter un commentaire</h4></label>
@@ -16,8 +18,9 @@
       </form>
       <div class="comment_container" v-if="show_comment">
         <div
-          class="comment-card"
+          class="comment_card"
           :data-id_comment="comment.id_comment"
+          :data-id_user="comment.id_user"
           v-for="comment in comments"
           :key="comment.id_comment"
         >
@@ -28,6 +31,15 @@
           <div class="comment_text">
             <p>{{ comment.comment_message }}</p>
           </div>
+          <div class="modify_comment" v-if="userId == comment.id_user">
+            <button class="modify_comment_button">Modifier</button>
+            <button
+              class="delete_comment_button"
+              @click="deleteComment($route.params.id, comment.id_comment)"
+            >
+              Supprimer
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -37,6 +49,7 @@
 <script>
 import UserAvatar from "@/components/UserAvatar";
 import { requestAllCommentsFromAPI } from "@/functions/fetchComment.js";
+import { requestDeleteCommentFromAPI } from "@/functions/fetchComment.js";
 import { sendNewCommentToAPI } from "@/functions/fetchComment.js";
 
 export default {
@@ -48,6 +61,8 @@ export default {
       post_comment: "Dites quelque chose...",
       title_comment: "Pas de commentaires",
       new_comment: false,
+      count_comments: "",
+      userId: localStorage.getItem("userId"),
     };
   },
   components: {
@@ -55,10 +70,12 @@ export default {
   },
   methods: {
     requestAllCommentsFromAPI,
+    requestDeleteCommentFromAPI,
     sendNewCommentToAPI,
     async showAllComments() {
       let reponse = await requestAllCommentsFromAPI(this.$route.params.id);
       if (reponse.length != 0) {
+        this.count_comments = reponse.length;
         this.show_comment = true;
         this.title_comment = "Commentaires";
       }
@@ -72,11 +89,19 @@ export default {
         this.post_comment,
         localStorage.getItem("userId")
       );
-      // Mettre à jour le DOM sans actualiser la page
-      // 1: Appeler showAllComments
-      // 2: $forceupdate()
-      this.showAllComments();
+      if (!reponse.error) {
+        // Mettre à jour le DOM sans actualiser la page
+        // 1: Appeler showAllComments
+        // 2: $forceupdate()
+        this.showAllComments();
+      }
       return reponse;
+    },
+    async deleteComment(id_post, id_comment) {
+      let reponse = await requestDeleteCommentFromAPI(id_post, id_comment);
+      if (!reponse.error) {
+        this.showAllComments();
+      }
     },
   },
   created() {
@@ -105,12 +130,21 @@ export default {
 .title {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   border-bottom: 2px solid red;
-  padding-left: 15px;
+  padding-right: 20px;
 
   h3 {
     margin-left: 10px;
+
+    span {
+      margin-left: 5px;
+    }
+  }
+
+  span {
+    font-size: 18px;
+    font-weight: bold;
   }
 }
 .input_comment {
@@ -130,7 +164,7 @@ export default {
     margin-bottom: 15px;
   }
 }
-.comment-card {
+.comment_card {
   margin: auto;
   border-top: 1px dashed red;
   padding-top: 10px;
@@ -164,5 +198,23 @@ export default {
   padding: 10px;
   margin: auto;
   border-radius: 5px;
+  margin-bottom: 8px;
+}
+
+.modify_comment {
+  width: 90%;
+  margin: auto;
+  text-align: start;
+}
+
+.modify_comment_button,
+.delete_comment_button {
+  font-weight: lighter;
+  height: 30px;
+  font-size: 16px;
+}
+
+.delete_comment_button {
+  margin-left: 10px;
 }
 </style>

@@ -161,7 +161,7 @@ exports.saveComment = async (req, res, next) => {
 exports.getAllCommentsOfPost = async (req, res, next) => {
   try {
     connexion.query(
-      `select id_comment, comment_message, date_comment, nickname, picture from comment join user on comment.id_user = user.id_user where id_post = ?`,
+      `select id_comment, comment_message, date_comment, nickname, picture, comment.id_user from comment join user on comment.id_user = user.id_user where id_post = ?`,
       [req.params.id_post],
       function (err, result) {
         if (err) {
@@ -194,6 +194,28 @@ exports.getCountPostComments = async (req, res, next) => {
         }
         res.status(200).json({ value: result[0]["count(1)"] });
         next();
+      }
+    );
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};
+
+// Compte le nombre de commentaires d'un post
+exports.deleteComment = async (req, res, next) => {
+  try {
+    connexion.query(
+      `delete from comment where id_comment = ?`,
+      [req.params.id_comment],
+      function (err, result) {
+        if (err) {
+          res
+            .status(400)
+            .json({ message: "impossible de récupérer l'information" });
+          return;
+        }
+        res.status(200).json({ message: "Commentaire supprimé" });
       }
     );
   } catch (err) {
