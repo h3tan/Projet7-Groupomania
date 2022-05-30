@@ -223,3 +223,22 @@ exports.deleteComment = async (req, res, next) => {
     throw new Error(message);
   }
 };
+
+exports.updateComment = async (req, res, next) => {
+  try {
+    connexion.query(
+      `update comment set comment_message = ?, comment_updated = now() where id_comment = ?`,
+      [req.body.text, req.params.id_comment],
+      function (err, result) {
+        if (err) {
+          res.status(400).json({ message: "Impossible de modifier" });
+          return;
+        }
+        res.status(200).json({ message: "Commentaire mis à jour!" });
+      }
+    );
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};

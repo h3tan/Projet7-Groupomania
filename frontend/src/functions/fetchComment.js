@@ -89,3 +89,32 @@ export const requestDeleteCommentFromAPI = async (id_post, id_comment) => {
     throw new Error(message);
   }
 };
+
+export const requestUpdateCommentFromAPI = async (
+  id_post,
+  id_comment,
+  text
+) => {
+  try {
+    let postJson = await fetch(
+      `http://localhost:3000/api/auth/posts/${id_post}/comments/${id_comment}`,
+      {
+        mode: "cors",
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: localStorage.getItem("token"),
+        },
+        body: JSON.stringify({
+          text: text,
+        }),
+      }
+    );
+    let reponse = await postJson.json();
+    return reponse;
+  } catch (err) {
+    let message = `Impossible de trouver l'API`;
+    throw new Error(message);
+  }
+};

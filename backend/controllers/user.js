@@ -124,7 +124,6 @@ exports.updatePicture = async (req, res, next) => {
 
 exports.updateUserInfos = async (req, res, next) => {
   try {
-    console.log(req.body);
     connexion.query(
       `update user set nickname = ?, last_name = ?, first_name = ?, email = ? where id_user = ?;`,
       [

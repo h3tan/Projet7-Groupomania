@@ -54,6 +54,9 @@ router.get("/:id_post/comments/count", auth, postCtrl.getCountPostComments);
 // Route pour poster un commentaire
 router.post("/:id_post/comments", auth, postCtrl.saveComment);
 
+// Route pour modifier un commentaire
+router.put("/:id_post/comments/:id_comment", auth, postCtrl.updateComment);
+
 // Route pour supprimer un commentaire
 router.delete("/:id_post/comments/:id_comment", auth, postCtrl.deleteComment);
 

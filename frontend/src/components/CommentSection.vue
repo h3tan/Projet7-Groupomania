@@ -31,14 +31,36 @@
           <div class="comment_text">
             <p>{{ comment.comment_message }}</p>
           </div>
-          <div class="modify_comment" v-if="userId == comment.id_user">
-            <button class="modify_comment_button">Modifier</button>
-            <button
-              class="delete_comment_button"
-              @click="deleteComment($route.params.id, comment.id_comment)"
+          <div class="comment_interactions">
+            <div
+              class="modify_comment"
+              v-if="userId == comment.id_user && comment_box != comment.id_comment"
             >
-              Supprimer
-            </button>
+              <button
+                class="modify_comment_button"
+                @click="toggleModifyCommentBox(comment.id_comment)"
+              >
+                Modifier
+              </button>
+              <button
+                class="delete_comment_button"
+                @click="deleteComment($route.params.id, comment.id_comment)"
+              >
+                Supprimer
+              </button>
+            </div>
+            <div
+              class="modify_container"
+              v-if="userId == comment.id_user && comment_box == comment.id_comment"
+            >
+              <ModifyComment
+                :id_post="$route.params.id"
+                :id_comment="comment.id_comment"
+                :text="comment.comment_message"
+                @update_comment="updateCommentSection"
+              />
+              <button id="cancel_modify" @click="cancelUpdateComment">Annuler</button>
+            </div>
           </div>
         </div>
       </div>
@@ -48,6 +70,7 @@
 
 <script>
 import UserAvatar from "@/components/UserAvatar";
+import ModifyComment from "@/components/ModifyComment";
 import { requestAllCommentsFromAPI } from "@/functions/fetchComment.js";
 import { requestDeleteCommentFromAPI } from "@/functions/fetchComment.js";
 import { sendNewCommentToAPI } from "@/functions/fetchComment.js";
@@ -60,13 +83,16 @@ export default {
       show_comment: false,
       post_comment: "Dites quelque chose...",
       title_comment: "Pas de commentaires",
+      comment_message: "",
       new_comment: false,
       count_comments: "",
       userId: localStorage.getItem("userId"),
+      comment_box: "",
     };
   },
   components: {
     UserAvatar,
+    ModifyComment,
   },
   methods: {
     requestAllCommentsFromAPI,
@@ -103,6 +129,23 @@ export default {
         this.showAllComments();
       }
     },
+    // id_comment en paramètres permet de pointer l'élément qu'on veut modifier
+    // Sinon le container pour modifier apparaîtrait pour tous les commentaires qu'a posté l'utilisateur
+    toggleModifyCommentBox(id_comment) {
+      if (this.comment_box != id_comment) {
+        this.comment_box = id_comment;
+      }
+    },
+    cancelUpdateComment() {
+      if (this.comment_box) {
+        this.comment_box = false;
+      }
+    },
+    // Méthode appelé pour mettre à jour les commentaires après qu'un des commentaires a été modifié
+    updateCommentSection() {
+      this.showAllComments();
+      this.comment_box = false;
+    }
   },
   created() {
     this.showAllComments();
@@ -191,6 +234,9 @@ export default {
   }
 }
 
+#cancel_modify {
+  margin-top: 10px;
+}
 .comment_text {
   background-color: grey;
   width: 90%;
