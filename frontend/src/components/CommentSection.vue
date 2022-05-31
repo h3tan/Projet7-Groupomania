@@ -7,11 +7,12 @@
         </h3>
         <span>{{ count_comments }}</span>
       </div>
-      <form class="input_comment" v-on:submit.prevent="postComment">
+      <form id="input_comment" v-on:submit.prevent="postComment">
         <label for="input_comment__area"><h4>Ajouter un commentaire</h4></label>
         <textarea
-          class="input_comment__area"
+          id="input_comment__area"
           name="input_comment__area"
+          placeholder="Dites quelque chose..."
           v-model="post_comment"
         ></textarea>
         <button id="post_comment">Publier</button>
@@ -34,7 +35,10 @@
           <div class="comment_interactions">
             <div
               class="modify_comment"
-              v-if="userId == comment.id_user && comment_box != comment.id_comment"
+              v-if="
+                (userId == comment.id_user || privilege == 'admin') &&
+                comment_box != comment.id_comment
+              "
             >
               <button
                 class="modify_comment_button"
@@ -51,7 +55,10 @@
             </div>
             <div
               class="modify_container"
-              v-if="userId == comment.id_user && comment_box == comment.id_comment"
+              v-if="
+                (userId == comment.id_user || privilege == 'admin') &&
+                comment_box == comment.id_comment
+              "
             >
               <ModifyComment
                 :id_post="$route.params.id"
@@ -59,7 +66,9 @@
                 :text="comment.comment_message"
                 @update_comment="updateCommentSection"
               />
-              <button id="cancel_modify" @click="cancelUpdateComment">Annuler</button>
+              <button id="cancel_modify" @click="cancelUpdateComment">
+                Annuler
+              </button>
             </div>
           </div>
         </div>
@@ -81,13 +90,13 @@ export default {
     return {
       comments: [],
       show_comment: false,
-      post_comment: "Dites quelque chose...",
       title_comment: "Pas de commentaires",
       comment_message: "",
       new_comment: false,
       count_comments: "",
       userId: localStorage.getItem("userId"),
       comment_box: "",
+      privilege: localStorage.getItem("privilege"),
     };
   },
   components: {
@@ -100,11 +109,13 @@ export default {
     sendNewCommentToAPI,
     async showAllComments() {
       let reponse = await requestAllCommentsFromAPI(this.$route.params.id);
-      if (reponse.length != 0) {
-        this.count_comments = reponse.length;
-        this.show_comment = true;
-        this.title_comment = "Commentaires";
+      if (reponse.length == 0) {
+        this.title_comment = "Pas de commentaires";
+        this.count_comments = 0;
       }
+      this.count_comments = reponse.length;
+      this.show_comment = true;
+      this.title_comment = "Commentaires";
       this.comments = reponse;
     },
     // Demande à l'API de créer un commentaire
@@ -145,7 +156,7 @@ export default {
     updateCommentSection() {
       this.showAllComments();
       this.comment_box = false;
-    }
+    },
   },
   created() {
     this.showAllComments();
@@ -190,7 +201,7 @@ export default {
     font-weight: bold;
   }
 }
-.input_comment {
+#input_comment {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -238,7 +249,8 @@ export default {
   margin-top: 10px;
 }
 .comment_text {
-  background-color: grey;
+  background-color: rgb(77, 71, 71);
+  font-size: 18px;
   width: 90%;
   color: white;
   padding: 10px;
