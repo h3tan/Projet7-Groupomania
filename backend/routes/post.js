@@ -19,6 +19,9 @@ router.get("/:id", auth, checkPost.checkPost, postCtrl.getPostFromAPI);
 // Route pour modifier un message
 router.put("/:id", auth, postCtrl.updatePost);
 
+// Route pour modifier l'image d'un message
+router.put("/:id_post/file", auth, multer, fileCtrl.deleteOldFile, postCtrl.updateFile);
+
 // Route pour supprimer un message
 router.delete(
   "/:id",

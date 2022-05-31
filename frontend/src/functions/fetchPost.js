@@ -52,6 +52,35 @@ export const getPostFromAPI = async (id_post) => {
     throw new Error(message);
   }
 };
+export const requestModifyPostPictureToAPI = async (
+  id_post,
+  newFile,
+  oldFile
+) => {
+  try {
+    let formData = new FormData();
+    formData.append("file", newFile); // clé 'file' doit correspondre au single('file') du middleware multer-config dans le backend
+    formData.append("oldfile", oldFile);
+    let modifyReponseJson = await fetch(
+      `http://localhost:3000/api/auth/posts/${id_post}/file`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+        body: formData,
+      }
+    );
+    let reponse = await modifyReponseJson.json();
+    if (reponse.error) {
+      return reponse.error;
+    }
+    return reponse;
+  } catch (err) {
+    let message = `Impossible de trouver l'API`;
+    throw new Error(message);
+  }
+};
 
 export const requestUpdatePostFromAPI = async (id_post, title, text) => {
   try {
