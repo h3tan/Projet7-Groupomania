@@ -2,6 +2,11 @@
   <div class="infos">
     <h2>{{ nickname }}</h2>
     <h3 id="privilege">{{ privilege }}</h3>
+    <UserButton
+      @click="goToSignUp"
+      buttonClass="logoutButton"
+      buttonText="Supprimer ce compte"
+    />
     <div class="avatar_section">
       <div class="avatar_box">
         <UserAvatar :avatar="`${picture}`" />
@@ -85,10 +90,11 @@ import { isPasswordValid } from "../functions/formCheck.js";
 import { isFirstNameValid } from "../functions/formCheck.js";
 import { isLastNameValid } from "../functions/formCheck.js";
 import { isEmailValid } from "../functions/formCheck.js";
+import { requestUpdateUserFromAPI } from "@/functions/fetchUser.js";
+import { requestDeleteUserFromAPI } from "@/functions/fetchUser.js";
 import UserAvatar from "@/components/UserAvatar";
 import UserButton from "@/components/UserButton";
 import ModifyPassword from "@/components/ModifyPassword";
-import { requestUpdateUserFromAPI } from "@/functions/fetchUser.js";
 //require('../assets/No-Image.png')
 
 export default {
@@ -96,7 +102,7 @@ export default {
   components: {
     UserAvatar,
     UserButton,
-    ModifyPassword
+    ModifyPassword,
   },
   data() {
     return {
@@ -120,6 +126,16 @@ export default {
     isPasswordValid,
     sendProfilePictureToAPI,
     requestUpdateUserFromAPI,
+    requestDeleteUserFromAPI,
+    async goToSignUp() {
+      let result = await requestDeleteUserFromAPI(
+        localStorage.getItem("userId")
+      );
+      localStorage.clear();
+      this.$store.dispatch("changeLogState");
+      this.$router.push("/signup");
+      return result;
+    },
     // Récupération des informations d'image pour changer un avatar
     handleFileUpload(e) {
       this.pictureChosen = false;
@@ -308,44 +324,4 @@ export default {
 #modify_user_infos {
   margin: auto;
 }
-/* .password_container {
-  margin: auto;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding-left: 15px;
-}
-.password_change {
-  display: flex;
-  position: relative;
-  margin: auto;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-.password_box {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  input {
-    width: 300px;
-    height: 30px;
-    margin-bottom: 15px;
-    border-radius: 5px;
-    margin-top: 3px;
-  }
-}
-.password_icon {
-  position: absolute;
-  right: 32px;
-  margin-top: 25px;
-  font-size: 20px;
-}
-.password_submit {
-  width: 95%;
-  margin-top: 20px;
-  margin-bottom: 20px;
-} */
 </style>

@@ -4,19 +4,24 @@
     <router-link to="/newpost">Poster un nouveau message</router-link>
     <div id="cards_container">
       <transition-group name="fade">
-      <div class="post_card" :data-count="post.count_post" v-for="post in posts" :key="post.id_post">
-        <router-link :to="`/post/${post.id_post}`">
-          <h3>{{ post.title }}</h3>
-        </router-link>
-        <div class="posted">
-          <div class="posted__by_user">
-            <UserAvatar :avatar="`${post.picture}`" />
-            <h4>{{ post.nickname }}</h4>
+        <div
+          class="post_card"
+          :data-count="post.count_post"
+          v-for="post in posts"
+          :key="post.id_post"
+        >
+          <router-link :to="`/post/${post.id_post}`">
+            <h2>{{ post.title }}</h2>
+          </router-link>
+          <div class="posted">
+            <div class="posted__by_user">
+              <UserAvatar :avatar="`${post.picture}`" />
+              <h3>{{ post.nickname }}</h3>
+            </div>
+            <span>{{ post.date_post }}</span>
           </div>
-          <span>{{ post.date_post }}</span>
+          <div>{{ post.count_comments }} commentaires</div>
         </div>
-        <div>{{ post.count_comments }} commentaires</div>
-      </div>
       </transition-group>
     </div>
   </div>
@@ -46,7 +51,7 @@ export default {
       let reponse = await getAllPostsFromAPI();
       for (let i = 0; i < reponse.length; i++) {
         this.total_post = reponse.length;
-        reponse[i].count_post = i+1;
+        reponse[i].count_post = i + 1;
         let count = await requestCountCommentsPostFromAPI(reponse[i].id_post);
         reponse[i].count_comments = count.value; // Création d'une clé count_comments pour affecter le nombre de commentaires
         let dateSQL = reponse[i].date_post.split("T");
@@ -91,7 +96,7 @@ export default {
   transform: translateY(-20px);
 }
 
-h3 {
+h2 {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -108,7 +113,7 @@ a {
     color: red;
   }
 }
-h4 {
+h3 {
   font-weight: lighter;
   margin-left: 5px;
 }

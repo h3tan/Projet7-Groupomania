@@ -50,7 +50,7 @@ export const requestAllCommentsFromAPI = async (id_post) => {
 export const requestCountCommentsPostFromAPI = async (id_post) => {
   try {
     let countCommentJson = await fetch(
-      `http://localhost:3000/api/auth/posts/${id_post}/comments/count`,
+      `http://localhost:3000/api/auth/posts/${id_post}/comments/number_of`,
       {
         method: "GET",
         headers: {

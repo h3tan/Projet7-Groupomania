@@ -1,15 +1,19 @@
 <template>
   <div id="main_vue">
     <transition name="toggleNavBar">
-      <header id="navbar">
-        <div id="logo_not_logged" v-if="$store.state.logState == false">
-          <img alt="Groupomania logo" src="./assets/Groupomania-logo-red.png" />
+      <header>
+        <div id="navbar">
+          <div id="logo_not_logged" v-if="$store.state.logState == false">
+            <img
+              alt="Groupomania logo"
+              src="./assets/Groupomania-logo-red.png"
+            />
+          </div>
+          <div id="logo_logged" v-if="$store.state.logState == true">
+          </div>
+          <NotLogged v-if="$store.state.logState == false" />
+          <IsLogged v-if="$store.state.logState == true" />
         </div>
-        <div id="logo_logged" v-if="$store.state.logState == true">
-          <img alt="Groupomania logo" src="./assets/icon.png" />
-        </div>
-        <NotLogged v-if="$store.state.logState == false" />
-        <IsLogged v-if="$store.state.logState == true" />
       </header>
     </transition>
     <main>
@@ -58,6 +62,11 @@ body {
   margin: 0;
   margin-top: 100px;
 }
+main {
+  min-height: 800px;
+  max-width: 1000px;
+  margin: auto;
+}
 header {
   display: flex;
   height: 60px;
@@ -68,13 +77,17 @@ header {
   right: 0;
   justify-content: space-between;
   border-bottom: 2px solid red;
-  padding-left: 10px;
-  padding-right: 10px;
   z-index: 5;
   background-color: white;
   transition: top 0.3s;
 }
-
+#navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin: auto;
+}
 #logo_not_logged {
   height: 50px;
 }
@@ -91,13 +104,13 @@ header {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  min-height: 100vh;
 }
-img {
-  width: 100px;
-}
+
 footer {
   height: 160px;
   margin-top: 40px;
+  width: 100%;
   background-color: grey;
 }
 </style>

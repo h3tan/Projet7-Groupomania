@@ -194,14 +194,13 @@ export default {
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
 }
 .password_box {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   input {
-    width: 300px;
+    width: 95%;
     height: 30px;
     margin-bottom: 15px;
     border-radius: 5px;
@@ -210,7 +209,7 @@ export default {
 }
 .password_icon {
   position: absolute;
-  right: 32px;
+  right: 7%;
   margin-top: 25px;
   font-size: 20px;
 }
@@ -219,10 +218,12 @@ export default {
   margin-top: 20px;
   margin-bottom: 50px;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 #modify_password {
   position: absolute;
-  right: 50px;
 }
 .password_change_result {
   height: 30px;

@@ -1,28 +1,3 @@
-/* export const sendPost = async (userId, title, text, picture) => {
-  try {
-    let postJson = await fetch("http://localhost:3000/api/auth/posts", {
-      mode: "cors",
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: localStorage.getItem("token"),
-      },
-      body: JSON.stringify({
-        userId: userId,
-        title: title,
-        text: text,
-        picture: picture,
-      }),
-    });
-    let reponse = await postJson.json();
-    return reponse;
-  } catch (err) {
-    let message = `Impossible de trouver l'API`;
-    throw new Error(message);
-  }
-}; */
-
 export const sendNewPostToAPI = async (userId, title, text, picture) => {
   try {
     let formData = new FormData();
@@ -64,10 +39,10 @@ export const getAllPostsFromAPI = async () => {
   }
 };
 
-export const getPostFromAPI = async (idPost) => {
+export const getPostFromAPI = async (id_post) => {
   try {
     let postJson = await fetch(
-      `http://localhost:3000/api/auth/posts/${idPost}`,
+      `http://localhost:3000/api/auth/posts/${id_post}`,
       { headers: { Authorization: localStorage.getItem("token") } }
     );
     let reponse = await postJson.json();
@@ -78,10 +53,10 @@ export const getPostFromAPI = async (idPost) => {
   }
 };
 
-export const requestUpdatePostFromAPI = async (idPost, title, text) => {
+export const requestUpdatePostFromAPI = async (id_post, title, text) => {
   try {
     let postJson = await fetch(
-      `http://localhost:3000/api/auth/posts/${idPost}`,
+      `http://localhost:3000/api/auth/posts/${id_post}`,
       {
         mode: "cors",
         method: "PUT",
@@ -104,10 +79,10 @@ export const requestUpdatePostFromAPI = async (idPost, title, text) => {
   }
 };
 
-export const requestDeletePostFromAPI = async (idPost) => {
+export const requestDeletePostFromAPI = async (id_post) => {
   try {
     let postJson = await fetch(
-      `http://localhost:3000/api/auth/posts/${idPost}`,
+      `http://localhost:3000/api/auth/posts/${id_post}`,
       {
         mode: "cors",
         method: "DELETE",

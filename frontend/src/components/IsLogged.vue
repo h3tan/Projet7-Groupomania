@@ -5,12 +5,15 @@
     v-if="$store.state.logState == true"
   >
     <div class="nav_section__post" @click="togglePostMenu">
+      <img id="logo" alt="Groupomania logo" src="../assets/icon.png" />
       <div class="nav_section__post__bar">
         <i class="fas fa-bars"></i>
       </div>
       <transition name="SlideNav">
         <nav class="nav_section__post__menu" v-if="show_nav_post">
           <router-link to="/whatsnew">Sujets récents</router-link>
+          <router-link to="/newcomments">Commentaires récents</router-link>
+          <router-link to="/newpost">Poster un nouveau message</router-link>
         </nav>
       </transition>
     </div>
@@ -19,18 +22,18 @@
       <div class="avatar_box">
         <UserAvatar :avatar="avatar" v-if="$store.state.logState == true" />
       </div>
+      <transition name="SlideNav">
+        <nav class="nav_section__user__menu" v-if="show_nav_user">
+          <router-link to="/userinfos">Vos Informations</router-link>
+          <div class="logout">
+            <i class="fas fa-sign-out-alt"></i>
+            <router-link class="logout__link" to="/login" @click="logOut"
+              >Se déconnecter</router-link
+            >
+          </div>
+        </nav>
+      </transition>
     </div>
-    <transition name="SlideNav">
-      <nav class="nav_section__user__menu" v-if="show_nav_user">
-        <router-link to="/userinfos">Vos Informations</router-link>
-        <div class="logout">
-          <i class="fas fa-sign-out-alt"></i>
-          <router-link class="logout__link" to="/login" @click="logOut"
-            >Se déconnecter</router-link
-          >
-        </div>
-      </nav>
-    </transition>
   </div>
 </template>
 
@@ -93,21 +96,32 @@ export default {
 </script>
 
 <style scoped lang="scss">
+#logo {
+  width: 50px;
+}
 .nav_section {
+  width: 100%;
+  max-width: 1000px;
   display: flex;
   justify-content: space-between;
+  margin: auto;
+
+  &__post {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
 
   &__post__bar {
-    position: absolute;
     width: 30px;
     font-size: 25px;
     height: 30px;
-    left: 60px;
-    top: 15px;
   }
   &__post__menu {
     padding: 10px;
-    left: 0px;
+    left: 0%;
+    width: 200px;
     display: flex;
     position: absolute;
     flex-direction: column;
@@ -125,13 +139,17 @@ export default {
 
   &__user {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
+    width: 170px;
+    position: relative;
     h4 {
       margin-right: 10px;
+      width: 100px;
     }
     &__menu {
       padding: 10px;
-      right: 0px;
+      right: 0;
       display: flex;
       position: absolute;
       flex-direction: column;
@@ -161,7 +179,7 @@ export default {
 
 .avatar_box {
   display: flex;
-  border-bottom: 1px solid red;
+  border-bottom: 2px solid red;
   width: 60px;
   height: 60px;
   justify-content: center;

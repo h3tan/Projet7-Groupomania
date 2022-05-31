@@ -49,7 +49,7 @@ router.put(
 router.get("/:id_post/comments", auth, postCtrl.getAllCommentsOfPost);
 
 // Route pour compter tous les commentaires d'un post
-router.get("/:id_post/comments/count", auth, postCtrl.getCountPostComments);
+router.get("/:id_post/comments/number_of", auth, postCtrl.getCountPostComments);
 
 // Route pour poster un commentaire
 router.post("/:id_post/comments", auth, postCtrl.saveComment);
