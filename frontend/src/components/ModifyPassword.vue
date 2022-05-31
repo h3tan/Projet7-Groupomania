@@ -166,9 +166,10 @@ export default {
       );
       if (!reponse.error) {
         this.confirm_password_change = true;
-        setTimeout(() => {
+/*         setTimeout(() => {
           location.reload();
-        }, 2000);
+        }, 2000); */
+        this.$emit('password_changed');
         return;
       }
       this.showErrorPassword = true;

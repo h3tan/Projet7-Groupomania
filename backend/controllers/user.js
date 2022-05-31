@@ -36,7 +36,7 @@ exports.signup = async (req, res, next) => {
 
 exports.login = (req, res, next) => {
   connexion.query(
-    `SELECT user.id_user, user.nickname, user.password, user.picture FROM user WHERE nickname = ?`,
+    `SELECT user.id_user, user.nickname, user.password, user.picture, user.privilege FROM user WHERE nickname = ?`,
     [req.body.nickname],
     function (err, result) {
       if (result[0] == undefined) {
@@ -46,6 +46,7 @@ exports.login = (req, res, next) => {
       let userId = result[0].id_user;
       let password = result[0].password;
       let avatar = result[0].picture;
+      let privilege = result[0].privilege;
       bcrypt
         .compare(req.body.password, password)
         .then((valid) => {
@@ -58,6 +59,7 @@ exports.login = (req, res, next) => {
               expiresIn: "24h",
             }),
             avatar: avatar,
+            privilege: privilege,
           });
         })
         .catch((error) => res.status(500).json({ error }));
@@ -124,17 +126,13 @@ exports.updatePicture = async (req, res, next) => {
 exports.updateUserInfos = async (req, res, next) => {
   try {
     connexion.query(
-      `update user set nickname = ?, last_name = ?, first_name = ?, email = ? where id_user = ?;`,
-      [
-        req.body.nickname,
-        req.body.last_name,
-        req.body.first_name,
-        req.body.email,
-        req.params.id,
-      ],
+      `update user set last_name = ?, first_name = ?, email = ? where id_user = ?;`,
+      [req.body.last_name, req.body.first_name, req.body.email, req.params.id],
       function (err, result) {
         if (err) {
-          res.status(400).json({ message: "Impossible de modifier l'image" });
+          res
+            .status(400)
+            .json({ message: "Impossible de modifier vos informations" });
           return;
         }
         res

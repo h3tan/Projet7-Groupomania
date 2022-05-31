@@ -75,7 +75,6 @@ export const requestUserInfos = async (id) => {
 
 export const requestUpdateUserFromAPI = async (
   id,
-  nickname,
   last_name,
   first_name,
   email
@@ -90,7 +89,6 @@ export const requestUpdateUserFromAPI = async (
         Authorization: localStorage.getItem("token"),
       },
       body: JSON.stringify({
-        nickname: nickname,
         last_name: last_name,
         first_name: first_name,
         email: email,

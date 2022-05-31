@@ -4,7 +4,7 @@
       <header>
         <div id="navbar">
           <div id="logo_not_logged" v-if="$store.state.logState == false">
-            <img
+            <img id="logo"
               alt="Groupomania logo"
               src="./assets/Groupomania-logo-red.png"
             />
@@ -58,6 +58,9 @@ export default {
 </script>
 
 <style lang="scss">
+#logo {
+  width: 100px;
+}
 body {
   margin: 0;
   margin-top: 100px;

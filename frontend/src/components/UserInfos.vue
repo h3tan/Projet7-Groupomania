@@ -11,7 +11,7 @@
       <div class="avatar_box">
         <UserAvatar :avatar="`${picture}`" />
       </div>
-      <form class="modify_avatar" @click="cancelProfilePictureChosen">
+      <form class="modify_avatar" v-on:submit.prevent="modifyProfilePicture">
         <label id="label_avatar" for="input_avatar">Choisir</label>
         <input
           type="file"
@@ -25,10 +25,8 @@
           <div id="image_type">{{ image_type }}</div>
         </div>
         <div class="profile_buttons">
-          <button @click="modifyProfilePicture" v-if="pictureChosen">
-            Modifier l'image
-          </button>
-          <button @click="cancelProfilePictureChosen" v-if="pictureChosen">
+          <button v-if="pictureChosen">Modifier l'image</button>
+          <button @click="cancelPictureChosen" v-if="pictureChosen">
             Annuler
           </button>
         </div>
@@ -36,14 +34,6 @@
     </div>
     <div class="user_infos">
       <form id="change_user_infos" v-on:submit.prevent="changeUserInfos">
-        <label for="nickname">Pseudo</label>
-        <input
-          @input="isNicknameValid(this.nickname, 'nickname')"
-          class="input_form"
-          id="nickname"
-          type="text"
-          v-model="nickname"
-        />
         <label for="last_name">Nom</label>
         <input
           @input="isLastNameValid(this.last_name, 'last_name')"
@@ -177,14 +167,13 @@ export default {
         location.reload();
       }
     },
-    cancelProfilePictureChosen() {
+    cancelPictureChosen() {
       this.pictureChosen = false;
     },
     async changeUserInfos() {
       let newNickname = this.nickname;
       let reponse = await requestUpdateUserFromAPI(
         localStorage.getItem("userId"),
-        this.nickname,
         this.last_name,
         this.first_name,
         this.email
