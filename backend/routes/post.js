@@ -31,23 +31,6 @@ router.delete(
   postCtrl.deletePost
 );
 
-// Route pour récupérer un like
-router.get(
-  "/:id_post/likes/:id_user",
-  auth,
-  checkLike.countPostLike,
-  checkLike.checkUserLike,
-  postCtrl.getLike
-);
-
-// Route pour modifier un like
-router.put(
-  "/:id_post/likes/:id_user",
-  auth,
-  checkLike.checkUserLike,
-  postCtrl.updateLike
-);
-
 // Route pour récupérer tous les commentaires d'un post
 router.get("/:id_post/comments", auth, postCtrl.getAllCommentsOfPost);
 
