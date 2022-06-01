@@ -3,8 +3,9 @@ const router = express.Router();
 const auth = require("../middlewares/auth");
 const pwdCheck = require("../middlewares/checkPassword");
 const userCtrl = require("../controllers/user");
-const multer = require("../middlewares/multer-config");
+//const multer = require("../middlewares/multer-config");
 const fileCtrl = require("../middlewares/fileCtrl");
+const multerAvatar = require("../middlewares/multer-avatar");
 
 // Route pour créer un compte utilisateur
 router.post("/signup", userCtrl.signup);
@@ -22,8 +23,8 @@ router.delete("/users/:id", auth, userCtrl.deleteUser);
 router.put(
   "/users/:id/avatar",
   auth,
-  multer,
-  fileCtrl.deleteOldFile,
+  multerAvatar,
+  fileCtrl.deleteOldAvatar,
   userCtrl.updatePicture
 );
 

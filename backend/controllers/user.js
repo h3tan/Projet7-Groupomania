@@ -102,7 +102,7 @@ exports.deleteUser = async (req, res, next) => {
 exports.updatePicture = async (req, res, next) => {
   try {
     if (req.file) {
-      let imageUrl = `${req.protocol}://${req.get("host")}/images/${
+      let imageUrl = `${req.protocol}://${req.get("host")}/avatar/${
         req.file.filename
       }`;
       connexion.query(

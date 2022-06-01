@@ -38,5 +38,6 @@ app.use("/api/auth/posts/", commentRoutes);
 
 // Envoie le fichier statique
 app.use("/images", express.static(path.join(__dirname, "images")));
+app.use("/avatar", express.static(path.join(__dirname, "avatar")));
 
 module.exports = app;
