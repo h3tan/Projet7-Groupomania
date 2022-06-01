@@ -17,7 +17,12 @@
         </div>
         <!-- Changement de l'image du post -->
         <div id="add_file">
-          <label id="label_file" for="input_file" v-if="sameUser || privilege == 'admin'" >{{ type_of_add }}</label>
+          <label
+            id="label_file"
+            for="input_file"
+            v-if="sameUser || privilege == 'admin'"
+            >{{ type_of_add }}</label
+          >
           <input
             type="file"
             id="input_file"
@@ -25,6 +30,9 @@
             accept="image/png, image/jpeg, image/gif"
             @change="handleFileUpload($event)"
           />
+<!--           <button @click="deletePostPicture">
+            Supprimez l'image
+          </button> -->
           <div class="picture_chosen" v-if="fileChosen">
             <div id="image_name">{{ file_name }}</div>
             <div id="image_type">{{ file_type }}</div>
@@ -63,33 +71,21 @@
       </transition>
     </div>
     <div class="show_interaction">
-      <div class="like_or_delete">
-        <div class="like" v-if="!sameUser">
-          <div class="like_icons" @click="modifyLike">
-            <transition name="cancel_like">
-              <i id="empty_heart" class="far fa-heart" v-if="!liked"></i>
-            </transition>
-            <transition name="display_like">
-              <i id="filled_heart" class="fas fa-heart" v-if="liked"></i>
-            </transition>
-          </div>
-          <span>J'aime</span>
-          <span class="num_likes">{{ num_likes }} likes</span>
-        </div>
-        <button id="delete_button" @click="deletePost" v-if="sameUser">Supprimer</button>
-      </div>
+      <LikeSection :user="sameUser" />
       <div class="show_interaction_buttons">
-        <div class="toggle_input_box">
-          <button
-            @click="toggleModifyPost"
-            v-if="sameUser || privilege == 'admin'"
-          >
-            {{ modifyButton }}
-          </button>
-          <button @click="deletePost" v-if="privilege == 'admin'">
-            Supprimer
-          </button>
-        </div>
+        <button id="modify_button" @click="toggleModifyPost" v-if="sameUser">
+          {{ modifyButton }}
+        </button>
+        <button
+          id="moderation_button"
+          @click="toggleModifyPost"
+          v-if="privilege == 'admin'"
+        >
+          {{ modifyButton }}
+        </button>
+        <button @click="deletePost" v-if="privilege == 'admin'">
+          Supprimer
+        </button>
       </div>
     </div>
   </div>
@@ -97,12 +93,12 @@
 
 <script>
 import UserAvatar from "@/components/UserAvatar.vue";
+import LikeSection from "@/components/LikeSection";
 import { getPostFromAPI } from "@/functions/fetchPost.js";
 import { requestUpdatePostFromAPI } from "@/functions/fetchPost.js";
 import { requestDeletePostFromAPI } from "@/functions/fetchPost.js";
-import { getLikeFromAPI } from "@/functions/fetchLike.js";
-import { sendLikeToAPI } from "@/functions/fetchLike.js";
 import { requestModifyPostPictureToAPI } from "@/functions/fetchPost.js";
+/* import { requestDeletePostPictureFromAPI } from "@/functions/fetchPost.js"; */
 
 export default {
   name: "PostCard",
@@ -124,18 +120,17 @@ export default {
       input_container: false,
       pictureExists: false,
       sameUser: false,
-      liked: "",
-      num_likes: 0,
       fileChosen: false,
       file_name: "",
       file_type: "",
       file_upload: "",
       type_of_add: "Ajouter une image",
-      confirm_add: "Ajouter"
+      confirm_add: "Ajouter",
     };
   },
   components: {
     UserAvatar,
+    LikeSection,
   },
   methods: {
     getPostFromAPI,
@@ -197,6 +192,12 @@ export default {
         this.assignPostInformations();
       }
     },
+/*     async deletePostPicture() {
+      let reponse = await requestDeletePostPictureFromAPI(this.post_ic, this.post_picture);
+        if (!reponse.error) {
+          return;
+        }
+      }, */
     // Prépare le post pour l'envoyer à l'API puis redirige vers whatsnew
     async updatePost() {
       //this.modify_title = this.modify_title.replace(/'/g, "''");
@@ -208,31 +209,20 @@ export default {
       );
       this.assignPostInformations();
       this.input_container = false;
-      this.modifyButton = "Modifier";
-      return reponse;
-    },
-    // Récupère le nombre de likes du post ainsi que si l'utilisateur connecté a liké ce post
-    async assignLike() {
-      let isLiked = await getLikeFromAPI(this.$route.params.id, this.userId);
-      this.num_likes = isLiked.countLikes;
-      if (isLiked.isLiked == 1) {
-        this.liked = true;
-      }
-    },
-    // Demande à l'API de modifier le like de l'utilisateur connecté
-    async modifyLike() {
-      let reponse = await sendLikeToAPI(this.$route.params.id, this.userId);
-      if (reponse.message == "post liké!") {
-        this.liked = true;
-        this.num_likes++;
+      if (this.privilege == "admin") {
+        this.modifyButton = "Modérer";
         return;
       }
-      this.liked = false;
-      this.num_likes--;
+      this.modifyButton = "Modifier";
+      return reponse;
     },
     toggleModifyPost() {
       if (this.modifyButton == "Annuler") {
         this.input_container = false;
+        if (this.privilege == "admin") {
+          this.modifyButton = "Modérer";
+          return;
+        }
         this.modifyButton = "Modifier";
       } else {
         this.input_container = true;
@@ -242,7 +232,6 @@ export default {
   },
   created() {
     this.assignPostInformations();
-    this.assignLike();
   },
 };
 </script>
@@ -383,6 +372,18 @@ h3 {
 }
 .show_interaction_buttons {
   display: flex;
+  width: 50%;
+  flex-direction: column;
+  justify-content: center;
+  row-gap: 10px;
+  align-items: center;
+}
+
+#modify_button {
+  margin-bottom: 25px;
+}
+#moderation_button {
+  margin-bottom: 0;
 }
 label {
   width: 80%;
@@ -406,16 +407,7 @@ h4 {
   align-items: center;
   padding-bottom: 20px;
 }
-.like_or_delete {
-  width: 50%;
-}
 .toggle_input_box {
-  margin: auto;
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  row-gap: 15px;
-
   button {
     width: 100px;
   }
@@ -431,47 +423,6 @@ h4 {
   margin-bottom: 10px;
   padding-left: 5px;
 }
-.like {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-
-  .num_likes {
-    bottom: 15px;
-    position: absolute;
-  }
-  span {
-    margin-top: -15px;
-    margin-left: 10px;
-  }
-}
-.like_icons {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  //margin-left: 27%;
-  margin-top: -12px;
-  height: 30px;
-  //position: absolute;
-  width: 30px;
-
-  i {
-    color: red;
-    font-size: 25px;
-    background: red;
-    background-clip: text;
-    -webkit-background-clip: text;
-    position: absolute;
-  }
-  #empty_heart {
-    color: black;
-  }
-}
-#delete_button {
-  margin-top: 38px;
-}
 // Animation pour les inputs de la modification ou du commentaire
 .appear-enter-active {
   transition-delay: 1s;
@@ -483,24 +434,5 @@ h4 {
 .appear-enter-active,
 .appear-leave-active {
   transition: opacity 1s ease;
-}
-
-// Animation des coeurs
-.display_like-enter-from,
-.display_like-leave-to {
-  transform: scale(0);
-}
-.display_like-enter-active,
-.display_like-leave-active {
-  transition: all 0.5s ease;
-}
-
-.cancel_like-enter-from,
-.cancel_like-leave-to {
-  transform: scale(0);
-}
-.cancel_like-enter-active,
-.cancel-like-leave-active {
-  transition: all 0.5s ease;
 }
 </style>
