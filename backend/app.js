@@ -6,6 +6,7 @@ const app = express();
 const userRoutes = require("./routes/user.js");
 const postRoutes = require("./routes/post.js");
 const likesRoutes = require("./routes/likes.js");
+const commentRoutes = require("./routes/comment.js");
 
 connexion.connect(function (err) {
   if (err) throw err;
@@ -31,9 +32,9 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/auth/", userRoutes);
-app.use("/api/auth/posts", postRoutes);
+app.use("/api/auth/posts/", postRoutes);
 app.use("/api/auth/posts/", likesRoutes);
-//app.use("/api/auth/posts/:id", commentRoutes)
+app.use("/api/auth/posts/", commentRoutes);
 
 // Envoie le fichier statique
 app.use("/images", express.static(path.join(__dirname, "images")));

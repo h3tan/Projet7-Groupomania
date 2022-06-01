@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../middlewares/auth");
-const checkLike = require("../middlewares/checkLike");
+//const checkLike = require("../middlewares/checkLike");
 const checkPost = require("../middlewares/checkPost");
 const multer = require("../middlewares/multer-config");
 const fileCtrl = require("../middlewares/fileCtrl");
@@ -30,20 +30,5 @@ router.delete(
   fileCtrl.deleteFile,
   postCtrl.deletePost
 );
-
-// Route pour récupérer tous les commentaires d'un post
-router.get("/:id_post/comments", auth, postCtrl.getAllCommentsOfPost);
-
-// Route pour compter tous les commentaires d'un post
-router.get("/:id_post/comments/number_of", auth, postCtrl.getCountPostComments);
-
-// Route pour poster un commentaire
-router.post("/:id_post/comments", auth, postCtrl.saveComment);
-
-// Route pour modifier un commentaire
-router.put("/:id_post/comments/:id_comment", auth, postCtrl.updateComment);
-
-// Route pour supprimer un commentaire
-router.delete("/:id_post/comments/:id_comment", auth, postCtrl.deleteComment);
 
 module.exports = router;
