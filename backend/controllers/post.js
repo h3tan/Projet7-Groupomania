@@ -72,22 +72,25 @@ exports.updatePost = async (req, res, next) => {
 
 exports.updateFile = async (req, res, next) => {
   try {
+    let imageUrl = "";
     if (req.file) {
-      let imageUrl = `${req.protocol}://${req.get("host")}/images/${
+      imageUrl = `${req.protocol}://${req.get("host")}/images/${
         req.file.filename
       }`;
-      connexion.query(
-        `update post set post_picture = ? where id_post = ?;`,
-        [imageUrl, req.params.id_post],
-        function (err, result) {
-          if (err) {
-            res.status(400).json({ message: "Impossible de modifier l'image" });
-            return;
-          }
-          res.status(200).json({ imageUrl: imageUrl });
-        }
-      );
+    } else {
+      imageUrl = null;
     }
+    connexion.query(
+      `update post set post_picture = ? where id_post = ?;`,
+      [imageUrl, req.params.id_post],
+      function (err, result) {
+        if (err) {
+          res.status(400).json({ message: "Impossible de modifier l'image" });
+          return;
+        }
+        res.status(200).json({ imageUrl: imageUrl });
+      }
+    );
   } catch (err) {
     let message = "Erreur avec les données";
     throw new Error(message);

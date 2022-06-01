@@ -16,11 +16,11 @@
           <img alt="Image posté par l'utilisateur" :src="`${post_picture}`" />
         </div>
         <!-- Changement de l'image du post -->
-        <div id="add_file">
+        <div id="add_file" v-if="sameUser || privilege =='admin' ">
           <label
             id="label_file"
             for="input_file"
-            v-if="sameUser || privilege == 'admin'"
+            v-if="sameUser"
             >{{ type_of_add }}</label
           >
           <input
@@ -29,16 +29,20 @@
             name="file"
             accept="image/png, image/jpeg, image/gif"
             @change="handleFileUpload($event)"
+            v-if="sameUser"
           />
-<!--           <button @click="deletePostPicture">
+          <button
+            @click="modifyPostPicture('delete')"
+            v-if="(!fileChosen && pictureExists) && (sameUser || privilege == 'admin')"
+          >
             Supprimez l'image
-          </button> -->
+          </button>
           <div class="picture_chosen" v-if="fileChosen">
             <div id="image_name">{{ file_name }}</div>
             <div id="image_type">{{ file_type }}</div>
           </div>
           <div class="picture_buttons">
-            <button @click="modifyPostPicture" v-if="fileChosen">
+            <button @click="modifyPostPicture('modify')" v-if="fileChosen">
               {{ confirm_add }}
             </button>
             <button @click="cancelFileChosen" v-if="fileChosen">Annuler</button>
@@ -98,7 +102,6 @@ import { getPostFromAPI } from "@/functions/fetchPost.js";
 import { requestUpdatePostFromAPI } from "@/functions/fetchPost.js";
 import { requestDeletePostFromAPI } from "@/functions/fetchPost.js";
 import { requestModifyPostPictureToAPI } from "@/functions/fetchPost.js";
-/* import { requestDeletePostPictureFromAPI } from "@/functions/fetchPost.js"; */
 
 export default {
   name: "PostCard",
@@ -181,23 +184,25 @@ export default {
         }
       }
     },
-    async modifyPostPicture() {
+    async modifyPostPicture(request) {
+      if (request == "delete") {
+        this.file_upload = "";
+      }
       let reponse = await requestModifyPostPictureToAPI(
         this.post_id,
         this.file_upload,
         this.post_picture
       );
       if (!reponse.error) {
+        if (!reponse.imageUrl) {
+          this.pictureExists = false;
+          this.type_of_add = "Ajouter une image";
+          this.confirm_add = "Ajouter";
+        }
         this.fileChosen = false;
         this.assignPostInformations();
       }
     },
-/*     async deletePostPicture() {
-      let reponse = await requestDeletePostPictureFromAPI(this.post_ic, this.post_picture);
-        if (!reponse.error) {
-          return;
-        }
-      }, */
     // Prépare le post pour l'envoyer à l'API puis redirige vers whatsnew
     async updatePost() {
       //this.modify_title = this.modify_title.replace(/'/g, "''");
