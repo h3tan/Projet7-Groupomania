@@ -1,8 +1,8 @@
 <template>
   <div id="main_vue">
     <transition name="toggleNavBar">
-      <header>
-        <div id="navbar">
+      <header id="header">
+        <div id="nav_bar">
           <div id="logo_not_logged" v-if="$store.state.logState == false">
             <img id="logo"
               alt="Groupomania logo"
@@ -40,9 +40,9 @@ export default {
       window.onscroll = function () {
         var currentScrollPos = window.pageYOffset;
         if (prevScrollpos > currentScrollPos) {
-          document.getElementById("navbar").style.top = "0";
+          document.getElementById("header").style.top = "0";
         } else {
-          document.getElementById("navbar").style.top = "-60px";
+          document.getElementById("header").style.top = "-60px";
         }
         prevScrollpos = currentScrollPos;
       };
@@ -84,7 +84,7 @@ header {
   background-color: white;
   transition: top 0.3s;
 }
-#navbar {
+#nav_bar {
   display: flex;
   align-items: center;
   justify-content: space-between;

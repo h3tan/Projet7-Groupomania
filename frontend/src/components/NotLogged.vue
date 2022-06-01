@@ -47,7 +47,7 @@ export default {
     document.addEventListener("click", (event) => {
       if (document.querySelector(".nav_menu__icon") != null) {
         // If the clicked element is not a child of #sideNav..
-        if (event.target.closest("#navbar") === null) {
+        if (event.target.closest("#header") === null) {
           this.show_nav = false;
           this.rotateIcon = false;
           document.querySelector(".nav_menu__icon").style.backgroundColor = "white";

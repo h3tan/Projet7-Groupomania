@@ -85,12 +85,13 @@ import { requestDeleteCommentFromAPI } from "@/functions/fetchComment.js";
 import { sendNewCommentToAPI } from "@/functions/fetchComment.js";
 
 export default {
-  name: "CommentBox",
+  name: "CommentSection",
   data() {
     return {
       comments: [],
       show_comment: false,
       title_comment: "Pas de commentaires",
+      post_comment: "",
       comment_message: "",
       new_comment: false,
       count_comments: "",

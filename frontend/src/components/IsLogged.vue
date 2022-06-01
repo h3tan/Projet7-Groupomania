@@ -55,12 +55,14 @@ export default {
   },
   methods: {
     toggleUserMenu() {
-      if (!this.show_nav_user) {
-        this.show_nav_user = true;
-        document.querySelector(".avatar_box").style.backgroundColor = "red";
-      } else {
-        this.show_nav_user = false;
-        document.querySelector(".avatar_box").style.backgroundColor = "white";
+      if (document.querySelector(".avatar_box")) {
+        if (!this.show_nav_user) {
+          this.show_nav_user = true;
+          document.querySelector(".avatar_box").style.backgroundColor = "red";
+        } else {
+          this.show_nav_user = false;
+          document.querySelector(".avatar_box").style.backgroundColor = "white";
+        }
       }
     },
     togglePostMenu() {
@@ -84,7 +86,7 @@ export default {
     document.addEventListener("click", (event) => {
       if (document.querySelector(".avatar_box") != null) {
         // If the clicked element is not a child of #sideNav..
-        if (event.target.closest("#navbar") === null) {
+        if (event.target.closest("#header") === null) {
           this.show_nav_user = false;
           this.show_nav_post = false;
           document.querySelector(".avatar_box").style.backgroundColor = "white";
