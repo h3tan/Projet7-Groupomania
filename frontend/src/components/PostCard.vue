@@ -443,7 +443,8 @@ h4 {
     position: absolute;
   }
   span {
-    margin-top: -6px;
+    margin-top: -15px;
+    margin-left: 10px;
   }
 }
 .like_icons {

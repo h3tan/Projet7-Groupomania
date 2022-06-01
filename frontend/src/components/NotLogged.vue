@@ -69,7 +69,7 @@ export default {
     width: 50px;
     height: 60px;
     padding-top: 15px;
-    border-bottom: 1px solid red;
+    border-bottom: 2px solid red;
   }
 }
 

@@ -23,18 +23,6 @@
           <i class="fas fa-eye-slash" v-if="!password_showed"></i>
           <i class="fas fa-eye" v-if="password_showed"></i>
         </div>
-        <label for="confirm_password">Confirmez le mot de passe</label>
-        <input
-          @input="isPasswordValid(this.confirm_password, 'confirm_password')"
-          class="input_form"
-          id="confirm_password"
-          type="password"
-          v-model="confirm_password"
-        />
-        <div id="show_confirm_password" @click="toggleShowConfirmPassword">
-          <i class="fas fa-eye-slash" v-if="!confirm_password_showed"></i>
-          <i class="fas fa-eye" v-if="confirm_password_showed"></i>
-        </div>
       </div>
       <div class="submit_form">
         <transition name="fadeButton">
@@ -71,12 +59,10 @@ export default {
     return {
       nickname: "",
       password: "",
-      confirm_password: "",
       confirmLogin: "",
       showErrorLogin: "",
       errorLogin: "",
       password_showed: false,
-      confirm_password_showed: false,
     };
   },
   components: {
@@ -96,33 +82,16 @@ export default {
         document.getElementById("password").setAttribute("type", "password");
       }
     },
-    toggleShowConfirmPassword() {
-      if (!this.confirm_password_showed) {
-        this.confirm_password_showed = true;
-        document
-          .getElementById("confirm_password")
-          .setAttribute("type", "text");
-      } else {
-        this.confirm_password_showed = false;
-        document
-          .getElementById("confirm_password")
-          .setAttribute("type", "password");
-      }
-    },
     async logIn() {
       this.showErrorLogin = false;
-      if (this.password != this.confirm_password) {
-        this.showErrorLogin = true;
-        this.errorLogin = "Veuillez reconfirmez votre mot de passe";
-        return;
-      }
-      let reponse = await sendLoginForm(this.nickname, this.confirm_password);
+      let reponse = await sendLoginForm(this.nickname, this.password);
       if (!reponse.error) {
         localStorage.clear();
         localStorage.setItem("userId", reponse.userId);
         localStorage.setItem("token", `BEARER ${reponse.token}`);
         localStorage.setItem("nickname", this.nickname);
         localStorage.setItem("avatar", reponse.avatar);
+        localStorage.setItem("privilege", reponse.privilege);
         this.showErrorLogin = false;
         this.confirmLogin = true;
         setTimeout(() => {
@@ -154,15 +123,9 @@ export default {
   position: absolute;
   right: 20px;
   width: 30px;
-  bottom: 97px;
+  bottom: 25px;
 }
-#show_confirm_password {
-  font-size: 20px;
-  position: absolute;
-  right: 20px;
-  width: 30px;
-  bottom: 24px;
-}
+
 i {
   position: absolute;
 }
