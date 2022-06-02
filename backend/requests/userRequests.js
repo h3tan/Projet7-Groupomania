@@ -2,6 +2,31 @@ const bcrypt = require("bcrypt");
 //const jwt = require("jsonwebtoken");
 const connexion = require("../mysql_connect");
 
+exports.requestSignUp = async (req, res, next) => {
+  try {
+    let passwordHash = await bcrypt.hash(req.body.password, 10);
+    connexion.query(
+      `INSERT INTO user (nickname, last_name, first_name, email, password)
+        values (?, ?, ?, ?, ?)`,
+      [
+        req.body.nickname,
+        req.body.lastName,
+        req.body.firstName,
+        req.body.email,
+        passwordHash,
+      ],
+      function (err, result) {
+        req.passwordHash = passwordHash;
+        req.errorSignUpResult = err;
+        next();
+      }
+    );
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};
+
 exports.requestLogin = async (req, res, next) => {
   try {
     connexion.query(

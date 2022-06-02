@@ -10,13 +10,17 @@ const checkUser = require("../middlewares/checkUser");
 const multerAvatar = require("../middlewares/multer-avatar");
 
 // Route pour créer un compte utilisateur
-router.post("/signup", userCtrl.signup);
+router.post(
+  "/signup",
+  checkInputs.checkSignUpInputs,
+  userReq.requestSignUp,
+  userCtrl.signup
+);
 
 // Route pour se connecter à un compte utilisateur
 router.post(
   "/login",
-  checkInputs.checkMailInput,
-  checkInputs.checkPasswordInput,
+  checkInputs.checkLoginInputs,
   userReq.requestLogin,
   userCtrl.login
 );

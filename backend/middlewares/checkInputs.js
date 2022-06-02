@@ -4,15 +4,6 @@ isEmailValid = (email) => {
   return emailRegex.test(email);
 };
 
-// Middleware pour vérifier si l'email entré est correct
-exports.checkMailInput = (req, res, next) => {
-  if (!isEmailValid(req.body.email)) {
-    res.status(400).json({ message: "email non valide" });
-    return;
-  }
-  next();
-};
-
 // Vérifie qu'un password est suffisamment sécurisé
 // Comporte 10 caractères, 1 minuscule, 1 majuscule, 1 chiffre et un caractère spécial
 isPasswordValid = (password) => {
@@ -20,20 +11,44 @@ isPasswordValid = (password) => {
   return regex.test(password);
 };
 
-// Middleware pour vérifier qu'un mot de passe est suffisamment sécurisé
-// contient au moins 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial et une longueur d'au moins 10
-exports.checkPasswordInput = (req, res, next) => {
+// Vérifie si "name" n'est pas composé de chiffres
+isNameValid = (name) => {
+  const regex = /^[a-z ,.'-]+$/i;
+  return regex.test(name);
+};
+
+// Vérifie les entrées utilisateurs du formulaire de connexion
+exports.checkLoginInputs = (req, res, next) => {
+  if (!isEmailValid(req.body.email)) {
+    res.status(400).json({ error: "email non valide" });
+  }
   if (!isPasswordValid(req.body.password)) {
     res
       .status(400)
-      .json({ message: "Veuillez entrer un mot de passe plus sécurisé" });
+      .json({ error: "Veuillez entrer un mot de passe plus sécurisé" });
     return;
   }
   next();
 };
 
-// Vérifie si "name" n'est pas composé de chiffres
-isNameValid = (name) => {
-  const regex = /^[a-z ,.'-]+$/i;
-  return regex.test(name);
+// Vérifie les entrées utilisateurs pour le formulaire d'inscription
+exports.checkSignUpInputs = (req, res, next) => {
+  if (!isNameValid(req.last_name)) {
+    res.status(400).json({ error: "Nom non valide" });
+    return;
+  }
+  if (!isNameValid(req.last_name)) {
+    res.status(400).json({ error: "Prénom non valide" });
+    return;
+  }
+  if (!isEmailValid(req.body.email)) {
+    res.status(400).json({ error: "email non valide" });
+  }
+  if (!isPasswordValid(req.body.password)) {
+    res
+      .status(400)
+      .json({ error: "Veuillez entrer un mot de passe plus sécurisé" });
+    return;
+  }
+  next();
 };

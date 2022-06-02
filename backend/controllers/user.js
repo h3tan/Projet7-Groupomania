@@ -4,34 +4,15 @@ const jwt = require("jsonwebtoken");
 const connexion = require("../mysql_connect");
 
 exports.signup = async (req, res, next) => {
-  try {
-    let passwordHash = await bcrypt.hash(req.body.password, 10);
-    connexion.query(
-      `INSERT INTO user (nickname, last_name, first_name, email, password)
-        values (?, ?, ?, ?, ?)`,
-      [
-        req.body.nickname,
-        req.body.lastName,
-        req.body.firstName,
-        req.body.email,
-        passwordHash,
-      ],
-      function (err, result) {
-        if (err) {
-          res.status(401).json({ error: "Nom ou email déjà utilisé" });
-          return;
-        }
-        res.status(200).json({
-          nickname: req.body.nickname,
-          email: req.body.email,
-          password: passwordHash,
-        });
-      }
-    );
-  } catch (err) {
-    let message = "Erreur avec les données";
-    throw new Error(message);
+  if (req.errorSignUpResult) {
+    res.status(401).json({ error: "Nom ou email déjà utilisé" });
+    return;
   }
+  res.status(200).json({
+    nickname: req.body.nickname,
+    email: req.body.email,
+    password: req.passwordHash,
+  });
 };
 
 exports.login = (req, res, next) => {
