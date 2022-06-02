@@ -16,6 +16,22 @@ exports.requestAllPosts = async (req, res, next) => {
   }
 };
 
+exports.requestPostPicture = async (req, res, next) => {
+  try {
+    connexion.query(
+      `select post_picture from post where id_post = ?`,
+      [req.params.id],
+      function (err, result) {
+        req.post_picture = result[0].post_picture;
+        next();
+      }
+    );
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};
+
 exports.savePostInDatabase = async (req, res, next) => {
   try {
     let imageUrl = null;
@@ -29,6 +45,22 @@ exports.savePostInDatabase = async (req, res, next) => {
       [req.body.title, req.body.text, imageUrl, req.body.userId],
       function (err, result) {
         req.errorPost = err;
+        next();
+      }
+    );
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};
+
+exports.requestDeletePost = async (req, res, next) => {
+  try {
+    connexion.query(
+      `delete from post where id_post = ?`,
+      [req.params.id],
+      function (err, result) {
+        req.errorDeletePost = err;
         next();
       }
     );

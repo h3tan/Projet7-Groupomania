@@ -39,8 +39,9 @@ router.put(
 router.delete(
   "/:id",
   auth,
-  checkPost.checkPost,
+  postReq.requestPostPicture,
   fileCtrl.deleteFile,
+  postReq.requestDeletePost,
   postCtrl.deletePost
 );
 

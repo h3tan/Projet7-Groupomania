@@ -14,8 +14,8 @@ exports.deleteOldFile = (req, res, next) => {
 
 // Suppression de l'image dans le dossier 'images'
 exports.deleteFile = (req, res, next) => {
-  if (req.post[0].post_picture != null) {
-    const filename = req.post[0].post_picture.split("/images/")[1];
+  if (req.post_picture != null) {
+    const filename = req.post_picture.split("/images/")[1];
     fs.unlink(`images/${filename}`, () => {
       console.log(`${filename} deleted`);
     });

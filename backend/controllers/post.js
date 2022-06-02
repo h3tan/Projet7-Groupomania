@@ -72,20 +72,9 @@ exports.updateFile = async (req, res, next) => {
 
 // Contrôleur pour supprimer un post de la base de données
 exports.deletePost = async (req, res, next) => {
-  try {
-    connexion.query(
-      `delete from post where id_post = ?`,
-      [req.params.id],
-      function (err, result) {
-        if (err) {
-          res.status(400).json({ message: "impossible de supprimer" });
-          return;
-        }
-      }
-    );
-    res.status(200).json({ message: "Ce post a été supprimé!" });
-  } catch (err) {
-    let message = "Erreur avec les données";
-    throw new Error(message);
+  if (req.errorDeletePost) {
+    res.status(400).json({ message: "Impossible de supprimer" });
+    return;
   }
+  res.status(200).json({ message: "Post supprimé" });
 };
