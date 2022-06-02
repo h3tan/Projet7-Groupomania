@@ -21,10 +21,10 @@ router.post(
 router.get("/", auth, postReq.requestAllPosts, postCtrl.sendAllPostsToFront);
 
 // Route pour récupérer un message
-router.get("/:id", auth, checkPost.checkPost, postCtrl.getPostFromAPI);
+router.get("/:id", auth, postReq.requestPost, postCtrl.sendPostInfosToFront);
 
 // Route pour modifier un message
-router.put("/:id", auth, postCtrl.updatePost);
+router.put("/:id", auth, postReq.RequestUpdatePost, postCtrl.SendUpdatePostResult);
 
 // Route pour modifier l'image d'un message
 router.put(

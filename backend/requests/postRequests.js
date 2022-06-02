@@ -16,6 +16,24 @@ exports.requestAllPosts = async (req, res, next) => {
   }
 };
 
+exports.requestPost = async (req, res, next) => {
+  try {
+    connexion.query(
+      `select post.id_post, post.title, post.date_post, post.user_id, post.message, user.nickname, user.picture
+        from post join user on user.id_user = post.user_id where post.id_post = ?`,
+      [req.params.id],
+      function (err, result) {
+        req.errorRequestPost;
+        req.post = result;
+        next();
+      }
+    );
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};
+
 exports.requestPostPicture = async (req, res, next) => {
   try {
     connexion.query(
@@ -45,6 +63,22 @@ exports.savePostInDatabase = async (req, res, next) => {
       [req.body.title, req.body.text, imageUrl, req.body.userId],
       function (err, result) {
         req.errorPost = err;
+        next();
+      }
+    );
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};
+
+exports.RequestUpdatePost = async (req, res, next) => {
+  try {
+    connexion.query(
+      `update post set title = ?, message = ?, date_post = now() where id_post = ?`,
+      [req.body.title, req.body.text, req.params.id],
+      function (err, result) {
+        req.errorUpdatePost = err;
         next();
       }
     );

@@ -1,6 +1,6 @@
 const connexion = require("../mysql_connect");
 
-// Contrôleur pour enregistrer un post dans la Base de données
+// Envoie le résultat de la requête pour publier un post
 exports.sendPostResult = async (req, res, next) => {
   if (req.errorPost) {
     res.status(400).json({ error: "Le post n'a pas pu être créé" });
@@ -10,37 +10,31 @@ exports.sendPostResult = async (req, res, next) => {
   return;
 };
 
-// Contrôleur pour récupérer tous les posts de la base de données avec les informations du créateur et dans l'ordre inverse
+// Envoie le résultat de la requête pour récupérer les informations d'un post
+exports.sendPostInfosToFront = async (req, res, next) => {
+  if (req.errorPost) {
+    res.status(404).json({ error: "Le post n'existe pas!" });
+    return;
+  }
+  res.status(200).json(req.post);
+};
+
+// Envoie les informations des posts
 exports.sendAllPostsToFront = async (req, res, next) => {
   if (req.errorAllPosts) {
-    res.status(400).json({ error: "Les posts n'ont pu être récupérés!" });
+    res.status(404).json({ error: "Les posts n'ont pu être récupérés!" });
     return;
   }
   res.status(200).json(req.resultAllPosts);
 };
 
-exports.getPostFromAPI = async (req, res, next) => {
-  res.status(200).json(req.post);
-};
-
 // Contrôleur pour mettre à jour un post dans la base de données
-exports.updatePost = async (req, res, next) => {
-  try {
-    connexion.query(
-      `update post set title = ?, message = ?, date_post = now() where id_post = ?`,
-      [req.body.title, req.body.text, req.params.id],
-      function (err, result) {
-        if (err) {
-          res.status(400).json({ message: "Impossible de modifier" });
-          return;
-        }
-        res.status(200).json({ message: "Post mis à jour!" });
-      }
-    );
-  } catch (err) {
-    let message = "Erreur avec les données";
-    throw new Error(message);
+exports.SendUpdatePostResult = async (req, res, next) => {
+  if (req.errorUpdatePost) {
+    res.status(400).json({ message: "Impossible de modifier" });
+    return;
   }
+  res.status(200).json({ message: "Post mis à jour!" });
 };
 
 exports.updateFile = async (req, res, next) => {
