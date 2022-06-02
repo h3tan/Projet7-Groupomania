@@ -86,7 +86,6 @@ export default {
       this.showErrorLogin = false;
       let reponse = await sendLoginForm(this.email, this.password);
       if (!reponse.error) {
-        console.log(reponse);
         localStorage.clear();
         localStorage.setItem("userId", reponse.userId);
         localStorage.setItem("token", `BEARER ${reponse.token}`);

@@ -3,15 +3,26 @@ const router = express.Router();
 const auth = require("../middlewares/auth");
 const pwdCheck = require("../middlewares/checkPassword");
 const userCtrl = require("../controllers/user");
-//const multer = require("../middlewares/multer-config");
+const userReq = require("../requests/userRequests");
 const fileCtrl = require("../middlewares/fileCtrl");
+const checkInputs = require("../middlewares/checkInputs");
+const checkUser = require("../middlewares/checkUser");
 const multerAvatar = require("../middlewares/multer-avatar");
 
 // Route pour créer un compte utilisateur
 router.post("/signup", userCtrl.signup);
 
 // Route pour se connecter à un compte utilisateur
-router.post("/login", userCtrl.login);
+//router.post("/login", userCtrl.login);
+
+// Route pour se connecter à un compte utilisateur
+router.post(
+  "/login",
+  checkInputs.checkMailInput,
+  checkInputs.checkPasswordInput,
+  userReq.requestLogin,
+  userCtrl.login
+);
 
 // Route pour obtenir les infos utilisateurs
 router.get("/users/:id", auth, userCtrl.getUserInfos);

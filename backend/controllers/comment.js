@@ -27,7 +27,7 @@ exports.saveComment = async (req, res, next) => {
 exports.getAllCommentsOfPost = async (req, res, next) => {
   try {
     connexion.query(
-      `select id_comment, comment_message, date_comment, nickname, picture, comment.id_user from comment join user on comment.id_user = user.id_user where id_post = ?`,
+      `select id_comment, comment_message, date_comment, comment.id_user, nickname, picture, comment.id_user from comment join user on comment.id_user = user.id_user where id_post = ?`,
       [req.params.id_post],
       function (err, result) {
         if (err) {

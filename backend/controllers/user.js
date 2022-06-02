@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const fs = require("fs");
+//const fs = require("fs");
 const connexion = require("../mysql_connect");
 
 exports.signup = async (req, res, next) => {
@@ -35,38 +35,32 @@ exports.signup = async (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
-  connexion.query(
-    `SELECT user.id_user, user.nickname, user.password, user.picture, user.privilege FROM user WHERE email = ?`,
-    [req.body.email],
-    function (err, result) {
-      if (result[0] == undefined) {
-        res.status(401).json({ error: "Nom d'utilisateur incorrect" });
-        return;
+  if (req.loginResult == undefined) {
+    res.status(401).json({ error: "Nom d'utilisateur incorrect" });
+    return;
+  }
+  let password = req.loginResult.password;
+  bcrypt
+    .compare(req.body.password, password)
+    .then((valid) => {
+      if (!valid) {
+        return res.status(401).json({ error: "Mot de passe incorrect" });
       }
-      let userId = result[0].id_user;
-      let nickname = result[0].nickname;
-      let password = result[0].password;
-      let avatar = result[0].picture;
-      let privilege = result[0].privilege;
-      bcrypt
-        .compare(req.body.password, password)
-        .then((valid) => {
-          if (!valid) {
-            return res.status(401).json({ error: "Mot de passe incorrect" });
-          }
-          res.status(200).json({
-            userId: userId,
-            nickname: nickname,
-            token: jwt.sign({ userId: userId }, "RANDOM_TOKEN_SECRET", {
-              expiresIn: "24h",
-            }),
-            avatar: avatar,
-            privilege: privilege,
-          });
-        })
-        .catch((error) => res.status(500).json({ error }));
-    }
-  );
+      let userId = req.loginResult.id_user;
+      let nickname = req.loginResult.nickname;
+      let avatar = req.loginResult.picture;
+      let privilege = req.loginResult.privilege;
+      res.status(200).json({
+        userId: userId,
+        nickname: nickname,
+        token: jwt.sign({ userId: userId }, "RANDOM_TOKEN_SECRET", {
+          expiresIn: "24h",
+        }),
+        avatar: avatar,
+        privilege: privilege,
+      });
+    })
+    .catch((error) => res.status(500).json({ error }));
 };
 
 exports.getUserInfos = async (req, res, next) => {
