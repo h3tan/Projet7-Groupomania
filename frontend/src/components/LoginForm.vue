@@ -2,13 +2,13 @@
   <div class="login_page">
     <h2>Veuillez vous connecter</h2>
     <form id="login" v-on:submit.prevent="logIn">
-      <label for="nickname">Nom d'utilisateur</label>
+      <label for="nickname">E-Mail</label>
       <input
-        @input="isNicknameValid(this.nickname, 'nickname')"
+        @input="isEmailValid(this.email, 'email')"
         class="input_form"
-        id="nickname"
+        id="email"
         type="text"
-        v-model="nickname"
+        v-model="email"
       />
       <div class="password_box">
         <label for="password">Mot de passe</label>
@@ -48,7 +48,7 @@
 
 <script>
 import UserButton from "./UserButton.vue";
-import { isNicknameValid } from "../functions/formCheck.js";
+import { isEmailValid } from "../functions/formCheck.js";
 import { isPasswordValid } from "../functions/formCheck.js";
 import { sendLoginForm } from "../functions/fetchUser.js";
 import { userLogged } from "../functions/fetchUser.js";
@@ -57,7 +57,7 @@ export default {
   name: "LoginForm",
   data() {
     return {
-      nickname: "",
+      email: "",
       password: "",
       confirmLogin: "",
       showErrorLogin: "",
@@ -69,7 +69,7 @@ export default {
     UserButton,
   },
   methods: {
-    isNicknameValid,
+    isEmailValid,
     isPasswordValid,
     sendLoginForm,
     userLogged,
@@ -84,12 +84,13 @@ export default {
     },
     async logIn() {
       this.showErrorLogin = false;
-      let reponse = await sendLoginForm(this.nickname, this.password);
+      let reponse = await sendLoginForm(this.email, this.password);
       if (!reponse.error) {
+        console.log(reponse);
         localStorage.clear();
         localStorage.setItem("userId", reponse.userId);
         localStorage.setItem("token", `BEARER ${reponse.token}`);
-        localStorage.setItem("nickname", this.nickname);
+        localStorage.setItem("nickname", reponse.nickname);
         localStorage.setItem("avatar", reponse.avatar);
         localStorage.setItem("privilege", reponse.privilege);
         this.showErrorLogin = false;

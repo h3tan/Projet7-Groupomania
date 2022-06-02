@@ -1,4 +1,4 @@
-export const sendLoginForm = async (nickname, password) => {
+export const sendLoginForm = async (email, password) => {
   try {
     let loginFormJson = await fetch("http://localhost:3000/api/auth/login", {
       mode: "cors",
@@ -8,7 +8,7 @@ export const sendLoginForm = async (nickname, password) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        nickname: `${nickname}`,
+        email: `${email}`,
         password: `${password}`,
       }),
     });

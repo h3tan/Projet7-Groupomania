@@ -36,14 +36,15 @@ exports.signup = async (req, res, next) => {
 
 exports.login = (req, res, next) => {
   connexion.query(
-    `SELECT user.id_user, user.nickname, user.password, user.picture, user.privilege FROM user WHERE nickname = ?`,
-    [req.body.nickname],
+    `SELECT user.id_user, user.nickname, user.password, user.picture, user.privilege FROM user WHERE email = ?`,
+    [req.body.email],
     function (err, result) {
       if (result[0] == undefined) {
         res.status(401).json({ error: "Nom d'utilisateur incorrect" });
         return;
       }
       let userId = result[0].id_user;
+      let nickname = result[0].nickname;
       let password = result[0].password;
       let avatar = result[0].picture;
       let privilege = result[0].privilege;
@@ -55,6 +56,7 @@ exports.login = (req, res, next) => {
           }
           res.status(200).json({
             userId: userId,
+            nickname: nickname,
             token: jwt.sign({ userId: userId }, "RANDOM_TOKEN_SECRET", {
               expiresIn: "24h",
             }),
