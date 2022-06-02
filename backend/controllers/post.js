@@ -1,30 +1,13 @@
 const connexion = require("../mysql_connect");
 
 // Contrôleur pour enregistrer un post dans la Base de données
-exports.post = async (req, res, next) => {
-  try {
-    let imageUrl = null;
-    if (req.file) {
-      imageUrl = `${req.protocol}://${req.get("host")}/images/${
-        req.file.filename
-      }`;
-    }
-    connexion.query(
-      `insert into post (title, message, post_picture, date_post, user_id) values (?, ?, ?, now(), ?);`,
-      [req.body.title, req.body.text, imageUrl, req.body.userId],
-      function (err, result) {
-        if (err) {
-          res.status(400).json({ error: "Le post n'a pas pu être créé" });
-          return;
-        }
-        res.status(201).json({ message: "post publié !" });
-        return;
-      }
-    );
-  } catch (err) {
-    let message = "Erreur avec les données";
-    throw new Error(message);
+exports.sendPostResult = async (req, res, next) => {
+  if (req.errorPost) {
+    res.status(400).json({ error: "Le post n'a pas pu être créé" });
+    return;
   }
+  res.status(201).json({ message: "post publié !" });
+  return;
 };
 
 // Contrôleur pour récupérer tous les posts de la base de données avec les informations du créateur et dans l'ordre inverse

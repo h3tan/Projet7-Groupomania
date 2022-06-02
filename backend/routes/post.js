@@ -9,7 +9,13 @@ const fileCtrl = require("../middlewares/fileCtrl");
 const postCtrl = require("../controllers/post");
 
 // Route pour poster un message
-router.post("/", auth, multer, postCtrl.post);
+router.post(
+  "/",
+  auth,
+  multer,
+  postReq.savePostInDatabase,
+  postCtrl.sendPostResult
+);
 
 // Route pour récupérer tous les messages
 router.get("/", auth, postReq.requestAllPosts, postCtrl.sendAllPostsToFront);
@@ -21,7 +27,13 @@ router.get("/:id", auth, checkPost.checkPost, postCtrl.getPostFromAPI);
 router.put("/:id", auth, postCtrl.updatePost);
 
 // Route pour modifier l'image d'un message
-router.put("/:id_post/file", auth, multer, fileCtrl.deleteOldFile, postCtrl.updateFile);
+router.put(
+  "/:id_post/file",
+  auth,
+  multer,
+  fileCtrl.deleteOldFile,
+  postCtrl.updateFile
+);
 
 // Route pour supprimer un message
 router.delete(
