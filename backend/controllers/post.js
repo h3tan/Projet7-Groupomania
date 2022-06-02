@@ -28,22 +28,12 @@ exports.post = async (req, res, next) => {
 };
 
 // Contrôleur pour récupérer tous les posts de la base de données avec les informations du créateur et dans l'ordre inverse
-exports.getAllPosts = async (req, res, next) => {
-  try {
-    connexion.query(
-      `select * from post join user on post.user_id = user.id_user order by post.id_post desc`,
-      function (err, result) {
-        if (err) {
-          res.status(400).json({ error: "Les posts n'ont pu être récupérés!" });
-          return;
-        }
-        res.status(200).json(result);
-      }
-    );
-  } catch (err) {
-    let message = "Erreur avec les données";
-    throw new Error(message);
+exports.sendAllPostsToFront = async (req, res, next) => {
+  if (req.errorAllPosts) {
+    res.status(400).json({ error: "Les posts n'ont pu être récupérés!" });
+    return;
   }
+  res.status(200).json(req.resultAllPosts);
 };
 
 exports.getPostFromAPI = async (req, res, next) => {

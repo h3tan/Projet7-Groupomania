@@ -3,6 +3,7 @@ const router = express.Router();
 const auth = require("../middlewares/auth");
 //const checkLike = require("../middlewares/checkLike");
 const checkPost = require("../middlewares/checkPost");
+const postReq = require("../requests/postRequests");
 const multer = require("../middlewares/multer-config");
 const fileCtrl = require("../middlewares/fileCtrl");
 const postCtrl = require("../controllers/post");
@@ -11,7 +12,7 @@ const postCtrl = require("../controllers/post");
 router.post("/", auth, multer, postCtrl.post);
 
 // Route pour récupérer tous les messages
-router.get("/", auth, postCtrl.getAllPosts);
+router.get("/", auth, postReq.requestAllPosts, postCtrl.sendAllPostsToFront);
 
 // Route pour récupérer un message
 router.get("/:id", auth, checkPost.checkPost, postCtrl.getPostFromAPI);

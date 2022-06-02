@@ -1,7 +1,5 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-//const fs = require("fs");
-const connexion = require("../mysql_connect");
 
 exports.signup = async (req, res, next) => {
   if (req.errorSignUpResult) {

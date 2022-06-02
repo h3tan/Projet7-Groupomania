@@ -1,5 +1,4 @@
 const bcrypt = require("bcrypt");
-//const jwt = require("jsonwebtoken");
 const connexion = require("../mysql_connect");
 
 // Requête pour créer un nouvel utilisateur
