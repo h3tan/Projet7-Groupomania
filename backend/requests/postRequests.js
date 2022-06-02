@@ -19,7 +19,7 @@ exports.requestAllPosts = async (req, res, next) => {
 exports.requestPost = async (req, res, next) => {
   try {
     connexion.query(
-      `select post.id_post, post.title, post.date_post, post.user_id, post.message, user.nickname, user.picture
+      `select post.id_post, post.title, post.post_picture, post.date_post, post.user_id, post.message, user.nickname, user.picture
         from post join user on user.id_user = post.user_id where post.id_post = ?`,
       [req.params.id],
       function (err, result) {
@@ -79,6 +79,31 @@ exports.RequestUpdatePost = async (req, res, next) => {
       [req.body.title, req.body.text, req.params.id],
       function (err, result) {
         req.errorUpdatePost = err;
+        next();
+      }
+    );
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};
+
+exports.requestUpdatePostFile = async (req, res, next) => {
+  try {
+    let imageUrl = "";
+    if (req.file) {
+      imageUrl = `${req.protocol}://${req.get("host")}/images/${
+        req.file.filename
+      }`;
+    } else {
+      imageUrl = null;
+    }
+    connexion.query(
+      `update post set post_picture = ? where id_post = ?;`,
+      [imageUrl, req.params.id_post],
+      function (err, result) {
+        req.errorUpdateFile = err;
+        req.imageUrl = imageUrl;
         next();
       }
     );

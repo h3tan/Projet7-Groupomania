@@ -37,31 +37,13 @@ exports.SendUpdatePostResult = async (req, res, next) => {
   res.status(200).json({ message: "Post mis à jour!" });
 };
 
-exports.updateFile = async (req, res, next) => {
-  try {
-    let imageUrl = "";
-    if (req.file) {
-      imageUrl = `${req.protocol}://${req.get("host")}/images/${
-        req.file.filename
-      }`;
-    } else {
-      imageUrl = null;
-    }
-    connexion.query(
-      `update post set post_picture = ? where id_post = ?;`,
-      [imageUrl, req.params.id_post],
-      function (err, result) {
-        if (err) {
-          res.status(400).json({ message: "Impossible de modifier l'image" });
-          return;
-        }
-        res.status(200).json({ imageUrl: imageUrl });
-      }
-    );
-  } catch (err) {
-    let message = "Erreur avec les données";
-    throw new Error(message);
+exports.sendResultOfUpdateFileOfPost = async (req, res, next) => {
+  if (req.errorUpdateFile) {
+    res.status(400).json({ message: "Impossible de modifier l'image" });
+    return;
   }
+  console.log(req.imageUrl);
+  res.status(200).json({ imageUrl: req.imageUrl });
 };
 
 // Contrôleur pour supprimer un post de la base de données

@@ -32,7 +32,8 @@ router.put(
   auth,
   multer,
   fileCtrl.deleteOldFile,
-  postCtrl.updateFile
+  postReq.requestUpdatePostFile,
+  postCtrl.sendResultOfUpdateFileOfPost
 );
 
 // Route pour supprimer un message
