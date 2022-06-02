@@ -52,46 +52,19 @@ exports.sendUserInfosToFront = async (req, res, next) => {
   return res.status(200).json(req.userInfos);
 };
 
-exports.deleteUser = async (req, res, next) => {
-  try {
-    connexion.query(
-      `delete from user where id_user = ?`,
-      [req.params.id],
-      function (err, result) {
-        if (err) {
-          return res.status(400).json({ message: "Impossible de supprimer" });
-        }
-      }
-    );
-    res.status(200).json({ message: "Compte supprimé!" });
-  } catch (err) {
-    let message = "Erreur avec les données";
-    throw new Error(message);
+exports.sendDeleteUserResult = async (req, res, next) => {
+  if (req.errorDeleteUser) {
+    return res.status(400).json({ message: "Impossible de supprimer" });
   }
+  res.status(200).json({ message: "Compte supprimé!" });
 };
 
-exports.updatePicture = async (req, res, next) => {
-  try {
-    if (req.file) {
-      let imageUrl = `${req.protocol}://${req.get("host")}/avatar/${
-        req.file.filename
-      }`;
-      connexion.query(
-        `update user set picture = ? where id_user = ?;`,
-        [imageUrl, req.params.id],
-        function (err, result) {
-          if (err) {
-            res.status(400).json({ message: "Impossible de modifier l'image" });
-            return;
-          }
-          res.status(200).json({ imageUrl: imageUrl });
-        }
-      );
-    }
-  } catch (err) {
-    let message = "Erreur avec les données";
-    throw new Error(message);
+exports.sendUpdatePictureResult = async (req, res, next) => {
+  if (req.errorUpdatePicture) {
+    res.status(400).json({ message: "Impossible de modifier l'image" });
+    return;
   }
+  res.status(200).json({ imageUrl: req.imageUrl });
 };
 
 exports.updateUserInfos = async (req, res, next) => {

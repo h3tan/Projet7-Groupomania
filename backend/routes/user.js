@@ -33,7 +33,16 @@ router.get(
 );
 
 // Route pour supprimer un utilisateur
-router.delete("/users/:id", auth, userCtrl.deleteUser);
+router.delete(
+  "/users/:id",
+  auth,
+  userReq.requestUserPostPictures,
+  fileCtrl.deleteUserAllPostFiles,
+  userReq.requestAvatar,
+  fileCtrl.deleteAvatar,
+  userReq.requestDeleteUser,
+  userCtrl.sendDeleteUserResult
+);
 
 // Route pour modifier l'image d'un utilisateur
 router.put(
@@ -41,7 +50,8 @@ router.put(
   auth,
   multerAvatar,
   fileCtrl.deleteOldAvatar,
-  userCtrl.updatePicture
+  userReq.requestUpdatePicture,
+  userCtrl.sendUpdatePictureResult
 );
 
 // Route pour modifier les infos d'un utilisateur
@@ -49,6 +59,7 @@ router.put(
   "/users/:id",
   auth,
   checkInputs.checkUpdateUserInfosInputs,
+  userReq.requestUpdateUserInfos,
   userCtrl.updateUserInfos
 );
 

@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 //const jwt = require("jsonwebtoken");
 const connexion = require("../mysql_connect");
 
+// Requête pour créer un nouvel utilisateur
 exports.requestSignUp = async (req, res, next) => {
   try {
     let passwordHash = await bcrypt.hash(req.body.password, 10);
@@ -27,6 +28,7 @@ exports.requestSignUp = async (req, res, next) => {
   }
 };
 
+// Requête pour connecter un utilisateur
 exports.requestLogin = async (req, res, next) => {
   try {
     connexion.query(
@@ -43,6 +45,7 @@ exports.requestLogin = async (req, res, next) => {
   }
 };
 
+// Requête pour récupérer les informations d'un utilisateur
 exports.requestUserInfos = async (req, res, next) => {
   try {
     connexion.query(
@@ -59,6 +62,7 @@ exports.requestUserInfos = async (req, res, next) => {
   }
 };
 
+// Requête pour modifier les informations d'un utilisateur
 exports.requestUpdateUserInfos = async (req, res, next) => {
   try {
     connexion.query(
@@ -75,6 +79,42 @@ exports.requestUpdateUserInfos = async (req, res, next) => {
   }
 };
 
+// Requête pour récupérer l'avatar d'un utilisateur
+exports.requestAvatar = (req, res, next) => {
+  try {
+    connexion.query(
+      `SELECT picture FROM user WHERE id_user = ?`,
+      [req.auth.userId],
+      function (err, result) {
+        req.file = result[0];
+        next();
+      }
+    );
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};
+
+// Requête pour récupérer les images des posts d'un utilisateur
+exports.requestUserPostPictures = (req, res, next) => {
+  try {
+    connexion.query(
+      `SELECT post_picture FROM post WHERE user_id = ?`,
+      [req.auth.userId],
+      function (err, result) {
+        console.log(result[1]);
+        req.file = result;
+        next();
+      }
+    );
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};
+
+// Requête pour récupérer le mot de passe d'un utilisateur
 exports.getPassword = (req, res, next) => {
   try {
     connexion.query(
@@ -91,6 +131,29 @@ exports.getPassword = (req, res, next) => {
   }
 };
 
+// Requête pour modifier l'avatar d'un utilisateur
+exports.requestUpdatePicture = async (req, res, next) => {
+  try {
+    if (req.file) {
+      req.imageUrl = `${req.protocol}://${req.get("host")}/avatar/${
+        req.file.filename
+      }`;
+      connexion.query(
+        `update user set picture = ? where id_user = ?;`,
+        [req.imageUrl, req.params.id],
+        function (err, result) {
+          req.errorUpdatePicture = err;
+          next();
+        }
+      );
+    }
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};
+
+// Requête pour modifier le mot de passe d'un utilisateur
 exports.requestUpdatePassword = async (req, res, next) => {
   try {
     connexion.query(
@@ -98,6 +161,25 @@ exports.requestUpdatePassword = async (req, res, next) => {
       [req.passwordHash, req.auth.userId],
       function (err, result) {
         req.errorUpdatePassword = err;
+        next();
+      }
+    );
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};
+
+// Requête pour supprimer un utilisateur
+exports.requestDeleteUser = async (req, res, next) => {
+  try {
+    connexion.query(
+      `delete from user where id_user = ?`,
+      [req.params.id],
+      function (err, result) {
+        console.log(err);
+        console.log(result);
+        req.errorDeleteUser = err;
         next();
       }
     );
