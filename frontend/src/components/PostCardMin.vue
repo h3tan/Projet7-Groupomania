@@ -54,6 +54,11 @@ export default {
         reponse[i].date_post = dateSQL[0];
       }
       this.posts = reponse;
+      for (let i in this.posts) {
+        if (this.posts[i].user_id == localStorage.getItem("userId")) {
+          this.posts[i].nickname = "Vous";
+        }
+      }
     },
   },
   created() {

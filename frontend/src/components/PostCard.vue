@@ -16,13 +16,10 @@
           <img alt="Image posté par l'utilisateur" :src="`${post_picture}`" />
         </div>
         <!-- Changement de l'image du post -->
-        <div id="add_file" v-if="sameUser || privilege =='admin' ">
-          <label
-            id="label_file"
-            for="input_file"
-            v-if="sameUser"
-            >{{ type_of_add }}</label
-          >
+        <div id="add_file" v-if="sameUser || privilege == 'admin'">
+          <label id="label_file" for="input_file" v-if="sameUser">{{
+            type_of_add
+          }}</label>
           <input
             type="file"
             id="input_file"
@@ -33,7 +30,9 @@
           />
           <button
             @click="modifyPostPicture('delete')"
-            v-if="(!fileChosen && pictureExists) && (sameUser || privilege == 'admin')"
+            v-if="
+              !fileChosen && pictureExists && (sameUser || privilege == 'admin')
+            "
           >
             Supprimez l'image
           </button>
@@ -168,7 +167,11 @@ export default {
       if (!post.error) {
         this.post_id = post[0].id_post;
         this.post_userId = post[0].user_id;
-        this.post_nickname = post[0].nickname;
+        if (post[0].user_id == this.userId) {
+          this.post_nickname = "Vous";
+        } else {
+          this.post_nickname = post[0].nickname;
+        }
         this.post_pictureUser = post[0].picture;
         this.post_title = post[0].title;
         this.post_picture = post[0].post_picture;

@@ -118,6 +118,11 @@ export default {
       this.show_comment = true;
       this.title_comment = "Commentaires";
       this.comments = reponse;
+      for (let i = 0; i < reponse.length; i++) {
+        if (this.comments[i].id_user == this.userId) {
+          this.comments[i].nickname = "Vous";
+        }
+      }
     },
     // Demande à l'API de créer un commentaire
     async postComment() {
