@@ -13,9 +13,6 @@ const multerAvatar = require("../middlewares/multer-avatar");
 router.post("/signup", userCtrl.signup);
 
 // Route pour se connecter à un compte utilisateur
-//router.post("/login", userCtrl.login);
-
-// Route pour se connecter à un compte utilisateur
 router.post(
   "/login",
   checkInputs.checkMailInput,
@@ -25,7 +22,12 @@ router.post(
 );
 
 // Route pour obtenir les infos utilisateurs
-router.get("/users/:id", auth, userCtrl.getUserInfos);
+router.get(
+  "/users/:id",
+  auth,
+  userReq.requestUserInfos,
+  userCtrl.sendUserInfosToFront
+);
 
 // Route pour supprimer un utilisateur
 router.delete("/users/:id", auth, userCtrl.deleteUser);

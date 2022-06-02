@@ -63,18 +63,12 @@ exports.login = (req, res, next) => {
     .catch((error) => res.status(500).json({ error }));
 };
 
-exports.getUserInfos = async (req, res, next) => {
-  connexion.query(
-    `SELECT user.id_user, user.nickname, user.last_name, user.first_name, user.email, user.privilege, user.picture FROM user WHERE id_user = ?`,
-    [req.params.id],
-    function (err, result) {
-      if (result[0] == undefined) {
-        res.status(401).json({ error: "Nom d'utilisateur incorrect" });
-        return;
-      }
-      return res.status(200).json(result);
-    }
-  );
+exports.sendUserInfosToFront = async (req, res, next) => {
+  if (req.userInfos == undefined) {
+    res.status(401).json({ error: "Nom d'utilisateur incorrect" });
+    return;
+  }
+  return res.status(200).json(req.userInfos);
 };
 
 exports.deleteUser = async (req, res, next) => {

@@ -17,3 +17,19 @@ exports.requestLogin = async (req, res, next) => {
     throw new Error(message);
   }
 };
+
+exports.requestUserInfos = async (req, res, next) => {
+  try {
+    connexion.query(
+      `SELECT user.id_user, user.nickname, user.last_name, user.first_name, user.email, user.privilege, user.picture FROM user WHERE id_user = ?`,
+      [req.params.id],
+      function (err, result) {
+        req.userInfos = result[0];
+        next();
+      }
+    );
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};
