@@ -1,3 +1,5 @@
+// Vérification des regex
+
 // Vérifie si "email" est bien de type "email"
 isEmailValid = (email) => {
   const emailRegex = /^[\w\-\.]+@[\w\-\.]+\.[a-z]{2,3}$/;
@@ -16,6 +18,8 @@ isNameValid = (name) => {
   const regex = /^[a-z ,.'-]+$/i;
   return regex.test(name);
 };
+
+//Vérification des formulaires
 
 // Vérifie les entrées utilisateurs du formulaire de connexion
 exports.checkLoginInputs = (req, res, next) => {
@@ -45,6 +49,33 @@ exports.checkSignUpInputs = (req, res, next) => {
     res.status(400).json({ error: "email non valide" });
   }
   if (!isPasswordValid(req.body.password)) {
+    res
+      .status(400)
+      .json({ error: "Veuillez entrer un mot de passe plus sécurisé" });
+    return;
+  }
+  next();
+};
+
+// Vérifie les entrées utilisateurs pour la modification des infos utilisateurs
+exports.checkUpdateUserInfosInputs = (req, res, next) => {
+  if (!isNameValid(req.last_name)) {
+    res.status(400).json({ error: "Nom non valide" });
+    return;
+  }
+  if (!isNameValid(req.last_name)) {
+    res.status(400).json({ error: "Prénom non valide" });
+    return;
+  }
+  next();
+};
+
+// Vérifie si les champs du changement de mot de passe sont correctement remplis
+exports.checkChangePasswordInputs = (req, res, next) => {
+  if (
+    !isPasswordValid(req.body.actualPassword) ||
+    !isPasswordValid(req.body.newPassword)
+  ) {
     res
       .status(400)
       .json({ error: "Veuillez entrer un mot de passe plus sécurisé" });

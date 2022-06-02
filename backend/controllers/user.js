@@ -5,7 +5,7 @@ const connexion = require("../mysql_connect");
 
 exports.signup = async (req, res, next) => {
   if (req.errorSignUpResult) {
-    res.status(401).json({ error: "Nom ou email déjà utilisé" });
+    res.status(401).json({ error: "Email ou pseudo déjà utilisé" });
     return;
   }
   res.status(200).json({
@@ -95,52 +95,19 @@ exports.updatePicture = async (req, res, next) => {
 };
 
 exports.updateUserInfos = async (req, res, next) => {
-  try {
-    connexion.query(
-      `update user set last_name = ?, first_name = ?, email = ? where id_user = ?;`,
-      [req.body.last_name, req.body.first_name, req.body.email, req.params.id],
-      function (err, result) {
-        if (err) {
-          res
-            .status(400)
-            .json({ message: "Impossible de modifier vos informations" });
-          return;
-        }
-        res
-          .status(200)
-          .json({ message: "Vos informations ont bien été modifiées" });
-      }
-    );
-  } catch (err) {
-    let message = "Erreur avec les données";
-    throw new Error(message);
+  if (req.errorUpdate) {
+    res
+      .status(400)
+      .json({ message: "Impossible de modifier vos informations" });
+    return;
   }
+  res.status(200).json({ message: "Vos informations ont bien été modifiées" });
 };
 
-exports.updatePassword = async (req, res, next) => {
-  try {
-    let valid = await bcrypt.compare(req.body.actualPassword, req.password);
-    if (!valid) {
-      return res.status(401).json({ error: "Mot de passe incorrect" });
-    }
-    let passwordHash = await bcrypt.hash(req.body.newPassword, 10);
-    connexion.query(
-      `update user set password = ? where id_user = ?;`,
-      [passwordHash, req.auth.userId],
-      function (err, result) {
-        if (err) {
-          res
-            .status(400)
-            .json({ error: "Impossible de modifier le mot de passe" });
-          return;
-        }
-        res
-          .status(200)
-          .json({ message: "Votre mot de passe a bien été modifié" });
-      }
-    );
-  } catch (err) {
-    let message = "Erreur avec les données";
-    throw new Error(message);
+exports.sendUpdatePasswordResultToFront = async (req, res, next) => {
+  if (req.errorUpdatePassword) {
+    res.status(400).json({ error: "Impossible de modifier le mot de passe" });
+    return;
   }
+  res.status(200).json({ message: "Votre mot de passe a bien été modifié" });
 };

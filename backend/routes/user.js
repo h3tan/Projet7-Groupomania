@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../middlewares/auth");
-const pwdCheck = require("../middlewares/checkPassword");
 const userCtrl = require("../controllers/user");
 const userReq = require("../requests/userRequests");
 const fileCtrl = require("../middlewares/fileCtrl");
@@ -46,9 +45,22 @@ router.put(
 );
 
 // Route pour modifier les infos d'un utilisateur
-router.put("/users/:id", auth, userCtrl.updateUserInfos);
+router.put(
+  "/users/:id",
+  auth,
+  checkInputs.checkUpdateUserInfosInputs,
+  userCtrl.updateUserInfos
+);
 
 // Route pour modifier le mot de passe d'un utilisateur
-router.put("/users/:id/password", auth, pwdCheck, userCtrl.updatePassword);
+router.put(
+  "/users/:id/password",
+  auth,
+  checkInputs.checkChangePasswordInputs,
+  userReq.getPassword,
+  checkUser.checkPassword,
+  userReq.requestUpdatePassword,
+  userCtrl.sendUpdatePasswordResultToFront
+);
 
 module.exports = router;

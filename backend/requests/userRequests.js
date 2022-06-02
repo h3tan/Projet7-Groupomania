@@ -58,3 +58,51 @@ exports.requestUserInfos = async (req, res, next) => {
     throw new Error(message);
   }
 };
+
+exports.requestUpdateUserInfos = async (req, res, next) => {
+  try {
+    connexion.query(
+      `update user set last_name = ?, first_name = ? where id_user = ?;`,
+      [req.body.last_name, req.body.first_name, req.params.id],
+      function (err, result) {
+        req.errorUpdate = err;
+        next();
+      }
+    );
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};
+
+exports.getPassword = (req, res, next) => {
+  try {
+    connexion.query(
+      `SELECT password FROM user WHERE id_user = ?`,
+      [req.auth.userId],
+      function (err, result) {
+        req.password = result[0].password;
+        next();
+      }
+    );
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};
+
+exports.requestUpdatePassword = async (req, res, next) => {
+  try {
+    connexion.query(
+      `update user set password = ? where id_user = ?;`,
+      [req.passwordHash, req.auth.userId],
+      function (err, result) {
+        req.errorUpdatePassword = err;
+        next();
+      }
+    );
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};
