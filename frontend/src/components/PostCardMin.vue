@@ -17,7 +17,7 @@
           </div>
           <span>{{ post.date_post }}</span>
         </div>
-        <div>{{ post.count_comments }} commentaires</div>
+        <div>{{ count_comments }} commentaires</div>
       </div>
     </transition-group>
   </div>
@@ -26,7 +26,6 @@
 <script>
 import UserAvatar from "@/components/UserAvatar";
 import { getAllPostsFromAPI } from "@/functions/fetchPost";
-import { requestCountCommentsPostFromAPI } from "@/functions/fetchComment";
 
 export default {
   name: "PostCardMin",
@@ -34,7 +33,7 @@ export default {
     return {
       posts: [],
       comments: [],
-      count_comments: "",
+      count_comments: 0,
       total_post: "",
     };
   },
@@ -47,9 +46,6 @@ export default {
       let reponse = await getAllPostsFromAPI();
       for (let i = 0; i < reponse.length; i++) {
         this.total_post = reponse.length;
-        reponse[i].count_post = i + 1;
-        let count = await requestCountCommentsPostFromAPI(reponse[i].id_post);
-        reponse[i].count_comments = count.value; // Création d'une clé count_comments pour affecter le nombre de commentaires
         let dateSQL = reponse[i].date_post.split("T");
         reponse[i].date_post = dateSQL[0];
       }

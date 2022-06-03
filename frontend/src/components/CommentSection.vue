@@ -80,7 +80,7 @@
 <script>
 import UserAvatar from "@/components/UserAvatar";
 import ModifyComment from "@/components/ModifyComment";
-import { requestAllCommentsFromAPI } from "@/functions/fetchComment.js";
+import { requestAllPostCommentsFromAPI } from "@/functions/fetchComment.js";
 import { requestDeleteCommentFromAPI } from "@/functions/fetchComment.js";
 import { sendNewCommentToAPI } from "@/functions/fetchComment.js";
 
@@ -105,11 +105,11 @@ export default {
     ModifyComment,
   },
   methods: {
-    requestAllCommentsFromAPI,
+    requestAllPostCommentsFromAPI,
     requestDeleteCommentFromAPI,
     sendNewCommentToAPI,
     async showAllComments() {
-      let reponse = await requestAllCommentsFromAPI(this.$route.params.id);
+      let reponse = await requestAllPostCommentsFromAPI(this.$route.params.id);
       if (reponse.length == 0) {
         this.title_comment = "Pas de commentaires";
         this.count_comments = 0;
