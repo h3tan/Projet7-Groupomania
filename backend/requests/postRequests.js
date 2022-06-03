@@ -1,5 +1,32 @@
 const connexion = require("../mysql_connect");
 
+// Requête vérifiant qu'un post existe et que l'utilisateur a les droits pour ce post
+exports.requestIdOfPostCreator = async (req, res, next) => {
+  try {
+    connexion.query(
+      `select user_id from post where id_post = ?`,
+      [req.params.id_post],
+      function (err, result) {
+        if (result[0] == undefined) {
+          res.status(400).json({ error: "Ce post n'existe pas" });
+          return;
+        }
+        if (req.auth.userId != result[0].user_id) {
+          res.status(401).json({
+            error:
+              "Vous ne pouvez pas modifier ou supprimer un post que vous n'avez pas créé",
+          });
+          return;
+        }
+        next();
+      }
+    );
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};
+
 exports.requestAllPosts = async (req, res, next) => {
   try {
     connexion.query(
@@ -23,6 +50,10 @@ exports.requestPost = async (req, res, next) => {
         from post join user on user.id_user = post.user_id where post.id_post = ?`,
       [req.params.id_post],
       function (err, result) {
+        if (result[0] == undefined) {
+          res.status(400).json({ error: "Ce post n'existe pas" });
+          return;
+        }
         req.errorRequestPost;
         req.post = result[0];
         next();
