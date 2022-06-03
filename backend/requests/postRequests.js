@@ -21,10 +21,10 @@ exports.requestPost = async (req, res, next) => {
     connexion.query(
       `select post.id_post, post.title, post.post_picture, post.date_post, post.user_id, post.message, user.nickname, user.picture
         from post join user on user.id_user = post.user_id where post.id_post = ?`,
-      [req.params.id],
+      [req.params.id_post],
       function (err, result) {
         req.errorRequestPost;
-        req.post = result;
+        req.post = result[0];
         next();
       }
     );
@@ -38,7 +38,7 @@ exports.requestPostPicture = async (req, res, next) => {
   try {
     connexion.query(
       `select post_picture from post where id_post = ?`,
-      [req.params.id],
+      [req.params.id_post],
       function (err, result) {
         req.post_picture = result[0].post_picture;
         next();
@@ -72,11 +72,11 @@ exports.savePostInDatabase = async (req, res, next) => {
   }
 };
 
-exports.RequestUpdatePost = async (req, res, next) => {
+exports.requestUpdatePost = async (req, res, next) => {
   try {
     connexion.query(
       `update post set title = ?, message = ?, date_post = now() where id_post = ?`,
-      [req.body.title, req.body.text, req.params.id],
+      [req.body.title, req.body.text, req.params.id_post],
       function (err, result) {
         req.errorUpdatePost = err;
         next();
@@ -117,7 +117,7 @@ exports.requestDeletePost = async (req, res, next) => {
   try {
     connexion.query(
       `delete from post where id_post = ?`,
-      [req.params.id],
+      [req.params.id_post],
       function (err, result) {
         req.errorDeletePost = err;
         next();

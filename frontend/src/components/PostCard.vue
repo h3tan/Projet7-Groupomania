@@ -74,7 +74,7 @@
       </transition>
     </div>
     <div class="show_interaction">
-      <LikeSection :user="sameUser" />
+      <LikeSection :user="sameUser" :liked="requestedUserliked" :num_likes="requestedNumLikes" @likeUpdated="updateInfos" />
       <div class="show_interaction_buttons">
         <button id="modify_button" @click="toggleModifyPost" v-if="sameUser">
           {{ modifyButton }}
@@ -128,6 +128,8 @@ export default {
       file_upload: "",
       type_of_add: "Ajouter une image",
       confirm_add: "Ajouter",
+      requestedUserliked: "",
+      requestedNumLikes: "",
     };
   },
   components: {
@@ -159,26 +161,28 @@ export default {
     // Récupère les informations du post de l'API pour les afficher
     async assignPostInformations() {
       let post = await getPostFromAPI(this.$route.params.id);
-      if (post[0].post_picture) {
+      if (post.post_picture) {
         this.pictureExists = true;
         this.type_of_add = "Modifier";
         this.confirm_add = "Modifier";
       }
       if (!post.error) {
-        this.post_id = post[0].id_post;
-        this.post_userId = post[0].user_id;
-        if (post[0].user_id == this.userId) {
+        this.requestedNumLikes = post.numLikes;
+        this.requestedUserliked = post.isLiked;
+        this.post_id = post.id_post;
+        this.post_userId = post.user_id;
+        if (post.user_id == this.userId) {
           this.post_nickname = "Vous";
         } else {
-          this.post_nickname = post[0].nickname;
+          this.post_nickname = post.nickname;
         }
-        this.post_pictureUser = post[0].picture;
-        this.post_title = post[0].title;
-        this.post_picture = post[0].post_picture;
-        this.post_message = post[0].message;
+        this.post_title = post.title;
+        this.post_pictureUser = post.picture;
+        this.post_picture = post.post_picture;
+        this.post_message = post.message;
         this.modify_title = this.post_title;
         this.modify_text = this.post_message;
-        let dateSQL = post[0].date_post.split("T");
+        let dateSQL = post.date_post.split("T");
         let dateFr = new Date(dateSQL[0]);
         this.post_date = dateFr.toLocaleDateString("fr");
         if (parseInt(this.userId) == parseInt(this.post_userId)) {
@@ -237,6 +241,9 @@ export default {
         this.modifyButton = "Annuler";
       }
     },
+    updateInfos() {
+      this.assignPostInformations();
+    }
   },
   created() {
     this.assignPostInformations();

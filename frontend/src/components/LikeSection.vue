@@ -1,7 +1,7 @@
 <template>
   <div class="like_or_delete">
     <div class="like" v-if="!user">
-      <div class="like_icons" @click="modifyLike">
+      <div class="like_icons" @click="updateLike">
         <transition name="cancel_like">
           <i id="empty_heart" class="far fa-heart" v-if="!liked"></i>
         </transition>
@@ -19,61 +19,55 @@
 </template>
 
 <script>
-import { getLikeFromAPI } from "@/functions/fetchLike.js";
-import { sendLikeToAPI } from "@/functions/fetchLike.js";
+import { requestDeletePostFromAPI } from "@/functions/fetchPost.js";
+import { requestDeleteLikeFromAPI } from "@/functions/fetchLike.js";
+import { requestInsertLikeFromAPI } from "@/functions/fetchLike.js";
 
 export default {
   name: "LikeSection",
-  props: {
-    user: Boolean,
-  },
-  data() {
-    return {
-      liked: "",
-      num_likes: 0,
-    };
-  },
+  props: ["user", "liked", "num_likes"],
   methods: {
+    requestDeletePostFromAPI,
     // Récupère le nombre de likes du post ainsi que si l'utilisateur connecté a liké ce post
-    async assignLike() {
-      let isLiked = await getLikeFromAPI(
-        this.$route.params.id,
-        localStorage.getItem("userId")
-      );
-      this.num_likes = isLiked.countLikes;
-      if (isLiked.isLiked == 1) {
-        this.liked = true;
-      }
-    },
-    // Demande à l'API de modifier le like de l'utilisateur connecté
-    async modifyLike() {
-      let reponse = await sendLikeToAPI(
-        this.$route.params.id,
-        localStorage.getItem("userId")
-      );
-      if (reponse.message == "post liké!") {
-        this.liked = true;
-        this.num_likes++;
+    async updateLike() {
+      console.log(this.$route.params)
+      if (this.liked == true) {
+        let reponse = await requestDeleteLikeFromAPI(
+          this.$route.params.id,
+        );
+        if (reponse.message == "Annulation du like") {
+          this.$emit('likeUpdated');
+        }
         return;
       }
-      this.liked = false;
-      this.num_likes--;
+      if (this.liked == false) {
+        let reponse = await requestInsertLikeFromAPI(
+          this.$route.params.id,
+        );
+        if (reponse.message == "Post liké") {
+          this.$emit('likeUpdated');
+        }
+        return;
+      }
+    },
+    async deletePost() {
+      let result = await requestDeletePostFromAPI(this.$route.params.id);
+      this.$router.push("/whatsnew");
+      return result;
     },
   },
-  created() {
-    this.assignLike();
-  },
+  created() {},
 };
 </script>
 
 <style scoped lang="scss">
 .like_or_delete {
-    width: 50%;
-    position: relative;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
+  width: 50%;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }
 .like {
   position: relative;

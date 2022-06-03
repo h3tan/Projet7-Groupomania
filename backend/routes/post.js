@@ -3,6 +3,7 @@ const router = express.Router();
 const auth = require("../middlewares/auth");
 //const checkLike = require("../middlewares/checkLike");
 const checkPost = require("../middlewares/checkPost");
+const likeReq = require("../requests/likeRequests");
 const postReq = require("../requests/postRequests");
 const multer = require("../middlewares/multer-config");
 const fileCtrl = require("../middlewares/fileCtrl");
@@ -21,10 +22,22 @@ router.post(
 router.get("/", auth, postReq.requestAllPosts, postCtrl.sendAllPostsToFront);
 
 // Route pour récupérer un message
-router.get("/:id", auth, postReq.requestPost, postCtrl.sendPostInfosToFront);
+router.get(
+  "/:id_post",
+  auth,
+  postReq.requestPost,
+  likeReq.requestCountLikesOfPost,
+  likeReq.requestUserLike,
+  postCtrl.sendPostInfosToFront
+);
 
 // Route pour modifier un message
-router.put("/:id", auth, postReq.RequestUpdatePost, postCtrl.SendUpdatePostResult);
+router.put(
+  "/:id_post",
+  auth,
+  postReq.requestUpdatePost,
+  postCtrl.SendUpdatePostResult
+);
 
 // Route pour modifier l'image d'un message
 router.put(
@@ -38,7 +51,7 @@ router.put(
 
 // Route pour supprimer un message
 router.delete(
-  "/:id",
+  "/:id_post",
   auth,
   postReq.requestPostPicture,
   fileCtrl.deleteFile,

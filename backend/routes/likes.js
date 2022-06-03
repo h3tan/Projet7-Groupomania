@@ -1,25 +1,26 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../middlewares/auth");
-const checkLike = require("../middlewares/checkLike");
+const likeReq = require("../requests/likeRequests");
 //const checkPost = require("../middlewares/checkPost");
 const likesCtrl = require("../controllers/likes");
 
-// Route pour récupérer un like
-router.get(
-  "/:id_post/likes/:id_user",
+// Route pour ajouter un like
+router.post(
+  "/:id_post/likes/",
   auth,
-  checkLike.countPostLike,
-  checkLike.checkUserLike,
-  likesCtrl.getLike
+  //likeReq.requestUserLike,
+  likeReq.requestInsertLike,
+  likesCtrl.sendUpdateLikeResult
 );
 
-// Route pour modifier un like
-router.put(
-  "/:id_post/likes/:id_user",
+// Route pour supprimer un like
+router.delete(
+  "/:id_post/likes/",
   auth,
-  checkLike.checkUserLike,
-  likesCtrl.updateLike
+  //likeReq.requestUserLike,
+  likeReq.requestDeleteLike,
+  likesCtrl.sendUpdateLikeResult
 );
 
 module.exports = router;

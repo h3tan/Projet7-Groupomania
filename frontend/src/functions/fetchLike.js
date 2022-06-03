@@ -1,10 +1,24 @@
-export const sendLikeToAPI = async (idPost, idUser) => {
+export const getLikeFromAPI = async (id_post) => {
   try {
     let postJson = await fetch(
-      `http://localhost:3000/api/auth/posts/${idPost}/likes/${idUser}`,
+      `http://localhost:3000/api/auth/posts/${id_post}/likes/`,
+      { headers: { Authorization: localStorage.getItem("token") } }
+    );
+    let reponse = await postJson.json();
+    return reponse;
+  } catch (err) {
+    let message = "Impossible de trouver l'API";
+    throw new Error(message);
+  }
+};
+
+export const requestDeleteLikeFromAPI = async (id_post) => {
+  try {
+    let postJson = await fetch(
+      `http://localhost:3000/api/auth/posts/${id_post}/likes/`,
       {
         mode: "cors",
-        method: "PUT",
+        method: "DELETE",
         headers: { Authorization: localStorage.getItem("token") },
       }
     );
@@ -16,11 +30,16 @@ export const sendLikeToAPI = async (idPost, idUser) => {
   }
 };
 
-export const getLikeFromAPI = async (idPost, idUser) => {
+export const requestInsertLikeFromAPI = async (id_post) => {
   try {
+    console.log("entrée dans insert like");
     let postJson = await fetch(
-      `http://localhost:3000/api/auth/posts/${idPost}/likes/${idUser}`,
-      { headers: { Authorization: localStorage.getItem("token") } }
+      `http://localhost:3000/api/auth/posts/${id_post}/likes/`,
+      {
+        mode: "cors",
+        method: "POST",
+        headers: { Authorization: localStorage.getItem("token") },
+      }
     );
     let reponse = await postJson.json();
     return reponse;

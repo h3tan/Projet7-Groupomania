@@ -16,7 +16,10 @@ exports.sendPostInfosToFront = async (req, res, next) => {
     res.status(404).json({ error: "Le post n'existe pas!" });
     return;
   }
+  req.post.isLiked = req.like; // Ajoute si le l'utilisateur a liké le post ou non dans les infos du post
+  req.post.numLikes = req.count; // Ajoute le nombre de likes du post dans les infos du post
   res.status(200).json(req.post);
+  return;
 };
 
 // Envoie les informations des posts
@@ -26,6 +29,7 @@ exports.sendAllPostsToFront = async (req, res, next) => {
     return;
   }
   res.status(200).json(req.resultAllPosts);
+  return;
 };
 
 // Contrôleur pour mettre à jour un post dans la base de données
@@ -35,6 +39,7 @@ exports.SendUpdatePostResult = async (req, res, next) => {
     return;
   }
   res.status(200).json({ message: "Post mis à jour!" });
+  return;
 };
 
 exports.sendResultOfUpdateFileOfPost = async (req, res, next) => {
@@ -42,8 +47,8 @@ exports.sendResultOfUpdateFileOfPost = async (req, res, next) => {
     res.status(400).json({ message: "Impossible de modifier l'image" });
     return;
   }
-  console.log(req.imageUrl);
   res.status(200).json({ imageUrl: req.imageUrl });
+  return;
 };
 
 // Contrôleur pour supprimer un post de la base de données
@@ -53,4 +58,5 @@ exports.deletePost = async (req, res, next) => {
     return;
   }
   res.status(200).json({ message: "Post supprimé" });
+  return;
 };
