@@ -25,6 +25,7 @@ router.post(
 router.put(
   "/:id_post/comments/:id_comment",
   auth,
+  reqComment.requestIdOfCommentCreator,
   reqComment.requestUpdateComment,
   commentCtrl.sendUpdateCommentResult
 );
@@ -33,6 +34,7 @@ router.put(
 router.delete(
   "/:id_post/comments/:id_comment",
   auth,
+  reqComment.requestIdOfCommentCreator,
   reqComment.requestDeleteComment,
   commentCtrl.sendDeleteCommentResult
 );

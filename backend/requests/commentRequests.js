@@ -1,5 +1,32 @@
 const connexion = require("../mysql_connect");
 
+// Requête vérifiant qu'un commentaire existe et que l'utilisateur a les droits pour ce commentaire
+exports.requestIdOfCommentCreator = async (req, res, next) => {
+  try {
+    connexion.query(
+      `select id_user from comment where id_comment = ?`,
+      [req.params.id_comment],
+      function (err, result) {
+        if (result[0] == undefined) {
+          res.status(400).json({ error: "Ce commentaire n'existe pas" });
+          return;
+        }
+        if (req.auth.userId != result[0].id_user) {
+          res.status(401).json({
+            error:
+              "Vous ne pouvez pas modifier ou supprimer un commentaire que vous n'avez pas créé",
+          });
+          return;
+        }
+        next();
+      }
+    );
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};
+
 // Requête pour enregistrer un commentaire
 exports.requestSaveComment = async (req, res, next) => {
   try {
