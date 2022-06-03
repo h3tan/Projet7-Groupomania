@@ -1,16 +1,6 @@
 const bcrypt = require("bcrypt");
 
-// Middleware pour vérifier si un utilisateur a les droits pour modifier ou supprimer un post ou un commentaire
-/* exports.userRights = (req, res, next) => {
-  if (req.body.userId !== req.auth.userId) {
-    res.status(403).json({
-      error: "Unauthorised User",
-    });
-    return;
-  }
-  next();
-}; */
-
+// Vérification du mot de passe actuel de l'utilisateur en vue de sa modification
 exports.checkPassword = async (req, res, next) => {
   let valid = await bcrypt.compare(req.body.actualPassword, req.password);
   if (!valid) {
