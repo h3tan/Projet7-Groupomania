@@ -1,65 +1,40 @@
 <template>
-  <div id="cards_container">
-    <transition-group name="fade">
-      <div
-        class="post_card"
-        :data-count="post.count_post"
-        v-for="post in posts"
-        :key="post.id_post"
-      >
-        <router-link :to="`/post/${post.id_post}`">
-          <h2>{{ post.title }}</h2>
-        </router-link>
-        <div class="posted">
-          <div class="posted__by_user">
-            <UserAvatar :avatar="`${post.picture}`" />
-            <h3>{{ post.nickname }}</h3>
-          </div>
-          <span>{{ post.date_post }}</span>
-        </div>
-        <div>{{ count_comments }} commentaires</div>
+  <div class="post_card" :data-count="count_post">
+    <router-link :to="`/post/${id_post}`">
+      <h2>{{ post_title }}</h2>
+    </router-link>
+    <div class="posted">
+      <div class="posted__by_user">
+        <UserAvatar :avatar="`${user_picture}`" />
+        <h3>{{ nickname }}</h3>
       </div>
-    </transition-group>
+      <span>{{ date_post }}</span>
+    </div>
+    <div>{{ count_comments }} commentaires</div>
   </div>
 </template>
 
 <script>
 import UserAvatar from "@/components/UserAvatar";
-import { getAllPostsFromAPI } from "@/functions/fetchPost";
 
 export default {
   name: "PostCardMin",
   data() {
-    return {
-      posts: [],
-      comments: [],
-      count_comments: 0,
-      total_post: "",
-    };
+    return {};
   },
+  props: [
+    "count_post",
+    "id_post",
+    "post_title",
+    "user_picture",
+    "nickname",
+    "date_post",
+    "count_comments",
+  ],
   components: {
     UserAvatar,
   },
-  methods: {
-    getAllPostsFromAPI,
-    async showAllPosts() {
-      let reponse = await getAllPostsFromAPI();
-      for (let i = 0; i < reponse.length; i++) {
-        this.total_post = reponse.length;
-        let dateSQL = reponse[i].date_post.split("T");
-        reponse[i].date_post = dateSQL[0];
-      }
-      this.posts = reponse;
-      for (let i in this.posts) {
-        if (this.posts[i].user_id == localStorage.getItem("userId")) {
-          this.posts[i].nickname = "Vous";
-        }
-      }
-    },
-  },
-  created() {
-    this.showAllPosts();
-  },
+  methods: {},
 };
 </script>
 

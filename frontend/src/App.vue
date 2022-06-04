@@ -68,7 +68,7 @@ export default {
 }
 body {
   margin: 0;
-  margin-top: 100px;
+  margin-top: 60px;
 }
 main {
   min-height: 800px;
@@ -117,7 +117,6 @@ header {
 
 footer {
   height: 160px;
-  margin-top: 40px;
   width: 100%;
   background-color: grey;
 }
