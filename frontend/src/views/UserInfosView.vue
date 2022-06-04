@@ -1,9 +1,8 @@
 <template>
   <div id="user_box">
     <div id="user_infos">
-      <h1>Vos Informations</h1>
-
-      <UserInfos />
+      <h1>Votre profil</h1>
+      <UserInfos @sendUpdateAvatarToView='sendUpdateAvatarToApp'/>
     </div>
   </div>
 </template>
@@ -17,6 +16,9 @@ export default {
     UserInfos,
   },
   methods: {
+    sendUpdateAvatarToApp() {
+      this.$emit('modifyAvatar');
+    }
   },
 };
 </script>

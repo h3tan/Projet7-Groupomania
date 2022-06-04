@@ -12,12 +12,12 @@
           <div id="logo_logged" v-if="$store.state.logState == true">
           </div>
           <NotLogged v-if="$store.state.logState == false" />
-          <IsLogged v-if="$store.state.logState == true" />
+          <IsLogged v-if="$store.state.logState == true" :key="pictureChange" />
         </div>
       </header>
     </transition>
     <main>
-      <router-view />
+      <router-view @modifyAvatar='updateAvatar'/>
     </main>
     <footer></footer>
   </div>
@@ -28,7 +28,9 @@ import IsLogged from "./components/IsLogged.vue";
 import NotLogged from "./components/NotLogged.vue";
 export default {
   data() {
-    return {};
+    return {
+      pictureChange: 0,
+    };
   },
   components: {
     NotLogged,
@@ -47,6 +49,9 @@ export default {
         prevScrollpos = currentScrollPos;
       };
     },
+    updateAvatar() {
+      this.pictureChange += 1;
+    }
   },
   beforeCreate() {
     this.$store.dispatch("changeLogState");

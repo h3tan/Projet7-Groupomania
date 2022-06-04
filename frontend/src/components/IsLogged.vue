@@ -183,7 +183,7 @@ export default {
   display: flex;
   border-bottom: 2px solid red;
   width: 60px;
-  height: 60px;
+  height: 59px;
   justify-content: center;
   align-items: center;
 }

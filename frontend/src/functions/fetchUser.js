@@ -77,7 +77,6 @@ export const requestUpdateUserFromAPI = async (
   id,
   last_name,
   first_name,
-  email
 ) => {
   try {
     let postJson = await fetch(`http://localhost:3000/api/auth/users/${id}`, {
@@ -91,7 +90,6 @@ export const requestUpdateUserFromAPI = async (
       body: JSON.stringify({
         last_name: last_name,
         first_name: first_name,
-        email: email,
       }),
     });
     let reponse = await postJson.json();

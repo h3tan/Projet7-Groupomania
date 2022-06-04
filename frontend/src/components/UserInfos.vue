@@ -33,7 +33,12 @@
       </form>
     </div>
     <div class="user_infos">
-      <form id="change_user_infos" v-on:submit.prevent="changeUserInfos">
+      <div class="email">
+        <h4>E-mail</h4>
+        <p>{{ email }}</p>
+      </div>
+      <form id="change_user_infos" v-on:submit.prevent="changeUserInfos" :key="profileChanged">
+      <h4>Modifier vos informations</h4>
         <label for="last_name">Nom</label>
         <input
           @input="isLastNameValid(this.last_name, 'last_name')"
@@ -49,14 +54,6 @@
           id="first_name"
           type="first_name"
           v-model="first_name"
-        />
-        <label for="email">E-mail</label>
-        <input
-          @input="isEmailValid(this.email, 'email')"
-          class="input_form"
-          id="email"
-          type="email"
-          v-model="email"
         />
         <div class="modify_button">
           <UserButton
@@ -106,6 +103,7 @@ export default {
       email: "",
       privilege: "",
       picture: "",
+      profileChanged: 0
     };
   },
   methods: {
@@ -164,23 +162,24 @@ export default {
       );
       if (!reponse.error) {
         localStorage.setItem("avatar", reponse.imageUrl);
-        location.reload();
+        this.cancelPictureChosen();
+        this.assignUserInfos();
+        this.$emit("sendUpdateAvatarToView");
       }
     },
     cancelPictureChosen() {
       this.pictureChosen = false;
     },
     async changeUserInfos() {
-      let newNickname = this.nickname;
+      this.profileChanged = 0;
       let reponse = await requestUpdateUserFromAPI(
         localStorage.getItem("userId"),
         this.last_name,
-        this.first_name,
-        this.email
+        this.first_name
       );
       if (!reponse.error) {
-        localStorage.setItem("nickname", newNickname);
-        location.reload();
+        this.profileChanged = 1;
+        this.assignUserInfos();
       }
       return reponse;
     },
@@ -288,6 +287,24 @@ export default {
 .user_infos {
   width: 95%;
   margin: auto;
+}
+.email {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  margin: auto;
+  margin-bottom: 20px;
+  row-gap: 10px;
+  padding-left: 20px;
+  font-style: italic;
+  h4 {
+    margin: 0;
+  }
+  p {
+    margin: 0;
+  }
 }
 #change_user_infos {
   display: flex;
