@@ -1,5 +1,5 @@
 <template>
-  <div class="post_card" :data-count="count_post">
+  <div class="post_card" :data-id_post="id_post" :data-count="count_post">
     <router-link :to="`/post/${id_post}`">
       <h2>{{ post_title }}</h2>
     </router-link>
@@ -20,7 +20,8 @@ import UserAvatar from "@/components/UserAvatar";
 export default {
   name: "PostCardMin",
   data() {
-    return {};
+    return {
+    };
   },
   props: [
     "count_post",
@@ -85,18 +86,5 @@ h3 {
 }
 span {
   margin-left: 5px;
-}
-
-.fade-enter-active .post_card {
-  transition-delay: 0.5s;
-}
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 1s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-  transform: translateY(-20px);
 }
 </style>

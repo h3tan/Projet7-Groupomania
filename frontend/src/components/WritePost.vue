@@ -1,27 +1,49 @@
 <template>
-  <form id="new_post_form" v-on:submit.prevent="publishPost">
-    <label for="post_title"><h4>Titre du post</h4></label>
-    <input id="post_title" name="post_title" type="text" v-model="post_title" />
-    <div id="add_file">
-      <label id="label_file" for="input_file">Ajouter un fichier image</label>
+  <div id="write_post">
+    <form id="new_post_form" v-on:submit.prevent="publishPost">
+      <h2>Ecrire un nouveau message</h2>
+      <label for="post_title"><h4>Titre du post</h4></label>
       <input
-        type="file"
-        id="input_file"
-        name="file"
-        accept="image/png, image/jpeg, image/gif"
-        @change="handleFileUpload($event)"
+        id="post_title"
+        name="post_title"
+        type="text"
+        v-model="post_title"
       />
-      <div class="picture_chosen" v-if="fileChosen">
-        <div id="image_name">{{ file_name }}</div>
-        <div id="image_type">{{ file_type }}</div>
+      <div id="add_file">
+        <label id="label_file" for="input_file">Ajouter un fichier image</label>
+        <input
+          type="file"
+          id="input_file"
+          name="file"
+          accept="image/png, image/jpeg, image/gif"
+          @change="handleFileUpload($event)"
+        />
+        <div class="picture_chosen" v-if="fileChosen">
+          <div id="image_name">{{ file_name }}</div>
+          <div id="image_type">{{ file_type }}</div>
+        </div>
+        <button id="cancel_file" @click="cancelFileChosen" v-if="fileChosen">
+          Annuler
+        </button>
       </div>
-      <button @click="cancelFileChosen" v-if="fileChosen">Annuler</button>
-    </div>
-    <label for="post_text"><h4>Texte du post</h4></label>
-    <textarea id="post_text" name="post_text" type="text" v-model="post_text" />
-    <button class="send" >Publier</button>
-    <p>{{ result }}</p>
-  </form>
+      <label for="post_text"><h4>Texte du post</h4></label>
+      <textarea
+        id="post_text"
+        name="post_text"
+        type="text"
+        v-model="post_text"
+      />
+      <div class="write_post__buttons">
+        <button class="send">Publier</button>
+        <div role="button" class="cancel_post" @click="cancelPost" tabindex="0">
+          Annuler
+        </div>
+      </div>
+      <transition name="post_result_appear">
+        <h3 class="post_result">{{ result }}</h3>
+      </transition>
+    </form>
+  </div>
 </template>
 
 <script>
@@ -38,6 +60,7 @@ export default {
       file_type: "",
       file_upload: "",
       result: "",
+      showPostResult: false,
     };
   },
   methods: {
@@ -51,12 +74,13 @@ export default {
         this.fileChosen = true;
       }
     },
+    cancelPost() {
+      this.$emit("cancelPost");
+    },
     cancelFileChosen() {
       this.fileChosen = false;
     },
     async publishPost() {
-      this.post_title = this.post_title.replace(/'/g, "''"); // Permet d'autoriser les apostrophes dans la requête
-      this.post_text = this.post_text.replace(/'/g, "''");
       let reponse = await sendNewPostToAPI(
         parseInt(localStorage.getItem("userId")),
         this.post_title,
@@ -65,9 +89,13 @@ export default {
       );
       if (!reponse.error) {
         this.result = "Message posté !";
+        this.post_title = "";
+        this.post_text = "";
         setTimeout(() => {
-          this.$router.push(`/whatsnew`);
-        }, 1000);
+          this.$emit("postPublished");
+          this.$emit("cancelPost");
+          this.result = "";
+        }, 2000);
       } else {
         this.result = reponse.error;
         return;
@@ -78,12 +106,28 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+#write_post {
+  position: fixed;
+  z-index: 5;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  top: 100px;
+  text-align: center;
+  background-color: white;
+  border: 1px solid black;
+  padding: 20px;
+}
 #new_post_form {
   display: flex;
   flex-direction: column;
-  width: 90%;
-  margin: auto;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
 }
 input {
   margin-bottom: 30px;
@@ -109,17 +153,38 @@ label {
   display: none;
 }
 #label_file {
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 11px;
   padding: 0px 23px 0px;
   border: 1px solid;
+  width: 220px;
+  height: 30px;
   border-radius: 4px;
   text-align: center;
   font-weight: 400;
   cursor: pointer;
 }
-.send {
-  width: 100px;
+.picture_chosen {
+  display: flex;
+  width: 250px;
+  height: 30px;
+  align-items: center;
+  justify-content: space-around;
+  border: 1px solid grey;
+  margin-bottom: 10px;
+}
+#image_name {
+  overflow: hidden;
+  padding-left: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#image_type {
+  border-left: 1px solid grey;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 #post_title {
   height: 30px;
@@ -129,5 +194,50 @@ label {
   max-height: 200px;
   height: 100px;
   margin-bottom: 20px;
+}
+.write_post__buttons {
+  display: flex;
+  column-gap: 10px;
+}
+.send,
+.cancel_post {
+  width: 100px;
+  height: 30px;
+  background-color: #fd2d01;
+  cursor: pointer;
+  font-size: 18px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  &:focus {
+    outline: none !important;
+    border: 2px solid black;
+  }
+}
+.cancel_post {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.post_result {
+  font-weight: bold;
+  margin-top: 30px;
+  color: red;
+  font-size: 25px;
+}
+
+/* Animation du message de résultat d'envoi du post */
+.post_result_appear-enter-active,
+.post_result_appear-leave-active {
+  transition: all 0.5s;
+  transition-delay: 0.5s;
+}
+.post_result_appear-enter-from {
+  opacity: 0;
+}
+
+.post_result_appear-enter-active,
+.post_result_appear-leave-active {
+  transition: all 0.5s;
 }
 </style>

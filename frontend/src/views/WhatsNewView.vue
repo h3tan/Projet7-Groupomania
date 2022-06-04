@@ -10,17 +10,20 @@
       @postPublished="updateWhatsNew"
     />
     <div id="cards_container">
-      <PostCardMin
-        :count_post="count"
-        :id_post="post.id_post"
-        :post_title="post.title"
-        :user_picture="post.picture"
-        :nickname="post.nickname"
-        :date_post="post.date_post"
-        :count_comments="comments"
-        v-for="post in posts"
-        :key="post.id_post"
-      />
+      <transition-group name="fade">
+        <PostCardMin
+          :count_post="count"
+          :id_post="post.id_post"
+          :post_title="post.title"
+          :user_picture="post.picture"
+          :nickname="post.nickname"
+          :date_post="post.date_post"
+          :count_comments="comments"
+          v-for="post in posts"
+          :key="post.id_post"
+          @postPublished="updateWhatsNew"
+        />
+      </transition-group>
     </div>
   </div>
 </template>
@@ -75,6 +78,9 @@ export default {
         }
       }
     },
+    updateWhatsNew() {
+      this.showAllPosts();
+    },
   },
   created() {
     this.showAllPosts();
@@ -110,5 +116,18 @@ export default {
   width: 95%;
   margin: auto;
   margin-top: 30px;
+}
+
+.fade-enter-active .post_card {
+  transition-delay: 0.5s;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 1s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
 }
 </style>

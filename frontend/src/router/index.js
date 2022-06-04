@@ -3,7 +3,6 @@ import UserFormView from "../views/UserFormView.vue";
 import UserInfosView from "../views/UserInfosView.vue";
 import WhatsNewView from "../views/WhatsNewView.vue";
 import ShowPostView from "../views/ShowPostView.vue";
-import WritePostView from "../views/WritePostView.vue";
 
 const routes = [
   {
@@ -35,11 +34,6 @@ const routes = [
     path: "/post/:id",
     name: "post",
     component: ShowPostView,
-  },
-  {
-    path: "/newpost",
-    name: "newpost",
-    component: WritePostView,
   },
 ];
 
