@@ -34,6 +34,8 @@ router.put(
   "/:id_post",
   auth,
   postReq.requestIdOfPostCreator,
+  multer,
+  fileCtrl.deleteOldFile,
   postReq.requestUpdatePost,
   postCtrl.SendUpdatePostResult
 );

@@ -7,7 +7,7 @@
         </h3>
         <span>{{ count_comments }}</span>
       </div>
-      <form id="input_comment" v-on:submit.prevent="postComment">
+<!--       <form id="input_comment" v-on:submit.prevent="postComment">
         <label for="input_comment__area"><h4>Ajouter un commentaire</h4></label>
         <textarea
           id="input_comment__area"
@@ -16,7 +16,7 @@
           v-model="post_comment"
         ></textarea>
         <button id="post_comment">Publier</button>
-      </form>
+      </form> -->
       <div class="comment_container" v-if="show_comment">
         <div
           class="comment_card"
@@ -73,6 +73,16 @@
           </div>
         </div>
       </div>
+      <form id="input_comment" v-on:submit.prevent="postComment">
+        <label for="input_comment__area"><h4>Ajouter un commentaire</h4></label>
+        <textarea
+          id="input_comment__area"
+          name="input_comment__area"
+          placeholder="Dites quelque chose..."
+          v-model="post_comment"
+        ></textarea>
+        <button id="post_comment">Publier</button>
+      </form>
     </div>
   </div>
 </template>
@@ -170,13 +180,13 @@ export default {
 
 <style scoped lang="scss">
 .comment_empty {
-  border: 2px solid #FD2D01;
+  border: 2px solid #fd2d01;
   border-radius: 10px;
   margin: auto;
   margin-top: 30px;
 }
 .comment_section {
-  border: 2px solid #FD2D01;
+  border: 2px solid #fd2d01;
   background-color: white;
   border-radius: 10px;
   margin-top: 15px;
@@ -187,7 +197,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 2px solid #FD2D01;
+  border-bottom: 2px solid #fd2d01;
   padding-right: 20px;
 
   h3 {
@@ -222,7 +232,7 @@ export default {
 }
 .comment_card {
   margin: auto;
-  border-top: 1px dashed #FD2D01;
+  border-bottom: 1px dashed #fd2d01;
   padding-top: 10px;
   padding-bottom: 20px;
 }

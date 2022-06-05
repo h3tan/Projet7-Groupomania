@@ -22,7 +22,16 @@
       :post_id_user="post_id_user"
       :liked="requestedUserliked"
       :num_likes="requestedNumLikes"
-      @likeUpdated="updateInfos"
+      @likeUpdated="assignPostInformations"
+    />
+    <PostPanel
+      v-if="post_id_user == userId"
+      :id_post="id_post"
+      :post_id_user="post_id_user"
+      :post_title="post_title"
+      :post_text="post_text"
+      :post_image="post_image"
+      @requestUpdatePostInfosInView="assignPostInformations"
     />
     <CommentSection />
   </div>
@@ -33,9 +42,8 @@ import NavButton from "@/components/NavButton";
 import PostCardDetailed from "@/components/PostCardDetailed";
 import LikeSection from "@/components/LikeSection";
 import CommentSection from "@/components/CommentSection";
+import PostPanel from "@/components/PostPanel";
 import { getPostFromAPI } from "@/functions/fetchPost.js";
-import { requestUpdatePostFromAPI } from "@/functions/fetchPost.js";
-import { requestDeletePostFromAPI } from "@/functions/fetchPost.js";
 
 export default {
   name: "PostAndCommentsView",
@@ -61,17 +69,10 @@ export default {
     LikeSection,
     PostCardDetailed,
     CommentSection,
+    PostPanel,
   },
   methods: {
     getPostFromAPI,
-    requestDeletePostFromAPI,
-    requestUpdatePostFromAPI,
-    // Demande à l'API de supprimer le post dans la base de données
-    async deletePost() {
-      let result = await requestDeletePostFromAPI(this.$route.params.id);
-      this.$router.push("/whatsnew");
-      return result;
-    },
     // Récupère les informations du post de l'API pour les afficher
     async assignPostInformations() {
       let post = await getPostFromAPI(this.$route.params.id);
@@ -101,37 +102,7 @@ export default {
       }
     },
     // Prépare le post pour l'envoyer à l'API puis redirige vers whatsnew
-    async updatePost() {
-      //this.modify_title = this.modify_title.replace(/'/g, "''");
-      //this.modify_text = this.modify_text.replace(/'/g, "''");
-      let reponse = await requestUpdatePostFromAPI(
-        this.$route.params.id,
-        this.modify_title,
-        this.modify_text
-      );
-      this.assignPostInformations();
-      this.input_container = false;
-      if (this.privilege == "admin") {
-        this.modifyButton = "Modérer";
-        return;
-      }
-      this.modifyButton = "Modifier";
-      return reponse;
-    },
-    toggleModifyPost() {
-      if (this.modifyButton == "Annuler") {
-        this.input_container = false;
-        if (this.privilege == "admin") {
-          this.modifyButton = "Modérer";
-          return;
-        }
-        this.modifyButton = "Modifier";
-      } else {
-        this.input_container = true;
-        this.modifyButton = "Annuler";
-      }
-    },
-    updateInfos() {
+    updatePostPage() {
       this.assignPostInformations();
     },
   },

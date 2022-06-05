@@ -105,9 +105,15 @@ exports.savePostInDatabase = async (req, res, next) => {
 
 exports.requestUpdatePost = async (req, res, next) => {
   try {
+    let imageUrl = null;
+    if (req.file) {
+      imageUrl = `${req.protocol}://${req.get("host")}/images/${
+        req.file.filename
+      }`;
+    }
     connexion.query(
-      `update post set title = ?, message = ?, date_updated = now() where id_post = ?`,
-      [req.body.title, req.body.text, req.params.id_post],
+      `update post set title = ?, post_text = ?, image = ?, date_updated = now() where id_post = ?`,
+      [req.body.title, req.body.text, imageUrl, req.params.id_post],
       function (err, result) {
         req.errorUpdatePost = err;
         next();

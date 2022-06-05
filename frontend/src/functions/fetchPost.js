@@ -82,22 +82,30 @@ export const requestModifyPostPictureToAPI = async (
   }
 };
 
-export const requestUpdatePostFromAPI = async (id_post, title, text) => {
+export const requestUpdatePostFromAPI = async (
+  userId,
+  id_post,
+  title,
+  text,
+  newFile,
+  oldFile
+) => {
   try {
+    let formData = new FormData();
+    formData.append("userId", userId);
+    formData.append("title", title);
+    formData.append("text", text);
+    formData.append("file", newFile);
+    formData.append("oldfile", oldFile);
     let postJson = await fetch(
       `http://localhost:3000/api/auth/posts/${id_post}`,
       {
         mode: "cors",
         method: "PUT",
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
           Authorization: localStorage.getItem("token"),
         },
-        body: JSON.stringify({
-          title: title,
-          text: text,
-        }),
+        body: formData,
       }
     );
     let reponse = await postJson.json();

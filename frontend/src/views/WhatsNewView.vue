@@ -1,10 +1,11 @@
 <template>
   <div id="whatsnew">
     <h1>Sujet récents</h1>
-<!--     <button id="write_post__button" @click="displayWritePost">
-      Poster un nouveau message
-    </button> -->
-    <PostButton id="write_post__button" @click="displayWritePost" post_button_name="Poster un nouveau message" />
+    <PostButton
+      id="write_post__button"
+      @click="displayWritePost"
+      post_button_name="Poster un nouveau message"
+    />
     <WritePost
       v-show="writePostDisplayed"
       @cancelPost="cancelDisplayWritePost"
@@ -47,7 +48,7 @@ export default {
   components: {
     PostCardMin,
     WritePost,
-    PostButton
+    PostButton,
   },
   methods: {
     getAllPostsFromAPI,
@@ -88,9 +89,8 @@ export default {
   created() {
     this.showAllPosts();
   },
-  mounted() {
+/*   mounted() {
     document.addEventListener("click", (event) => {
-      if (document.getElementById("write_post") != null) {
         if (
           event.target.closest("#write_post") === null &&
           event.target.closest("#write_post__button") === null &&
@@ -100,9 +100,8 @@ export default {
           document.getElementById("write_post__button").style.visibility =
             "visible";
         }
-      }
     });
-  },
+  }, */
 };
 </script>
 
