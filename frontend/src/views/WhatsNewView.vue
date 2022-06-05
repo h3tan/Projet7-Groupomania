@@ -16,13 +16,11 @@
       </div>
       <transition-group name="fade">
         <PostCardMin
-          :count_post="count"
           :id_post="post.id_post"
           :post_title="post.title"
           :user_picture="post.picture"
           :nickname="post.nickname"
           :date_post="post.date_created"
-          :count_comments="comments"
           v-for="post in posts"
           :key="post.id_post"
           @postPublished="updateWhatsNew"
