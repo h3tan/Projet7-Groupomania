@@ -41,9 +41,10 @@ export default {
 
 <style scoped lang="scss">
 .post_card {
-  border: 1px solid red;
+  border: 1px solid #FD2D01;
   margin-top: 10px;
   border-radius: 10px;
+  background-color: white;
 }
 
 h2 {
@@ -54,13 +55,13 @@ h2 {
   color: black;
   margin-top: 0;
   margin-bottom: 0;
-  border-bottom: 1px solid red;
+  border-bottom: 1px solid #FD2D01;
 }
 a {
   text-decoration: none;
 
   &:visited {
-    color: red;
+    color: #FD2D01;
   }
 }
 h3 {

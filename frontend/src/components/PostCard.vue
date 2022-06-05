@@ -1,94 +1,105 @@
 <template>
-  <div id="post_card">
+  <div id="post_section">
     <div class="title_container">
       <h1>{{ post_title }}</h1>
     </div>
-    <div class="post_informations">
-      <div class="posted">
-        <div class="posted__by_user">
-          <UserAvatar :avatar="`${post_pictureUser}`" />
-          <h2 id="nickname">{{ post_nickname }}</h2>
-        </div>
-        <span>{{ post_date }}</span>
-      </div>
-      <div class="post_body">
-        <div class="post_body__picture" v-if="pictureExists">
-          <img alt="Image posté par l'utilisateur" :src="`${post_picture}`" />
-        </div>
-        <!-- Changement de l'image du post -->
-        <div id="add_file" v-if="sameUser || privilege == 'admin'">
-          <label id="label_file" for="input_file" v-if="sameUser">{{
-            type_of_add
-          }}</label>
-          <input
-            type="file"
-            id="input_file"
-            name="file"
-            accept="image/png, image/jpeg, image/gif"
-            @change="handleFileUpload($event)"
-            v-if="sameUser"
-          />
-          <button
-            @click="modifyPostPicture('delete')"
-            v-if="
-              !fileChosen && pictureExists && (sameUser || privilege == 'admin')
-            "
-          >
-            Supprimez l'image
-          </button>
-          <div class="picture_chosen" v-if="fileChosen">
-            <div id="image_name">{{ file_name }}</div>
-            <div id="image_type">{{ file_type }}</div>
+    <div id="post_card">
+      <div class="post_informations">
+        <div class="posted">
+          <div class="posted__by_user">
+            <UserAvatar :avatar="`${post_pictureUser}`" />
+            <h2 id="nickname">{{ post_nickname }}</h2>
           </div>
-          <div class="picture_buttons">
-            <button @click="modifyPostPicture('modify')" v-if="fileChosen">
-              {{ confirm_add }}
+          <span>{{ post_date }}</span>
+        </div>
+        <div class="post_body">
+          <div class="post_body__picture" v-if="pictureExists">
+            <img alt="Image posté par l'utilisateur" :src="`${post_picture}`" />
+          </div>
+          <!-- Changement de l'image du post -->
+          <div id="add_file" v-if="sameUser || privilege == 'admin'">
+            <label id="label_file" for="input_file" v-if="sameUser">{{
+              type_of_add
+            }}</label>
+            <input
+              type="file"
+              id="input_file"
+              name="file"
+              accept="image/png, image/jpeg, image/gif"
+              @change="handleFileUpload($event)"
+              v-if="sameUser"
+            />
+            <button
+              @click="modifyPostPicture('delete')"
+              v-if="
+                !fileChosen &&
+                pictureExists &&
+                (sameUser || privilege == 'admin')
+              "
+            >
+              Supprimez l'image
             </button>
-            <button @click="cancelFileChosen" v-if="fileChosen">Annuler</button>
+            <div class="picture_chosen" v-if="fileChosen">
+              <div id="image_name">{{ file_name }}</div>
+              <div id="image_type">{{ file_type }}</div>
+            </div>
+            <div class="picture_buttons">
+              <button @click="modifyPostPicture('modify')" v-if="fileChosen">
+                {{ confirm_add }}
+              </button>
+              <button @click="cancelFileChosen" v-if="fileChosen">
+                Annuler
+              </button>
+            </div>
+          </div>
+          <div class="post_body__text_container">
+            <p>{{ post_message }}</p>
           </div>
         </div>
-        <div class="post_body__text_container">
-          <p>{{ post_message }}</p>
-        </div>
       </div>
-    </div>
-    <!-- Modifier un post -->
-    <div class="input_container">
-      <transition name="appear">
-        <div class="input_box" v-if="input_container">
-          <!-- Affichage de la zone pour modifier un post -->
-          <label for="modify_title"><h4>Modifier le titre</h4></label>
-          <input
-            class="modify_title"
-            name="modify_title"
-            v-model="modify_title"
-          />
-          <label for="input_area"><h4>Modifier le texte</h4></label>
-          <textarea
-            class="input_area"
-            name="input_area"
-            v-model="modify_text"
-          ></textarea>
-          <button @click="updatePost">Modifier</button>
+      <!-- Modifier un post -->
+      <div class="input_container">
+        <transition name="appear">
+          <div class="input_box" v-if="input_container">
+            <!-- Affichage de la zone pour modifier un post -->
+            <label for="modify_title"><h4>Modifier le titre</h4></label>
+            <input
+              class="modify_title"
+              name="modify_title"
+              v-model="modify_title"
+            />
+            <label for="input_area"><h4>Modifier le texte</h4></label>
+            <textarea
+              class="input_area"
+              name="input_area"
+              v-model="modify_text"
+            ></textarea>
+            <button @click="updatePost">Modifier</button>
+          </div>
+        </transition>
+      </div>
+      <div class="show_interaction">
+        <LikeSection
+          :user="sameUser"
+          :liked="requestedUserliked"
+          :num_likes="requestedNumLikes"
+          @likeUpdated="updateInfos"
+        />
+        <div class="show_interaction_buttons">
+          <button id="modify_button" @click="toggleModifyPost" v-if="sameUser">
+            {{ modifyButton }}
+          </button>
+          <button
+            id="moderation_button"
+            @click="toggleModifyPost"
+            v-if="privilege == 'admin'"
+          >
+            {{ modifyButton }}
+          </button>
+          <button @click="deletePost" v-if="privilege == 'admin'">
+            Supprimer
+          </button>
         </div>
-      </transition>
-    </div>
-    <div class="show_interaction">
-      <LikeSection :user="sameUser" :liked="requestedUserliked" :num_likes="requestedNumLikes" @likeUpdated="updateInfos" />
-      <div class="show_interaction_buttons">
-        <button id="modify_button" @click="toggleModifyPost" v-if="sameUser">
-          {{ modifyButton }}
-        </button>
-        <button
-          id="moderation_button"
-          @click="toggleModifyPost"
-          v-if="privilege == 'admin'"
-        >
-          {{ modifyButton }}
-        </button>
-        <button @click="deletePost" v-if="privilege == 'admin'">
-          Supprimer
-        </button>
       </div>
     </div>
   </div>
@@ -243,7 +254,7 @@ export default {
     },
     updateInfos() {
       this.assignPostInformations();
-    }
+    },
   },
   created() {
     this.assignPostInformations();
@@ -252,9 +263,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
-#post_card {
+#post_section {
   margin: auto;
   width: 90%;
+}
+#post_card {
+  background-color: white;
+  border: 2px solid #FD2D01;
+  border-radius: 10px;
 }
 #add_file {
   display: flex;
@@ -304,12 +320,6 @@ export default {
   padding-left: 15px;
   padding-right: 15px;
 }
-.post_informations {
-  margin-top: 50px;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-  border: 2px solid red;
-}
 .title_container {
   margin-top: 30px;
   padding-top: 5px;
@@ -327,7 +337,7 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 2px solid red;
+  border-bottom: 2px solid #FD2D01;
   padding-left: 5px;
   padding-right: 10px;
   height: 60px;
@@ -375,12 +385,7 @@ h3 {
   }
 }
 .show_interaction {
-  border-top: 2px solid red;
-  border-left: 2px solid red;
-  border-right: 2px solid red;
-  border-bottom: 2px solid red;
-  border-bottom-right-radius: 20px;
-  border-bottom-left-radius: 20px;
+  border-top: 2px solid #FD2D01;
   margin-top: -2px;
   display: flex;
   height: 100px;
@@ -411,8 +416,8 @@ h4 {
 .input_container {
   width: 100%;
   margin: auto;
-  border-left: 2px solid red;
-  border-right: 2px solid red;
+  border-left: 2px solid #FD2D01;
+  border-right: 2px solid #FD2D01;
   transform-origin: top;
 }
 

@@ -208,7 +208,7 @@ button {
   justify-content: center;
   align-items: center;
   font-weight: bold;
-  color: red;
+  color: #FD2D01;
   font-size: 20px;
   position: absolute;
   margin-left: auto;

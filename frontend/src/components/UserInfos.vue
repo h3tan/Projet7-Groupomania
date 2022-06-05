@@ -150,7 +150,7 @@ export default {
       }
       if (this.privilege == "admin") {
         this.privilege = "Modérateur";
-        document.getElementById("privilege").style.color = "red";
+        document.getElementById("privilege").style.color = "#FD2D01";
       }
     },
     // Met à jour la page lorsque l'avatar est modifié
@@ -193,7 +193,7 @@ export default {
 <style scoped lang="scss">
 .infos {
   margin: auto;
-  border: 1px solid red;
+  border: 1px solid #FD2D01;
   border-radius: 20px;
   width: 95%;
 }
@@ -212,7 +212,7 @@ export default {
   width: 150px;
   height: 150px;
   border-radius: 20px;
-  border: 1px solid red;
+  border: 1px solid #FD2D01;
   margin-bottom: 20px;
 }
 .avatar_container {
@@ -248,7 +248,7 @@ export default {
   margin-bottom: 10px;
   padding: 10px;
   overflow: hidden;
-  border: 1px solid red;
+  border: 1px solid #FD2D01;
   border-radius: 15px;
   width: 40%;
   height: 40%;

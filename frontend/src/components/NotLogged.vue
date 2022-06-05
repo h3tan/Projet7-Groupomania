@@ -33,7 +33,7 @@ export default {
     toggleNav() {
       if (!this.show_nav_menu) {
         this.show_nav_menu = true;
-        document.querySelector(".nav_menu__icon").style.backgroundColor = "red";
+        document.querySelector(".nav_menu__icon").style.backgroundColor = "#FD2D01";
         this.rotateIcon = true;
       } else {
         this.show_nav_menu = false;
@@ -50,7 +50,8 @@ export default {
         if (event.target.closest("#header") === null) {
           this.show_nav = false;
           this.rotateIcon = false;
-          document.querySelector(".nav_menu__icon").style.backgroundColor = "white";
+          document.querySelector(".nav_menu__icon").style.backgroundColor =
+            "white";
         }
       }
     });
@@ -66,16 +67,16 @@ export default {
   }
   &__icon {
     font-size: 25px;
+    display: flex;
     width: 50px;
+    justify-content: center;
     height: 60px;
     padding-top: 15px;
-    border-bottom: 2px solid red;
+    border-bottom: 2px solid #FD2D01;
+    i {
+      position: absolute;
+    }
   }
-}
-
-i {
-  position: absolute;
-  right: 28px;
 }
 
 nav {

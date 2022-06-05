@@ -133,10 +133,8 @@ export default {
         localStorage.getItem("userId")
       );
       if (!reponse.error) {
-        // Mettre à jour le DOM sans actualiser la page
-        // 1: Appeler showAllComments
-        // 2: $forceupdate()
         this.showAllComments();
+        this.post_comment = "";
       }
       return reponse;
     },
@@ -173,14 +171,15 @@ export default {
 <style scoped lang="scss">
 .comment_empty {
   width: 90%;
-  border: 2px solid red;
+  border: 2px solid #FD2D01;
   border-radius: 10px;
   margin: auto;
   margin-top: 30px;
 }
 .comment_section {
   width: 90%;
-  border: 2px solid red;
+  border: 2px solid #FD2D01;
+  background-color: white;
   border-radius: 10px;
   margin: auto;
   margin-top: 30px;
@@ -191,7 +190,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 2px solid red;
+  border-bottom: 2px solid #FD2D01;
   padding-right: 20px;
 
   h3 {
@@ -226,7 +225,7 @@ export default {
 }
 .comment_card {
   margin: auto;
-  border-top: 1px dashed red;
+  border-top: 1px dashed #FD2D01;
   padding-top: 10px;
   padding-bottom: 20px;
 }

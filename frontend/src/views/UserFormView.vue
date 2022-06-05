@@ -1,5 +1,5 @@
 <template>
-  <div id="userform">
+  <div id="user_form">
     <div class="title">
       <h1>Réseau social interne</h1>
     </div>
@@ -27,12 +27,15 @@ export default {
 </script>
 
 <style scoped lang="scss">
+#user_form{
+  padding-top: 1px;
+}
 .title {
   margin-top: 20px;
 }
 h1 {
   margin-top: 0;
-  color: red;
+  color: #FD2D01;
   font-size: 25px;
 }
 

@@ -58,7 +58,7 @@ export default {
       if (document.querySelector(".avatar_box")) {
         if (!this.show_nav_user) {
           this.show_nav_user = true;
-          document.querySelector(".avatar_box").style.backgroundColor = "red";
+          document.querySelector(".avatar_box").style.backgroundColor = "#FD2D01";
         } else {
           this.show_nav_user = false;
           document.querySelector(".avatar_box").style.backgroundColor = "white";
@@ -175,16 +175,18 @@ export default {
     height: 60px;
     justify-content: center;
     align-items: center;
-    border-bottom: 1px solid red;
+    border-bottom: 1px solid #FD2D01;
   } */
 }
 
 .avatar_box {
   display: flex;
-  border-bottom: 2px solid red;
+  /* border-bottom: 1px solid #FD2D01; */
   width: 60px;
-  height: 59px;
+  height: 60px;
   justify-content: center;
+  margin-top: -6px;
+  padding-top: 3px;
   align-items: center;
 }
 .avatar_container {

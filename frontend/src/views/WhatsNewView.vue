@@ -1,15 +1,19 @@
 <template>
   <div id="whatsnew">
     <h1>Sujet récents</h1>
-    <button id="write_post__button" @click="displayWritePost">
+<!--     <button id="write_post__button" @click="displayWritePost">
       Poster un nouveau message
-    </button>
+    </button> -->
+    <PostButton id="write_post__button" @click="displayWritePost" post_button_name="Poster un nouveau message" />
     <WritePost
       v-show="writePostDisplayed"
       @cancelPost="cancelDisplayWritePost"
       @postPublished="updateWhatsNew"
     />
     <div id="cards_container">
+      <div class="no_posts" v-if="posts.length == 0">
+        <h2>Aucun post à afficher</h2>
+      </div>
       <transition-group name="fade">
         <PostCardMin
           :count_post="count"
@@ -32,6 +36,7 @@
 import { getAllPostsFromAPI } from "@/functions/fetchPost";
 import WritePost from "@/components/WritePost";
 import PostCardMin from "@/components/PostCardMin";
+import PostButton from "@/components/PostButton.vue";
 
 export default {
   name: "WhatsNewView",
@@ -44,6 +49,7 @@ export default {
   components: {
     PostCardMin,
     WritePost,
+    PostButton
   },
   methods: {
     getAllPostsFromAPI,
@@ -65,7 +71,6 @@ export default {
     },
     async showAllPosts() {
       let reponse = await getAllPostsFromAPI();
-      console.log(reponse);
       for (let i = 0; i < reponse.length; i++) {
         this.total_post = reponse.length;
         let dateSQL = reponse[i].date_post.split("T");
@@ -117,7 +122,9 @@ export default {
   margin: auto;
   margin-top: 30px;
 }
-
+.no_posts {
+  margin-top: 150px;
+}
 .fade-enter-active .post_card {
   transition-delay: 0.5s;
 }

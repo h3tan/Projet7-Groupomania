@@ -55,7 +55,7 @@ export default {
   display: flex;
   flex-direction: column;
   width: 90%;
-  border: 1px solid red;
+  border: 1px solid #FD2D01;
   &__area {
     min-width: 95%;
     max-width: 95%;

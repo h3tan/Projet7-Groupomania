@@ -2,7 +2,7 @@ export const isNicknameValid = (nickname, element) => {
   const button = document.querySelector(".formButton");
   const regex = /^[a-z ,.'-]+$/i;
   if (!regex.test(nickname)) {
-    document.getElementById(element).style.background = "red";
+    document.getElementById(element).style.background = "#FD2D01";
     button.setAttribute("disabled", "true");
   } else {
     document.getElementById(element).style.background = "lightgreen";
@@ -15,7 +15,7 @@ export const isLastNameValid = (lastName, element) => {
   const button = document.querySelector(".formButton");
   const regex = /^[a-z ,.'-]+$/i;
   if (!regex.test(lastName)) {
-    document.getElementById(element).style.background = "red";
+    document.getElementById(element).style.background = "#FD2D01";
     button.setAttribute("disabled", "true");
   } else {
     document.getElementById(element).style.background = "lightgreen";
@@ -28,7 +28,7 @@ export const isFirstNameValid = (firstName, element) => {
   const button = document.querySelector(".formButton");
   const regex = /^[a-z ,.'-]+$/i;
   if (!regex.test(firstName)) {
-    document.getElementById(element).style.background = "red";
+    document.getElementById(element).style.background = "#FD2D01";
     button.setAttribute("disabled", "true");
   } else {
     document.getElementById(element).style.background = "lightgreen";
@@ -42,7 +42,7 @@ export const isPasswordValid = (password, element) => {
   //Comporte 10 caractères, 1 minuscule, 1 majuscule, 1 chiffre et un caractère spécial
   const regex = /^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/;
   if (!regex.test(password)) {
-    document.getElementById(element).style.background = "red";
+    document.getElementById(element).style.background = "#FD2D01";
     button.setAttribute("disabled", "true");
   } else {
     document.getElementById(element).style.background = "lightgreen";
@@ -58,7 +58,7 @@ export const isEmailValid = (email, element) => {
   //eslint-disable-next-line
   const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
   if (!regex.test(email)) {
-    document.getElementById(element).style.background = "red";
+    document.getElementById(element).style.background = "#FD2D01";
     button.setAttribute("disabled", "true");
   } else {
     document.getElementById(element).style.background = "lightgreen";
@@ -81,7 +81,7 @@ export const isPasswordChangeValid = (password, element) => {
   //Comporte 10 caractères, 1 minuscule, 1 majuscule, 1 chiffre et un caractère spécial
   const regex = /^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/;
   if (!regex.test(password)) {
-    document.getElementById(element).style.background = "red";
+    document.getElementById(element).style.background = "#FD2D01";
     button.setAttribute("disabled", "true");
   } else {
     document.getElementById(element).style.background = "lightgreen";

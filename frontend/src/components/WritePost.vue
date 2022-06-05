@@ -1,6 +1,6 @@
 <template>
   <div id="write_post">
-    <form id="new_post_form" v-on:submit.prevent="publishPost">
+    <form id="new_post_form">
       <h2>Ecrire un nouveau message</h2>
       <label for="post_title"><h4>Titre du post</h4></label>
       <input
@@ -34,10 +34,8 @@
         v-model="post_text"
       />
       <div class="write_post__buttons">
-        <button class="send">Publier</button>
-        <div role="button" class="cancel_post" @click="cancelPost" tabindex="0">
-          Annuler
-        </div>
+        <PostButton @click.prevent="publishPost" post_button_name="Publier" />
+        <PostButton @click.prevent="cancelPost" post_button_name="Annuler" />
       </div>
       <transition name="post_result_appear">
         <h3 class="post_result">{{ result }}</h3>
@@ -48,6 +46,7 @@
 
 <script>
 import { sendNewPostToAPI } from "@/functions/fetchPost.js";
+import PostButton from "@/components/PostButton.vue";
 
 export default {
   name: "WritePost",
@@ -62,6 +61,9 @@ export default {
       result: "",
       showPostResult: false,
     };
+  },
+  components: {
+    PostButton
   },
   methods: {
     sendNewPostToAPI,
@@ -199,30 +201,10 @@ label {
   display: flex;
   column-gap: 10px;
 }
-.send,
-.cancel_post {
-  width: 100px;
-  height: 30px;
-  background-color: #fd2d01;
-  cursor: pointer;
-  font-size: 18px;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  &:focus {
-    outline: none !important;
-    border: 2px solid black;
-  }
-}
-.cancel_post {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 .post_result {
   font-weight: bold;
   margin-top: 30px;
-  color: red;
+  color: #FD2D01;
   font-size: 25px;
 }
 

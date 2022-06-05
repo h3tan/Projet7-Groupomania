@@ -74,6 +74,8 @@ main {
   min-height: 800px;
   max-width: 1000px;
   margin: auto;
+  background-color: #FFD7D7;
+  padding-bottom: 100px;
 }
 header {
   display: flex;
@@ -84,9 +86,9 @@ header {
   left: 0;
   right: 0;
   justify-content: space-between;
-  border-bottom: 2px solid red;
+  border-bottom: 2px solid #FD2D01;
   z-index: 5;
-  background-color: white;
+  background-color:  white;
   transition: top 0.3s;
 }
 #nav_bar {
@@ -118,6 +120,6 @@ header {
 footer {
   height: 160px;
   width: 100%;
-  background-color: grey;
+  background-color: #4E5166;
 }
 </style>

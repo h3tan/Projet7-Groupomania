@@ -246,7 +246,7 @@ export default {
   justify-content: center;
   align-items: center;
   font-weight: bold;
-  color: red;
+  color: #FD2D01;
   font-size: 20px;
   height: 50px;
   margin-top: 20px;

@@ -91,9 +91,9 @@ export default {
   width: 30px;
 
   i {
-    color: red;
+    color: #FD2D01;
     font-size: 25px;
-    background: red;
+    background: #FD2D01;
     background-clip: text;
     -webkit-background-clip: text;
     position: absolute;
