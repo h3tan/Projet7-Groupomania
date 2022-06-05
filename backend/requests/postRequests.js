@@ -4,14 +4,14 @@ const connexion = require("../mysql_connect");
 exports.requestIdOfPostCreator = async (req, res, next) => {
   try {
     connexion.query(
-      `select user_id from post where id_post = ?`,
+      `select id_user from post where id_post = ?`,
       [req.params.id_post],
       function (err, result) {
         if (result[0] == undefined) {
           res.status(400).json({ error: "Ce post n'existe pas" });
           return;
         }
-        if (req.auth.userId != result[0].user_id) {
+        if (req.auth.userId != result[0].id_user) {
           res.status(401).json({
             error:
               "Vous ne pouvez pas modifier ou supprimer un post que vous n'avez pas créé",
@@ -30,7 +30,7 @@ exports.requestIdOfPostCreator = async (req, res, next) => {
 exports.requestAllPosts = async (req, res, next) => {
   try {
     connexion.query(
-      `select * from post join user on post.user_id = user.id_user order by post.id_post desc`,
+      `select * from post join user on post.id_user = user.id_user order by post.id_post desc`,
       function (err, result) {
         req.resultAllPosts = result;
         req.errorAllPosts = err;
@@ -46,8 +46,8 @@ exports.requestAllPosts = async (req, res, next) => {
 exports.requestPost = async (req, res, next) => {
   try {
     connexion.query(
-      `select post.id_post, post.title, post.post_picture, post.date_post, post.user_id, post.message, user.nickname, user.picture
-        from post join user on user.id_user = post.user_id where post.id_post = ?`,
+      `select post.id_post, post.title, post.image, post.date_created, post.id_user, post.post_text, user.nickname, user.picture
+        from post join user on user.id_user = post.id_user where post.id_post = ?`,
       [req.params.id_post],
       function (err, result) {
         if (result[0] == undefined) {
@@ -68,7 +68,7 @@ exports.requestPost = async (req, res, next) => {
 exports.requestPostPicture = async (req, res, next) => {
   try {
     connexion.query(
-      `select post_picture from post where id_post = ?`,
+      `select image from post where id_post = ?`,
       [req.params.id_post],
       function (err, result) {
         req.post_picture = result[0].post_picture;
@@ -90,7 +90,7 @@ exports.savePostInDatabase = async (req, res, next) => {
       }`;
     }
     connexion.query(
-      `insert into post (title, message, post_picture, date_post, user_id) values (?, ?, ?, now(), ?);`,
+      `insert into post (title, post_text, image, date_created, date_updated, id_user) values (?, ?, ?, now(), now(), ?);`,
       [req.body.title, req.body.text, imageUrl, req.body.userId],
       function (err, result) {
         req.errorPost = err;
@@ -106,7 +106,7 @@ exports.savePostInDatabase = async (req, res, next) => {
 exports.requestUpdatePost = async (req, res, next) => {
   try {
     connexion.query(
-      `update post set title = ?, message = ?, date_post = now() where id_post = ?`,
+      `update post set title = ?, message = ?, date_updated = now() where id_post = ?`,
       [req.body.title, req.body.text, req.params.id_post],
       function (err, result) {
         req.errorUpdatePost = err;
@@ -130,7 +130,7 @@ exports.requestUpdatePostFile = async (req, res, next) => {
       imageUrl = null;
     }
     connexion.query(
-      `update post set post_picture = ? where id_post = ?;`,
+      `update post set image = ? where id_post = ?;`,
       [imageUrl, req.params.id_post],
       function (err, result) {
         req.errorUpdateFile = err;

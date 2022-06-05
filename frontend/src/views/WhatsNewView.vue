@@ -21,7 +21,7 @@
           :post_title="post.title"
           :user_picture="post.picture"
           :nickname="post.nickname"
-          :date_post="post.date_post"
+          :date_post="post.date_created"
           :count_comments="comments"
           v-for="post in posts"
           :key="post.id_post"
@@ -73,12 +73,12 @@ export default {
       let reponse = await getAllPostsFromAPI();
       for (let i = 0; i < reponse.length; i++) {
         this.total_post = reponse.length;
-        let dateSQL = reponse[i].date_post.split("T");
-        reponse[i].date_post = dateSQL[0];
+        let dateSQL = reponse[i].date_created.split("T");
+        reponse[i].date_created = dateSQL[0];
       }
       this.posts = reponse;
       for (let i in this.posts) {
-        if (this.posts[i].user_id == localStorage.getItem("userId")) {
+        if (this.posts[i].id_user == localStorage.getItem("userId")) {
           this.posts[i].nickname = "Vous";
         }
       }

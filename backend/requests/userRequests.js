@@ -99,10 +99,9 @@ exports.requestAvatar = (req, res, next) => {
 exports.requestUserPostPictures = (req, res, next) => {
   try {
     connexion.query(
-      `SELECT post_picture FROM post WHERE user_id = ?`,
+      `SELECT image FROM post WHERE user_id = ?`,
       [req.auth.userId],
       function (err, result) {
-        console.log(result[1]);
         req.file = result;
         next();
       }
@@ -176,8 +175,6 @@ exports.requestDeleteUser = async (req, res, next) => {
       `delete from user where id_user = ?`,
       [req.params.id],
       function (err, result) {
-        console.log(err);
-        console.log(result);
         req.errorDeleteUser = err;
         next();
       }

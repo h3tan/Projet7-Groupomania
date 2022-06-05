@@ -30,7 +30,7 @@
             <p>{{ comment.nickname }}</p>
           </div>
           <div class="comment_text">
-            <p>{{ comment.comment_message }}</p>
+            <p>{{ comment.comment_text }}</p>
           </div>
           <div class="comment_interactions">
             <div
@@ -262,6 +262,9 @@ export default {
   margin: auto;
   border-radius: 5px;
   margin-bottom: 8px;
+  p {
+    text-align: left;
+  }
 }
 
 .modify_comment {

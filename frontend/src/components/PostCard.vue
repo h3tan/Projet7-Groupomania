@@ -3,18 +3,18 @@
     <div class="title_container">
       <h1>{{ post_title }}</h1>
     </div>
-    <div id="post_card">
+    <div id="post_card" :data-id_post="id_post">
       <div class="post_informations">
         <div class="posted">
           <div class="posted__by_user">
             <UserAvatar :avatar="`${post_pictureUser}`" />
             <h2 id="nickname">{{ post_nickname }}</h2>
           </div>
-          <span>{{ post_date }}</span>
+          <span>{{ post_date_created }}</span>
         </div>
         <div class="post_body">
           <div class="post_body__picture" v-if="pictureExists">
-            <img alt="Image posté par l'utilisateur" :src="`${post_picture}`" />
+            <img alt="Image posté par l'utilisateur" :src="`${post_image}`" />
           </div>
           <!-- Changement de l'image du post -->
           <div id="add_file" v-if="sameUser || privilege == 'admin'">
@@ -53,7 +53,7 @@
             </div>
           </div>
           <div class="post_body__text_container">
-            <p>{{ post_message }}</p>
+            <p>{{ post_text }}</p>
           </div>
         </div>
       </div>
@@ -119,14 +119,14 @@ export default {
     return {
       userId: localStorage.getItem("userId"),
       privilege: localStorage.getItem("privilege"),
-      post_id: "",
-      post_userId: "",
+      id_post: "",
+      post_id_user: "",
       post_pictureUser: "",
       post_title: "",
-      post_picture: "",
-      post_message: "",
+      post_image: "",
+      post_text: "",
       post_nickname: "",
-      post_date: "",
+      post_date_created: "",
       modify_title: "",
       modify_text: "",
       modifyButton: "Modifier",
@@ -180,22 +180,22 @@ export default {
       if (!post.error) {
         this.requestedNumLikes = post.numLikes;
         this.requestedUserliked = post.isLiked;
-        this.post_id = post.id_post;
-        this.post_userId = post.user_id;
-        if (post.user_id == this.userId) {
+        this.id_post = post.id_post;
+        this.post_id_user = post.id_user;
+        if (post.id_user == this.userId) {
           this.post_nickname = "Vous";
         } else {
           this.post_nickname = post.nickname;
         }
         this.post_title = post.title;
         this.post_pictureUser = post.picture;
-        this.post_picture = post.post_picture;
-        this.post_message = post.message;
+        this.post_image = post.image;
+        this.post_text = post.post_text;
         this.modify_title = this.post_title;
-        this.modify_text = this.post_message;
-        let dateSQL = post.date_post.split("T");
+        this.modify_text = this.post_text;
+        let dateSQL = post.date_created.split("T");
         let dateFr = new Date(dateSQL[0]);
-        this.post_date = dateFr.toLocaleDateString("fr");
+        this.post_date_created = dateFr.toLocaleDateString("fr");
         if (parseInt(this.userId) == parseInt(this.post_userId)) {
           this.sameUser = true;
           return;
@@ -207,9 +207,9 @@ export default {
         this.file_upload = "";
       }
       let reponse = await requestModifyPostPictureToAPI(
-        this.post_id,
+        this.id_post,
         this.file_upload,
-        this.post_picture
+        this.post_image
       );
       if (!reponse.error) {
         if (!reponse.imageUrl) {
