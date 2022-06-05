@@ -32,7 +32,6 @@ export const requestDeleteLikeFromAPI = async (id_post) => {
 
 export const requestInsertLikeFromAPI = async (id_post) => {
   try {
-    console.log("entrée dans insert like");
     let postJson = await fetch(
       `http://localhost:3000/api/auth/posts/${id_post}/likes/`,
       {

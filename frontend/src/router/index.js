@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import UserFormView from "../views/UserFormView.vue";
 import UserInfosView from "../views/UserInfosView.vue";
 import WhatsNewView from "../views/WhatsNewView.vue";
-import ShowPostView from "../views/ShowPostView.vue";
+import PostAndCommentsView from "../views/PostAndCommentsView.vue";
 
 const routes = [
   {
@@ -33,7 +33,7 @@ const routes = [
   {
     path: "/post/:id",
     name: "post",
-    component: ShowPostView,
+    component: PostAndCommentsView,
   },
 ];
 

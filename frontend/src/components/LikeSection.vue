@@ -1,6 +1,10 @@
 <template>
-  <div class="like_or_delete">
-    <div class="like" v-if="!user">
+  <div
+    class="like_section"
+    :data-id_post="id_post"
+    :data-id_user="post_id_user"
+  >
+    <div class="like" v-if="post_id_user != userId">
       <div class="like_icons" @click="updateLike">
         <transition name="cancel_like">
           <i id="empty_heart" class="far fa-heart" v-if="!liked"></i>
@@ -11,73 +15,67 @@
       </div>
       <span>J'aime</span>
     </div>
-    <button id="delete_button" @click="deletePost" v-if="user">
-      Supprimer
-    </button>
     <span class="num_likes">{{ num_likes }} likes</span>
   </div>
 </template>
 
 <script>
-import { requestDeletePostFromAPI } from "@/functions/fetchPost.js";
 import { requestDeleteLikeFromAPI } from "@/functions/fetchLike.js";
 import { requestInsertLikeFromAPI } from "@/functions/fetchLike.js";
 
 export default {
   name: "LikeSection",
-  props: ["user", "liked", "num_likes"],
+  data() {
+    return {
+      userId: localStorage.getItem("userId"),
+      notSameUser: "",
+    };
+  },
+  props: ["id_post", "post_id_user", "liked", "num_likes"],
   methods: {
-    requestDeletePostFromAPI,
     // Récupère le nombre de likes du post ainsi que si l'utilisateur connecté a liké ce post
     async updateLike() {
-      console.log(this.$route.params)
       if (this.liked == true) {
-        let reponse = await requestDeleteLikeFromAPI(
-          this.$route.params.id,
-        );
+        let reponse = await requestDeleteLikeFromAPI(this.$route.params.id);
         if (reponse.message == "Annulation du like") {
-          this.$emit('likeUpdated');
+          this.$emit("likeUpdated");
         }
         return;
       }
       if (this.liked == false) {
-        let reponse = await requestInsertLikeFromAPI(
-          this.$route.params.id,
-        );
+        let reponse = await requestInsertLikeFromAPI(this.$route.params.id);
         if (reponse.message == "Post liké") {
-          this.$emit('likeUpdated');
+          this.$emit("likeUpdated");
         }
         return;
       }
     },
-    async deletePost() {
-      let result = await requestDeletePostFromAPI(this.$route.params.id);
-      this.$router.push("/whatsnew");
-      return result;
-    },
   },
-  created() {},
 };
 </script>
 
 <style scoped lang="scss">
-.like_or_delete {
-  width: 50%;
+.like_section {
+  border: 2px solid #fd2d01;
+  border-radius: 10px;
+  background-color: white;
+  width: 100%;
   position: relative;
   justify-content: center;
   align-items: center;
   display: flex;
   flex-direction: column;
+  height: 80px;
+  margin-top: 15px;
 }
 .like {
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 30%;
+  height: 40%;
 
   span {
-    margin-top: -15px;
     margin-left: 10px;
   }
 }
@@ -86,14 +84,13 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-top: -12px;
   height: 30px;
   width: 30px;
 
   i {
-    color: #FD2D01;
+    color: #fd2d01;
     font-size: 25px;
-    background: #FD2D01;
+    background: #fd2d01;
     background-clip: text;
     -webkit-background-clip: text;
     position: absolute;

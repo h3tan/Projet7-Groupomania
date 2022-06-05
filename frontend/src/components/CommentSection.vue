@@ -170,19 +170,16 @@ export default {
 
 <style scoped lang="scss">
 .comment_empty {
-  width: 90%;
   border: 2px solid #FD2D01;
   border-radius: 10px;
   margin: auto;
   margin-top: 30px;
 }
 .comment_section {
-  width: 90%;
   border: 2px solid #FD2D01;
   background-color: white;
   border-radius: 10px;
-  margin: auto;
-  margin-top: 30px;
+  margin-top: 15px;
   margin-bottom: 100px;
   overflow: hidden;
 }
