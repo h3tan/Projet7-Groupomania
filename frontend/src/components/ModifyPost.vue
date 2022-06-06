@@ -1,7 +1,7 @@
 <template>
   <div id="write_post">
     <form id="new_post_form">
-      <h2>Modifiez votre post</h2>
+      <h2>Modifiez le post</h2>
       <label for="post_title"><h4>Titre du post</h4></label>
       <input
         id="post_title"

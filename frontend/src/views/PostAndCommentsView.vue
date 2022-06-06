@@ -18,21 +18,21 @@
       :post_date_created="post_date_created"
       :post_time_created="post_time_created"
     />
-    <LikeSection
-      :id_post="id_post"
-      :post_id_user="post_id_user"
-      :liked="requestedUserliked"
-      :num_likes="requestedNumLikes"
-      @likeUpdated="assignPostInformations"
-    />
     <PostPanel
-      v-if="post_id_user == userId"
+      v-if="post_id_user == userId || privilege == 'admin'"
       :id_post="id_post"
       :post_id_user="post_id_user"
       :post_title="post_title"
       :post_text="post_text"
       :post_image="post_image"
       @requestUpdatePostInfosInView="assignPostInformations"
+    />
+    <LikeSection
+      :id_post="id_post"
+      :post_id_user="post_id_user"
+      :liked="requestedUserliked"
+      :num_likes="requestedNumLikes"
+      @likeUpdated="assignPostInformations"
     />
     <CommentSection />
   </div>
@@ -96,12 +96,14 @@ export default {
         this.modify_text = this.post_text;
         let date = new Date(post.date_created);
         this.post_date_created = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
-        this.post_time_created = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+        this.post_time_created = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
         if (parseInt(this.userId) == parseInt(this.post_userId)) {
           this.sameUser = true;
           return;
         }
+        return;
       }
+      this.$router.push("/whatsnew"); // Redirection lorsque le post n'existe pas
     },
     // Prépare le post pour l'envoyer à l'API puis redirige vers whatsnew
     updatePostPage() {
