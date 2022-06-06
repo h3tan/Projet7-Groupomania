@@ -64,7 +64,7 @@
           />
         </div>
       </form>
-      <ModifyPassword />
+      <ModifyPassword @password_changed="updatePasswordSection" :key="passwordChanged"/>
     </div>
   </div>
 </template>
@@ -103,7 +103,8 @@ export default {
       email: "",
       privilege: "",
       picture: "",
-      profileChanged: 0
+      profileChanged: 0,
+      passwordChanged: 0
     };
   },
   methods: {
@@ -183,6 +184,9 @@ export default {
       }
       return reponse;
     },
+    updatePasswordSection() {
+    this.passwordChanged += 1;
+    }
   },
   created() {
     this.assignUserInfos();
@@ -193,9 +197,10 @@ export default {
 <style scoped lang="scss">
 .infos {
   margin: auto;
-  border: 1px solid #FD2D01;
+  border: 2px solid #FD2D01;
   border-radius: 20px;
   width: 95%;
+  background-color: white;
 }
 
 .avatar_section {

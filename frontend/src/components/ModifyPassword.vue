@@ -166,10 +166,9 @@ export default {
       );
       if (!reponse.error) {
         this.confirm_password_change = true;
-/*         setTimeout(() => {
-          location.reload();
-        }, 2000); */
-        this.$emit('password_changed');
+        setTimeout(() => {
+          this.$emit("password_changed");
+        }, 2000);
         return;
       }
       this.showErrorPassword = true;
@@ -246,7 +245,7 @@ export default {
   justify-content: center;
   align-items: center;
   font-weight: bold;
-  color: #FD2D01;
+  color: #fd2d01;
   font-size: 20px;
   height: 50px;
   margin-top: 20px;
