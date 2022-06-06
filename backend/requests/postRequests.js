@@ -1,6 +1,6 @@
 const connexion = require("../mysql_connect");
 
-// Requête vérifiant qu'un post existe et que l'utilisateur a les droits pour ce post
+// Requête vérifiant qu'un post existe et que l'utilisateur a les droits pour ce post (soit créateur du post ou admin)
 exports.requestIdOfPostCreator = async (req, res, next) => {
   try {
     connexion.query(
@@ -9,6 +9,10 @@ exports.requestIdOfPostCreator = async (req, res, next) => {
       function (err, result) {
         if (result[0] == undefined) {
           res.status(400).json({ error: "Ce post n'existe pas" });
+          return;
+        }
+        if (req.role.privilege == "admin") {
+          next();
           return;
         }
         if (req.auth.userId != result[0].id_user) {
