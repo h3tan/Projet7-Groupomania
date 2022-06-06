@@ -70,6 +70,9 @@ body {
   margin: 0;
   margin-top: 60px;
 }
+#main_vue {
+  background-color: #FFD7D7;
+}
 main {
   min-height: 800px;
   max-width: 1000px;

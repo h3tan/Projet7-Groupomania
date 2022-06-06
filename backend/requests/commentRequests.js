@@ -11,6 +11,10 @@ exports.requestIdOfCommentCreator = async (req, res, next) => {
           res.status(400).json({ error: "Ce commentaire n'existe pas" });
           return;
         }
+        if (req.role.privilege == "admin") {
+          next();
+          return;
+        }
         if (req.auth.userId != result[0].id_user) {
           res.status(401).json({
             error:
