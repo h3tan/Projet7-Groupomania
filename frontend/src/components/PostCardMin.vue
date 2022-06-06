@@ -1,8 +1,10 @@
 <template>
   <div class="post_card" :data-id_post="id_post" :data-count="count_post">
-    <router-link :to="`/post/${id_post}`">
-      <h2>{{ post_title }}</h2>
-    </router-link>
+    <div class="post_title">
+      <router-link :to="`/post/${id_post}`">
+        <h2>{{ post_title }}</h2>
+      </router-link>
+    </div>
     <div class="posted">
       <div class="posted__by_user">
         <UserAvatar :avatar="`${user_picture}`" />
@@ -31,7 +33,7 @@ export default {
     "user_picture",
     "nickname",
     "date_post",
-    "time_post"
+    "time_post",
   ],
   components: {
     UserAvatar,
@@ -42,21 +44,20 @@ export default {
 
 <style scoped lang="scss">
 .post_card {
-  border: 1px solid #fd2d01;
+  border: 2px solid #fd2d01;
   margin-top: 10px;
   border-radius: 10px;
   background-color: white;
 }
-
-h2 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50px;
-  color: black;
-  margin-top: 0;
-  margin-bottom: 0;
-  border-bottom: 1px solid #fd2d01;
+.post_title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-bottom: 2px solid #fd2d01;
+  padding: 15px;
+  h2 {
+    color: black;
+    margin: 0;
+  }
 }
 a {
   text-decoration: none;

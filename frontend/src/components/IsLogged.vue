@@ -58,7 +58,8 @@ export default {
       if (document.querySelector(".avatar_box")) {
         if (!this.show_nav_user) {
           this.show_nav_user = true;
-          document.querySelector(".avatar_box").style.backgroundColor = "#FD2D01";
+          document.querySelector(".avatar_box").style.backgroundColor =
+            "#FD2D01";
         } else {
           this.show_nav_user = false;
           document.querySelector(".avatar_box").style.backgroundColor = "white";
@@ -142,12 +143,12 @@ export default {
   &__user {
     display: flex;
     flex-wrap: wrap;
+    justify-content: end;
     align-items: center;
     width: 170px;
     position: relative;
     h4 {
       margin-right: 10px;
-      width: 100px;
     }
     &__menu {
       padding: 10px;
@@ -167,16 +168,6 @@ export default {
       }
     }
   }
-  /*   &__icon {
-    font-size: 25px;
-    position: relative;
-    width: 50px;
-    display: flex;
-    height: 60px;
-    justify-content: center;
-    align-items: center;
-    border-bottom: 1px solid #FD2D01;
-  } */
 }
 
 .avatar_box {

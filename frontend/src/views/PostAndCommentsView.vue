@@ -131,5 +131,13 @@ export default {
 .title_container {
   padding-top: 5px;
   padding-bottom: 5px;
+  margin-top: 40px;
+  border: 2px solid red;
+  margin-bottom: 20px;
+  border-radius: 50px;
+  background-color: white;
+  h1 {
+    margin: 0;
+  }
 }
 </style>

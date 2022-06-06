@@ -29,5 +29,6 @@ export default {
 }
 #user_infos {
   margin-top: 10%;
+  padding-top: 1px;
 }
 </style>

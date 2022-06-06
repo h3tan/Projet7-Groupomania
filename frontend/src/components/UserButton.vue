@@ -13,8 +13,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$color-formButton: rgb(243, 10, 10);
-$color-logoutButton: grey;
+$color-formButton: #FD2D01;
+$color-logoutButton: #4E5166;
 
 .formButton {
     width: 200px;
