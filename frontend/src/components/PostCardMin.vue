@@ -10,7 +10,7 @@
       </div>
       <div class="date_time_post">
         <span>{{ date_post }}</span>
-        <span>Heure</span>
+        <span>{{ time_post }}</span>
       </div>
     </div>
   </div>
@@ -31,6 +31,7 @@ export default {
     "user_picture",
     "nickname",
     "date_post",
+    "time_post"
   ],
   components: {
     UserAvatar,

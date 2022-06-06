@@ -5,7 +5,10 @@
         <UserAvatar :avatar="`${post_user_picture}`" />
         <h2 id="nickname">{{ post_user_nickname }}</h2>
       </div>
-      <span>{{ post_date_created }}</span>
+      <div class="post_date_created">
+        <span>{{ post_date_created }}</span>
+        <span>{{ post_time_created }}</span>
+      </div>
     </div>
     <div class="post_body">
       <div class="post_body__picture" v-if="post_image != null">
@@ -82,6 +85,7 @@ export default {
     "post_text",
     "post_user_nickname",
     "post_date_created",
+    "post_time_created",
   ],
   components: {
     UserAvatar,
@@ -132,6 +136,13 @@ export default {
   background-color: white;
   border: 2px solid #fd2d01;
   border-radius: 10px;
+}
+.post_date_created {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  row-gap: 3px;
 }
 #add_file {
   display: flex;

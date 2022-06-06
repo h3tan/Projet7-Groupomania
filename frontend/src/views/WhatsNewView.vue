@@ -22,6 +22,7 @@
           :user_picture="post.picture"
           :nickname="post.nickname"
           :date_post="post.date_created"
+          :time_post="post.time_created"
           v-for="post in posts"
           :key="post.id_post"
           @postPublished="updateWhatsNew"
@@ -72,8 +73,9 @@ export default {
       let reponse = await getAllPostsFromAPI();
       for (let i = 0; i < reponse.length; i++) {
         this.total_post = reponse.length;
-        let dateSQL = reponse[i].date_created.split("T");
-        reponse[i].date_created = dateSQL[0];
+        let date = new Date(reponse[i].date_created);
+        reponse[i].date_created = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
+        reponse[i].time_created = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
       }
       this.posts = reponse;
       for (let i in this.posts) {

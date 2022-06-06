@@ -63,7 +63,7 @@
               <ModifyComment
                 :id_post="$route.params.id"
                 :id_comment="comment.id_comment"
-                :text="comment.comment_message"
+                :text="comment.comment_text"
                 @update_comment="updateCommentSection"
               />
               <button id="cancel_modify" @click="cancelUpdateComment">
@@ -123,6 +123,8 @@ export default {
       if (reponse.length == 0) {
         this.title_comment = "Pas de commentaires";
         this.count_comments = 0;
+        this.show_comment = false;
+        return;
       }
       this.count_comments = reponse.length;
       this.show_comment = true;

@@ -16,6 +16,7 @@
       :post_text="post_text"
       :post_user_nickname="post_user_nickname"
       :post_date_created="post_date_created"
+      :post_time_created="post_time_created"
     />
     <LikeSection
       :id_post="id_post"
@@ -59,6 +60,7 @@ export default {
       post_text: "",
       post_user_nickname: "",
       post_date_created: "",
+      post_time_created: "",
       sameUser: false,
       requestedUserliked: "",
       requestedNumLikes: "",
@@ -92,9 +94,9 @@ export default {
         this.post_text = post.post_text;
         this.modify_title = this.post_title;
         this.modify_text = this.post_text;
-        let dateSQL = post.date_created.split("T");
-        let dateFr = new Date(dateSQL[0]);
-        this.post_date_created = dateFr.toLocaleDateString("fr");
+        let date = new Date(post.date_created);
+        this.post_date_created = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
+        this.post_time_created = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
         if (parseInt(this.userId) == parseInt(this.post_userId)) {
           this.sameUser = true;
           return;
