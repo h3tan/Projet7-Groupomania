@@ -15,7 +15,7 @@
       </div>
       <span>J'aime</span>
     </div>
-    <span class="num_likes">{{ num_likes }} likes</span>
+    <span class="num_likes">{{ num_likes }} {{ likeOrLikes }}</span>
   </div>
 </template>
 
@@ -27,9 +27,19 @@ export default {
   name: "LikeSection",
   data() {
     return {
+      like_word: "",
       userId: localStorage.getItem("userId"),
       notSameUser: "",
     };
+  },
+  computed: {
+    likeOrLikes() {
+      if (this.num_likes == 1 || this.num_likes == 0) {
+        return "like";
+      } else {
+        return "likes";
+      }
+    },
   },
   props: ["id_post", "post_id_user", "liked", "num_likes"],
   methods: {

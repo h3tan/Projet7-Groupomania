@@ -1,5 +1,32 @@
 const connexion = require("../mysql_connect");
 
+// Requête pour vérifier si l'utilisateur veut liker son propre post
+exports.requestSameUserLike = async (req, res, next) => {
+  try {
+    connexion.query(
+      `select id_user from post where id_post = ? and id_user = ?`,
+      [req.params.id_post, req.auth.userId],
+      function (err, result) {
+        if (!result) {
+          res
+            .status(400)
+            .json({ error: "impossible de récupérer l'information" });
+          return;
+        }
+        if (result[0]) {
+          res.status(400).json({ message: "Vous ne pouvez pas liker ou annuler un like de votre post"});
+          return;
+        }
+        next();
+        return;
+      }
+    );
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};
+
 // Requête pour vérifier si un utilisateur a liké un post
 exports.requestUserLike = async (req, res, next) => {
   try {

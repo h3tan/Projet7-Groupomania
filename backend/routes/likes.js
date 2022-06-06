@@ -8,6 +8,7 @@ const likesCtrl = require("../controllers/likes");
 router.post(
   "/:id_post/likes/",
   auth,
+  likeReq.requestSameUserLike,
   likeReq.requestUserLike,
   likeReq.requestInsertLike,
   likesCtrl.sendUpdateLikeResult
@@ -17,6 +18,7 @@ router.post(
 router.delete(
   "/:id_post/likes/",
   auth,
+  likeReq.requestSameUserLike,
   likeReq.requestUserLike,
   likeReq.requestDeleteLike,
   likesCtrl.sendUpdateLikeResult
