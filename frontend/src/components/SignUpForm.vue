@@ -167,6 +167,8 @@ h2 {
   padding-left: 20px;
   padding-right: 20px;
   text-align: left;
+  width: 94%;
+  margin: auto;
 
   &::after {
     background-color: lightgrey;
@@ -247,7 +249,7 @@ button {
   justify-content: center;
   align-items: center;
   font-weight: bold;
-  color: #FD2D01;
+  color: #fd2d01;
   font-size: 20px;
   position: absolute;
   margin-left: auto;

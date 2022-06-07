@@ -6,24 +6,25 @@
 export default {
   name: "PostButton",
   data() {
-    return {
-    };
+    return {};
   },
   props: {
-      post_button_name: String
-  }
+    post_button_name: String,
+  },
 };
 </script>
 
 <style scoped lang="scss">
 button {
-  height: 30px;
   background-color: #fd2d01;
+  padding: 10px;
+  opacity: 1;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 22px;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 20px;
+  font-weight: bolder;
   &:focus {
     outline: none !important;
     border: 2px solid black;

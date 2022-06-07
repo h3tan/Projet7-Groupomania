@@ -10,40 +10,6 @@
       <div class="post_body__picture" v-if="post_image != null">
         <img alt="Image posté par l'utilisateur" :src="post_image" />
       </div>
-      <!-- Changement de l'image du post -->
-      <div id="add_file" v-if="sameUser || privilege == 'admin'">
-        <label id="label_file" for="input_file" v-if="sameUser">{{
-          type_of_add
-        }}</label>
-        <input
-          type="file"
-          id="input_file"
-          name="file"
-          accept="image/png, image/jpeg, image/gif"
-          @change="handleFileUpload($event)"
-          v-if="sameUser"
-        />
-        <button
-          @click="modifyPostPicture('delete')"
-          v-if="
-            !fileChosen &&
-            post_image != null &&
-            (sameUser || privilege == 'admin')
-          "
-        >
-          Supprimez l'image
-        </button>
-        <div class="picture_chosen" v-if="fileChosen">
-          <div id="image_name">{{ file_name }}</div>
-          <div id="image_type">{{ file_type }}</div>
-        </div>
-        <div class="picture_buttons">
-          <button @click="modifyPostPicture('modify')" v-if="fileChosen">
-            {{ confirm_add }}
-          </button>
-          <button @click="cancelFileChosen" v-if="fileChosen">Annuler</button>
-        </div>
-      </div>
       <div class="post_body__text_container">
         <p>{{ post_text }}</p>
       </div>
@@ -52,10 +18,6 @@
       :date_created_prop="post_date_created"
       :date_updated_prop="post_date_updated"
     />
-    <!--     <div class="post_date_created">
-      <span>Créé le: {{ post_date_created }}</span>
-      <span>à: {{ post_time_created }}</span>
-    </div> -->
   </div>
 </template>
 
@@ -247,7 +209,7 @@ h3 {
   &__picture {
     margin: auto;
     margin-top: 30px;
-    max-width: 80%;
+    max-width: 95%;
     border-radius: 5px;
     overflow: hidden;
     padding: 5px;

@@ -99,6 +99,7 @@ header {
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  max-width: 950px;
   margin: auto;
 }
 #logo_not_logged {

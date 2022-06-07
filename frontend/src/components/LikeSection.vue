@@ -96,6 +96,7 @@ export default {
   justify-content: center;
   height: 30px;
   width: 30px;
+  cursor: pointer;
 
   i {
     color: #fd2d01;

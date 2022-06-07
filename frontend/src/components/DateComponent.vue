@@ -1,12 +1,12 @@
 <template>
   <div class="date_container">
     <div class="date_container__created">
-      <span>Créé: {{ setDateCreated }}</span>
-      <span>à: {{ setTimeCreated }}</span>
+      <span>{{ setDateCreated }}</span>
+      <span>{{ setTimeCreated }}</span>
     </div>
     <div class="date_container__updated">
-      <span>Mis à jour: {{ setDateUpdated }}</span>
-      <span>à: {{ setTimeUpdated }}</span>
+      <span>{{ setDateUpdated }}</span>
+      <span>{{ setTimeUpdated }}</span>
     </div>
   </div>
 </template>
@@ -28,14 +28,17 @@ export default {
         date.getMonth() + 1 < 10
           ? `0${date.getMonth() + 1}`
           : `${date.getMonth() + 1}`;
-      let date_created_formatted = `${day}/${month}/${date.getFullYear()}`;
+      let date_created_formatted = `Créé: ${day}/${month}/${date.getFullYear()}`;
       return date_created_formatted;
     },
     setTimeCreated() {
       let time = new Date(this.date_created_prop);
-      return `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
+      return `à ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
     },
     setDateUpdated() {
+      if (this.date_updated_prop == this.date_created_prop){
+        return '';
+      }
       let date = new Date(this.date_updated_prop);
       let day =
         date.getDate() < 10 ? `0${date.getDate()}` : `${date.getDate()}`;
@@ -43,12 +46,15 @@ export default {
         date.getMonth() + 1 < 10
           ? `0${date.getMonth() + 1}`
           : `${date.getMonth() + 1}`;
-      let date_updated_formatted = `${day}/${month}/${date.getFullYear()}`;
+      let date_updated_formatted = `Mis à jour: ${day}/${month}/${date.getFullYear()}`;
       return date_updated_formatted;
     },
     setTimeUpdated() {
+      if (this.date_updated_prop == this.date_created_prop){
+        return '';
+      }
       let time = new Date(this.date_updated_prop);
-      return `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
+      return `à: ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
     },
   },
 };
@@ -65,10 +71,12 @@ export default {
   padding-right: 10px;
   &__created,
   &__updated {
-    display: flex;
+display: flex;
     flex-direction: column;
     align-items: flex-start;
+    row-gap: 5px;
     width: 175px;
+    padding-top: 4px;
   }
 }
 </style>

@@ -11,6 +11,12 @@
       @cancelPost="cancelDisplayWritePost"
       @postPublished="updateWhatsNew"
     />
+    <div class="sort_by_date" @click="sortByDate">
+      <span>{{ sort_message }}</span>
+      <div class="sort_by_date__icon">
+        <i class="fas fa-exchange-alt"></i>
+      </div>
+    </div>
     <div id="cards_container">
       <div class="no_posts" v-if="posts.length == 0">
         <h2>Aucun post à afficher</h2>
@@ -44,6 +50,8 @@ export default {
     return {
       posts: [],
       writePostDisplayed: false,
+      sorted: "newest",
+      sort_message: "Du plus récent au plus ancien"
     };
   },
   components: {
@@ -53,6 +61,17 @@ export default {
   },
   methods: {
     getAllPostsFromAPI,
+    sortByDate() {
+      if (this.sorted == 'newest') {
+        this.sort_message = "Du plus ancien au plus récent"
+        this.sorted = 'oldest'
+        document.getElementById("cards_container").style.flexDirection = "column-reverse";
+        return;
+      }
+      this.sort_message = "Du plus récent au plus ancien"
+      this.sorted = "newest"
+      document.getElementById("cards_container").style.flexDirection = "column";
+    },
     displayWritePost() {
       if (this.writePostDisplayed == false) {
         this.writePostDisplayed = true;
@@ -92,16 +111,37 @@ export default {
 <style scoped lang="scss">
 #whatsnew {
   margin: auto;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
   padding-top: 1px;
   z-index: 1;
+  h1 {
+    margin-bottom: 40px;
+  }
 }
-#cards_container {
-  margin-top: 30px;
-  margin-bottom: 30px;
+.sort_by_date {
   width: 95%;
   margin: auto;
-  margin-top: 30px;
+  margin-top: 40px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 15px;
+  cursor: pointer;
+  span {
+    font-size: 16px;
+    margin-right: 5px;
+  }
+  &__icon {
+    font-size: 25px;
+    transform: rotate(90deg);
+  }
+}
+#cards_container {
+  width: 95%;
+  margin: auto;
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
 }
 .no_posts {
   margin-top: 150px;

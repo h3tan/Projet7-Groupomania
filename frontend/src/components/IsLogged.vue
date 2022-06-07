@@ -104,7 +104,7 @@ export default {
 }
 .nav_section {
   width: 100%;
-  max-width: 1000px;
+  max-width: 950px;
   display: flex;
   justify-content: space-between;
   margin: auto;
@@ -114,6 +114,7 @@ export default {
     align-items: center;
     justify-content: center;
     position: relative;
+    cursor: pointer;
   }
 
   &__post__bar {
@@ -147,6 +148,7 @@ export default {
     align-items: center;
     width: 170px;
     position: relative;
+    cursor: pointer;
     h4 {
       margin-right: 10px;
     }
