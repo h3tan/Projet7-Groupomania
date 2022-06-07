@@ -10,16 +10,17 @@
         <UserAvatar :avatar="`${user_picture}`" />
         <h3>{{ nickname }}</h3>
       </div>
-      <div class="date_time_post">
-        <span>{{ date_post }}</span>
-        <span>{{ time_post }}</span>
-      </div>
     </div>
+    <DateComponent
+      :date_created_prop="date_post"
+      :date_updated_prop="date_updated"
+    />
   </div>
 </template>
 
 <script>
 import UserAvatar from "@/components/UserAvatar";
+import DateComponent from "@/components/DateComponent";
 
 export default {
   name: "PostCardMin",
@@ -33,10 +34,11 @@ export default {
     "user_picture",
     "nickname",
     "date_post",
-    "time_post",
+    "date_updated"
   ],
   components: {
     UserAvatar,
+    DateComponent,
   },
   methods: {},
 };
@@ -67,7 +69,6 @@ a {
   }
 }
 h3 {
-  font-weight: lighter;
   margin-left: 5px;
 }
 .posted {
@@ -86,6 +87,10 @@ h3 {
 .date_time_post {
   display: flex;
   flex-direction: column;
+  span {
+    display: flex;
+    justify-content: flex-end;
+  }
 }
 .avatar_container {
   margin-top: 5px;

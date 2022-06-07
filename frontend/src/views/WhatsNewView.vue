@@ -22,7 +22,7 @@
           :user_picture="post.picture"
           :nickname="post.nickname"
           :date_post="post.date_created"
-          :time_post="post.time_created"
+          :date_updated="post.date_updated"
           v-for="post in posts"
           :key="post.id_post"
           @postPublished="updateWhatsNew"
@@ -71,12 +71,7 @@ export default {
     },
     async showAllPosts() {
       let reponse = await getAllPostsFromAPI();
-      for (let i = 0; i < reponse.length; i++) {
-        this.total_post = reponse.length;
-        let date = new Date(reponse[i].date_created);
-        reponse[i].date_created = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
-        reponse[i].time_created = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
-      }
+      this.total_post = reponse.length;
       this.posts = reponse;
       for (let i in this.posts) {
         if (this.posts[i].id_user == localStorage.getItem("userId")) {
@@ -91,19 +86,6 @@ export default {
   created() {
     this.showAllPosts();
   },
-/*   mounted() {
-    document.addEventListener("click", (event) => {
-        if (
-          event.target.closest("#write_post") === null &&
-          event.target.closest("#write_post__button") === null &&
-          event.target.closest("#cancel_file") === null
-        ) {
-          this.writePostDisplayed = false;
-          document.getElementById("write_post__button").style.visibility =
-            "visible";
-        }
-    });
-  }, */
 };
 </script>
 

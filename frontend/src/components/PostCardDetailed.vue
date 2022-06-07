@@ -5,10 +5,6 @@
         <UserAvatar :avatar="`${post_user_picture}`" />
         <h2 id="nickname">{{ post_user_nickname }}</h2>
       </div>
-      <div class="post_date_created">
-        <span>{{ post_date_created }}</span>
-        <span>{{ post_time_created }}</span>
-      </div>
     </div>
     <div class="post_body">
       <div class="post_body__picture" v-if="post_image != null">
@@ -52,10 +48,19 @@
         <p>{{ post_text }}</p>
       </div>
     </div>
+    <DateComponent
+      :date_created_prop="post_date_created"
+      :date_updated_prop="post_date_updated"
+    />
+    <!--     <div class="post_date_created">
+      <span>Créé le: {{ post_date_created }}</span>
+      <span>à: {{ post_time_created }}</span>
+    </div> -->
   </div>
 </template>
 
 <script>
+import DateComponent from "@/components/DateComponent";
 import UserAvatar from "@/components/UserAvatar.vue";
 import { requestModifyPostPictureToAPI } from "@/functions/fetchPost";
 
@@ -85,9 +90,10 @@ export default {
     "post_text",
     "post_user_nickname",
     "post_date_created",
-    "post_time_created",
+    "post_date_updated",
   ],
   components: {
+    DateComponent,
     UserAvatar,
   },
   methods: {
@@ -138,11 +144,16 @@ export default {
   border-radius: 10px;
 }
 .post_date_created {
+  border-top: 2px solid #fd2d01;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   align-items: center;
   row-gap: 3px;
+  span {
+    display: flex;
+    justify-content: flex-end;
+  }
 }
 #add_file {
   display: flex;
@@ -220,7 +231,6 @@ h2 {
   }
 }
 #nickname {
-  font-weight: lighter;
   margin-left: 5px;
   margin-top: 0;
   margin-bottom: 0;

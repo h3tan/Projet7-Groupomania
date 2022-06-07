@@ -16,7 +16,7 @@
       :post_text="post_text"
       :post_user_nickname="post_user_nickname"
       :post_date_created="post_date_created"
-      :post_time_created="post_time_created"
+      :post_date_updated="post_date_updated"
     />
     <PostPanel
       v-if="post_id_user == userId || privilege == 'admin'"
@@ -60,7 +60,7 @@ export default {
       post_text: "",
       post_user_nickname: "",
       post_date_created: "",
-      post_time_created: "",
+      post_date_updated: "",
       sameUser: false,
       requestedUserliked: "",
       requestedNumLikes: "",
@@ -94,9 +94,8 @@ export default {
         this.post_text = post.post_text;
         this.modify_title = this.post_title;
         this.modify_text = this.post_text;
-        let date = new Date(post.date_created);
-        this.post_date_created = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
-        this.post_time_created = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+        this.post_date_created = post.date_created;
+        this.post_date_updated = post.date_updated;
         if (parseInt(this.userId) == parseInt(this.post_userId)) {
           this.sameUser = true;
           return;
@@ -119,7 +118,7 @@ export default {
 <style scoped lang="scss">
 #post_section {
   margin: auto;
-  width: 90%;
+  width: 95%;
   margin-top: 30px;
   padding-top: 40px;
 }

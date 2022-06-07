@@ -50,7 +50,7 @@ exports.requestAllPosts = async (req, res, next) => {
 exports.requestPost = async (req, res, next) => {
   try {
     connexion.query(
-      `select post.id_post, post.title, post.image, post.date_created, post.id_user, post.post_text, user.nickname, user.picture
+      `select post.id_post, post.title, post.image, post.date_created, post.date_updated, post.id_user, post.post_text, user.nickname, user.picture
         from post join user on user.id_user = post.id_user where post.id_post = ?`,
       [req.params.id_post],
       function (err, result) {

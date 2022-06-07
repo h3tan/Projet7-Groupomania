@@ -143,7 +143,7 @@ export default {
   &__user {
     display: flex;
     flex-wrap: wrap;
-    justify-content: end;
+    justify-content: flex-end;
     align-items: center;
     width: 170px;
     position: relative;
