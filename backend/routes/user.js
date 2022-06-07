@@ -24,6 +24,14 @@ router.post(
   userCtrl.login
 );
 
+// Route pour obtenir les infos de tous les utilisateurs
+router.get(
+  "/users",
+  auth,
+  userReq.requestAllUsersInfos,
+  userCtrl.sendAllUsersInfosToFront
+);
+
 // Route pour obtenir les infos utilisateurs
 router.get(
   "/users/:id",

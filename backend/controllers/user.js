@@ -46,6 +46,16 @@ exports.login = (req, res, next) => {
     .catch((error) => res.status(500).json({ error }));
 };
 
+exports.sendAllUsersInfosToFront = async (req, res, next) => {
+  if (req.errorAllUsers) {
+    res
+      .status(401)
+      .json({ error: "La liste des utilisateurs n'a pu être récupéré" });
+    return;
+  }
+  return res.status(200).json(req.resultAllUsers);
+};
+
 exports.sendUserInfosToFront = async (req, res, next) => {
   if (req.userInfos == undefined) {
     res.status(401).json({ error: "Nom d'utilisateur incorrect" });

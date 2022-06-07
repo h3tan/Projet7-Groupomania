@@ -51,6 +51,25 @@ export const sendSignUpForm = async (
   }
 };
 
+export const requestAllUsersInfos = async () => {
+  try {
+    let userInfosJson = await fetch(`http://localhost:3000/api/auth/users/`, {
+      method: "GET",
+      headers: {
+        Authorization: localStorage.getItem("token"),
+      },
+    });
+    let reponse = await userInfosJson.json();
+    if (reponse.error) {
+      return reponse.error;
+    }
+    return reponse;
+  } catch (err) {
+    let message = `Impossible de trouver l'API`;
+    throw new Error(message);
+  }
+};
+
 export const requestUserInfos = async (id) => {
   try {
     let userInfosJson = await fetch(
@@ -73,11 +92,7 @@ export const requestUserInfos = async (id) => {
   }
 };
 
-export const requestUpdateUserFromAPI = async (
-  id,
-  last_name,
-  first_name,
-) => {
+export const requestUpdateUserFromAPI = async (id, last_name, first_name) => {
   try {
     let postJson = await fetch(`http://localhost:3000/api/auth/users/${id}`, {
       mode: "cors",

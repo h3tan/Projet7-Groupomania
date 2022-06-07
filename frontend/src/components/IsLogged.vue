@@ -12,8 +12,7 @@
       <transition name="SlideNav">
         <nav class="nav_section__post__menu" v-if="show_nav_post">
           <router-link to="/whatsnew">Sujets récents</router-link>
-          <router-link to="/newcomments">Commentaires récents</router-link>
-          <router-link to="/newpost">Poster un nouveau message</router-link>
+          <router-link to="/users/">Utilisateurs</router-link>
         </nav>
       </transition>
     </div>
@@ -143,7 +142,6 @@ export default {
 
   &__user {
     display: flex;
-    flex-wrap: wrap;
     justify-content: flex-end;
     align-items: center;
     width: 170px;

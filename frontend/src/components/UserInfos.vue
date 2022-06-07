@@ -10,7 +10,7 @@
     />
     <div class="avatar_section">
       <div class="avatar_box">
-        <UserAvatar :avatar="`${picture}`" />
+        <UserAvatar :avatar="picture" />
       </div>
       <form class="modify_avatar" v-on:submit.prevent="modifyProfilePicture">
         <label id="label_avatar" for="input_avatar">Choisir</label>

@@ -1,8 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
 import UserFormView from "../views/UserFormView.vue";
 import UserInfosView from "../views/UserInfosView.vue";
+import UsersView from "../views/UsersView.vue";
 import WhatsNewView from "../views/WhatsNewView.vue";
 import PostAndCommentsView from "../views/PostAndCommentsView.vue";
+import SingleUserView from "../views/SingleUserView.vue";
 
 const routes = [
   {
@@ -21,9 +23,19 @@ const routes = [
     component: UserFormView,
   },
   {
+    path: "/users",
+    name: "users",
+    component: UsersView,
+  },
+  {
     path: "/userinfos",
     name: "userinfos",
     component: UserInfosView,
+  },
+  {
+    path: "/users/:nickname",
+    name: "users",
+    component: SingleUserView,
   },
   {
     path: "/whatsnew",

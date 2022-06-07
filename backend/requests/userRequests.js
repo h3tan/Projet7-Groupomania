@@ -44,6 +44,23 @@ exports.requestLogin = async (req, res, next) => {
   }
 };
 
+// Requête pour récupérer les informations de tous les utilisateurs
+exports.requestAllUsersInfos = async (req, res, next) => {
+  try {
+    connexion.query(
+      `SELECT user.id_user, user.nickname, user.picture FROM user`,
+      function (err, result) {
+        req.resultAllUsers = result;
+        req.errorAllUsers = err;
+        next();
+      }
+    );
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};
+
 // Requête pour récupérer les informations d'un utilisateur
 exports.requestUserInfos = async (req, res, next) => {
   try {
