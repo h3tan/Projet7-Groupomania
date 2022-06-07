@@ -18,6 +18,11 @@
       :post_date_created="post_date_created"
       :post_date_updated="post_date_updated"
     />
+    <ConfirmBox
+      v-if="show_confirm_box"
+      :confirm_message="confirm_message"
+      @confirm="deletePostConfirmed"
+    />
     <PostPanel
       v-if="post_id_user == userId || privilege == 'admin'"
       :id_post="id_post"
@@ -26,6 +31,7 @@
       :post_text="post_text"
       :post_image="post_image"
       @requestUpdatePostInfosInView="assignPostInformations"
+      @show_confirm_delete="ShowConfirmDelete"
     />
     <LikeSection
       :id_post="id_post"
@@ -45,6 +51,8 @@ import LikeSection from "@/components/LikeSection";
 import CommentSection from "@/components/CommentSection";
 import PostPanel from "@/components/PostPanel";
 import { getPostFromAPI } from "@/functions/fetchPost.js";
+import { requestDeletePostFromAPI } from "@/functions/fetchPost";
+import ConfirmBox from "@/components/ConfirmBox";
 
 export default {
   name: "PostAndCommentsView",
@@ -64,6 +72,9 @@ export default {
       sameUser: false,
       requestedUserliked: "",
       requestedNumLikes: "",
+      show_confirm_box: "",
+      show_confirm_message: "",
+      confirm_message: "",
     };
   },
   components: {
@@ -72,9 +83,30 @@ export default {
     PostCardDetailed,
     CommentSection,
     PostPanel,
+    ConfirmBox,
   },
   methods: {
     getPostFromAPI,
+    requestDeletePostFromAPI,
+    async deletePost() {
+      let reponse = await requestDeletePostFromAPI(this.id_post);
+      if (!reponse.error) {
+        this.$router.push(`/whatsnew/`);
+      }
+    },
+    ShowConfirmDelete() {
+      if (this.show_confirm_box == false) {
+        this.show_confirm_box = true;
+        this.confirm_message = "Voulez-vous vraiment supprimer ce post?";
+      }
+    },
+    async deletePostConfirmed(payload) {
+      if (payload.result_confirm == false) {
+        this.show_confirm_box = false;
+        return;
+      }
+      this.deletePost();
+    },
     // Récupère les informations du post de l'API pour les afficher
     async assignPostInformations() {
       let post = await getPostFromAPI(this.$route.params.id);

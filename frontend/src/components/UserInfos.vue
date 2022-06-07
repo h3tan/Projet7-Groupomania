@@ -2,8 +2,9 @@
   <div class="infos">
     <h2>{{ nickname }}</h2>
     <h3 id="privilege">{{ privilege }}</h3>
+    <ConfirmBox v-if="show_confirm_box" @confirm="deleteAccountConfirmed" :confirm_message="confirm_message"/>
     <UserButton
-      @click="goToSignUp"
+      @click="confirmDeleteAccount"
       buttonClass="logoutButton"
       buttonText="Supprimer ce compte"
     />
@@ -82,7 +83,7 @@ import { requestDeleteUserFromAPI } from "@/functions/fetchUser.js";
 import UserAvatar from "@/components/UserAvatar";
 import UserButton from "@/components/UserButton";
 import ModifyPassword from "@/components/ModifyPassword";
-//require('../assets/No-Image.png')
+import ConfirmBox from "@/components/ConfirmBox";
 
 export default {
   name: "UserInfos",
@@ -90,6 +91,7 @@ export default {
     UserAvatar,
     UserButton,
     ModifyPassword,
+    ConfirmBox,
   },
   data() {
     return {
@@ -104,7 +106,9 @@ export default {
       privilege: "",
       picture: "",
       profileChanged: 0,
-      passwordChanged: 0
+      passwordChanged: 0,
+      confirm_message: "",
+      show_confirm_box: false,
     };
   },
   methods: {
@@ -116,7 +120,7 @@ export default {
     sendProfilePictureToAPI,
     requestUpdateUserFromAPI,
     requestDeleteUserFromAPI,
-    async goToSignUp() {
+    async deleteAccount() {
       let result = await requestDeleteUserFromAPI(
         localStorage.getItem("userId")
       );
@@ -124,6 +128,17 @@ export default {
       this.$store.dispatch("changeLogState");
       this.$router.push("/signup");
       return result;
+    },
+    async deleteAccountConfirmed(payload) {
+      if (payload.result_confirm == false) {
+        this.show_confirm_box = false
+        return;
+      }
+      this.deleteAccount();
+    },
+    confirmDeleteAccount() {
+      this.show_confirm_box = true;
+      this.confirm_message = "Voulez-vous vraiment supprimer votre compte?"
     },
     // Récupération des informations d'image pour changer un avatar
     handleFileUpload(e) {

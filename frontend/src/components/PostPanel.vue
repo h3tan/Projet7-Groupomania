@@ -11,14 +11,13 @@
       :post_image="post_image"
     />
     <PostButton post_button_name="Modifier" @click="toggleModifyPost" />
-    <PostButton post_button_name="Supprimer" @click="deletePost" />
+    <PostButton post_button_name="Supprimer" @click="confirm_deletePost" />
   </div>
 </template>
 
 <script>
 import ModifyPost from "@/components/ModifyPost";
 import PostButton from "@/components/PostButton";
-import { requestDeletePostFromAPI } from "@/functions/fetchPost";
 
 export default {
   name: "PostPanel",
@@ -33,12 +32,8 @@ export default {
     ModifyPost,
   },
   methods: {
-    requestDeletePostFromAPI,
-    async deletePost() {
-        let reponse = await requestDeletePostFromAPI(this.id_post);
-        if (!reponse.error) {
-            this.$router.push(`/whatsnew/`);
-        }
+    confirm_deletePost() {
+      this.$emit('show_confirm_delete');
     },
     toggleModifyPost() {
       if (!this.show_modify_post) {

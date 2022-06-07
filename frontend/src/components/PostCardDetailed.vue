@@ -24,7 +24,6 @@
 <script>
 import DateComponent from "@/components/DateComponent";
 import UserAvatar from "@/components/UserAvatar.vue";
-import { requestModifyPostPictureToAPI } from "@/functions/fetchPost";
 
 export default {
   name: "PostCard",
@@ -58,39 +57,7 @@ export default {
     DateComponent,
     UserAvatar,
   },
-  methods: {
-    handleFileUpload(e) {
-      this.fileChosen = false;
-      if (e.target.files[0]) {
-        this.file_name = e.target.files[0].name;
-        this.file_type = e.target.files[0].type;
-        this.file_upload = e.target.files[0];
-        this.fileChosen = true;
-      }
-    },
-    cancelFileChosen() {
-      this.fileChosen = false;
-    },
-    async modifyPostPicture(request) {
-      if (request == "delete") {
-        this.file_upload = "";
-      }
-      let reponse = await requestModifyPostPictureToAPI(
-        this.id_post,
-        this.file_upload,
-        this.post_image
-      );
-      if (!reponse.error) {
-        if (!reponse.imageUrl) {
-          this.pictureExists = false;
-          this.type_of_add = "Ajouter une image";
-          this.confirm_add = "Ajouter";
-        }
-        this.fileChosen = false;
-        this.assignPostInformations();
-      }
-    },
-  },
+  methods: {},
   created() {
     if (this.post_id_user == this.userId) {
       this.sameUser = true;
@@ -104,70 +71,6 @@ export default {
   background-color: white;
   border: 2px solid #fd2d01;
   border-radius: 10px;
-}
-.post_date_created {
-  border-top: 2px solid #fd2d01;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  align-items: center;
-  row-gap: 3px;
-  span {
-    display: flex;
-    justify-content: flex-end;
-  }
-}
-#add_file {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 50%;
-  margin: auto;
-  margin-bottom: 10px;
-}
-#input_file {
-  display: none;
-}
-#label_file {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 11px;
-  border: 1px solid;
-  border-radius: 4px;
-  margin-top: 20px;
-  font-weight: 400;
-  width: 170px;
-  cursor: pointer;
-  height: 30px;
-}
-.picture_chosen {
-  display: flex;
-  width: 250px;
-  height: 30px;
-  align-items: center;
-  justify-content: space-around;
-  border: 1px solid grey;
-  margin-bottom: 10px;
-}
-.picture_buttons {
-  display: flex;
-  column-gap: 10px;
-}
-#image_name {
-  overflow: hidden;
-  padding-left: 10px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-#image_type {
-  border-left: 1px solid grey;
-  padding-left: 15px;
-  padding-right: 15px;
-}
-.title_container {
-  padding-top: 5px;
-  padding-bottom: 5px;
 }
 h2 {
   display: flex;
@@ -225,6 +128,7 @@ h3 {
     overflow-wrap: break-word;
     text-align: left;
     padding: 10px;
+    font-size: 18px;
   }
 }
 label {

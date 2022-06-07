@@ -2,7 +2,7 @@
   <div id="user_box">
     <div id="user_infos">
       <h1>Votre profil</h1>
-      <UserInfos @sendUpdateAvatarToView='sendUpdateAvatarToApp'/>
+      <UserInfos @sendUpdateAvatarToView="sendUpdateAvatarToApp" />
     </div>
   </div>
 </template>
@@ -17,8 +17,8 @@ export default {
   },
   methods: {
     sendUpdateAvatarToApp() {
-      this.$emit('modifyAvatar');
-    }
+      this.$emit("modifyAvatar");
+    },
   },
 };
 </script>
@@ -28,7 +28,7 @@ export default {
   padding-bottom: 30px;
 }
 #user_infos {
-  margin-top: 10%;
-  padding-top: 1px;
+  margin-top: 0;
+  padding-top: 20px;
 }
 </style>
