@@ -6,8 +6,8 @@ exports.requestSignUp = async (req, res, next) => {
   try {
     let passwordHash = await bcrypt.hash(req.body.password, 10);
     connexion.query(
-      `INSERT INTO user (nickname, last_name, first_name, email, password)
-        values (?, ?, ?, ?, ?)`,
+      `INSERT INTO user (nickname, last_name, first_name, email, password, picture)
+        values (?, ?, ?, ?, ?, 'No-Image.png')`,
       [
         req.body.nickname,
         req.body.lastName,

@@ -2,7 +2,7 @@
   <div id="post_card" :data-id_post="id_post" :data-id_user="post_id_user">
     <div class="posted">
       <div class="posted__by_user">
-        <UserAvatar :avatar="`${post_user_picture}`" />
+        <UserAvatar :avatar="post_user_picture" />
         <h2 id="nickname">{{ post_user_nickname }}</h2>
       </div>
     </div>
@@ -31,7 +31,6 @@ export default {
     return {
       userId: localStorage.getItem("userId"),
       privilege: localStorage.getItem("privilege"),
-      sameUser: "",
       fileChosen: false,
       file_name: "",
       file_type: "",
@@ -58,11 +57,6 @@ export default {
     UserAvatar,
   },
   methods: {},
-  created() {
-    if (this.post_id_user == this.userId) {
-      this.sameUser = true;
-    }
-  },
 };
 </script>
 
