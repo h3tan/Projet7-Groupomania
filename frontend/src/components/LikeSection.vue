@@ -87,6 +87,8 @@ export default {
 
   span {
     margin-left: 10px;
+    font-size: 20px;
+    font-weight: bold;
   }
 }
 
@@ -110,8 +112,10 @@ export default {
     color: black;
   }
 }
-#delete_button {
-  margin-bottom: 10px;
+
+.num_likes {
+  font-size: 20px;
+  font-weight: bold;
 }
 
 // Animation des coeurs

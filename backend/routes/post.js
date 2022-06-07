@@ -40,6 +40,15 @@ router.put(
   postCtrl.SendUpdatePostResult
 );
 
+// Route pour modifier un post
+router.put(
+  "/:id_post/same_file",
+  auth,
+  postReq.requestIdOfPostCreator,
+  postReq.requestUpdatePostSameFile,
+  postCtrl.SendUpdatePostResult
+);
+
 // Route pour modifier l'image d'un post
 router.put(
   "/:id_post/file",

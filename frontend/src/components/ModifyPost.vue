@@ -25,6 +25,15 @@
         <button id="cancel_file" @click="cancelFileChosen" v-if="fileChosen">
           Annuler
         </button>
+        <div class="keep_file_box">
+          <input
+            type="checkbox"
+            name="keep_file"
+            id="keep_file"
+            checked
+            v-model="checked"
+          /><span>Garder l'image actuelle</span>
+        </div>
       </div>
       <label for="post_text"><h4>Texte du post</h4></label>
       <textarea
@@ -45,6 +54,7 @@
 </template>
 
 <script>
+import { requestUpdatePostSameFileFromAPI } from "@/functions/fetchPost.js";
 import { requestUpdatePostFromAPI } from "@/functions/fetchPost.js";
 import PostButton from "@/components/PostButton.vue";
 
@@ -60,14 +70,16 @@ export default {
       file_upload: "",
       result: "",
       showPostResult: false,
+      checked: true,
     };
   },
   props: ["id_post", "post_id_user", "post_title", "post_text", "post_image"],
   components: {
-    PostButton
+    PostButton,
   },
   methods: {
     requestUpdatePostFromAPI,
+    requestUpdatePostSameFileFromAPI,
     handleFileUpload(e) {
       this.fileChosen = false;
       if (e.target.files[0]) {
@@ -75,6 +87,7 @@ export default {
         this.file_type = e.target.files[0].type;
         this.file_upload = e.target.files[0];
         this.fileChosen = true;
+        this.checked = false;
       }
     },
     cancelPost() {
@@ -82,16 +95,26 @@ export default {
     },
     cancelFileChosen() {
       this.fileChosen = false;
+      this.checked = true;
     },
     async updatePost() {
-      let reponse = await requestUpdatePostFromAPI(
-        parseInt(localStorage.getItem("userId")),
-        this.id_post,
-        this.modify_title,
-        this.modify_text,
-        this.file_upload,
-        this.post_image
-      );
+      let reponse = "";
+      if (this.checked == true) {
+        reponse = await requestUpdatePostSameFileFromAPI(
+          this.id_post,
+          this.modify_title,
+          this.modify_text
+        );
+      } else {
+        reponse = await requestUpdatePostFromAPI(
+          parseInt(localStorage.getItem("userId")),
+          this.id_post,
+          this.modify_title,
+          this.modify_text,
+          this.file_upload,
+          this.post_image
+        );
+      }
       if (!reponse.error) {
         this.result = "Post Modifié !";
         this.modify_title = "";
@@ -120,10 +143,11 @@ export default {
   margin-right: auto;
   left: 0;
   right: 0;
-  top: 100px;
+  top: 20px;
   text-align: center;
   background-color: white;
-  border: 1px solid black;
+  border: 2px solid black;
+  border-radius: 10px;
   padding: 20px;
 }
 #new_post_form {
@@ -191,6 +215,13 @@ label {
   padding-left: 15px;
   padding-right: 15px;
 }
+.keep_file_box {
+  display: flex;
+  margin-top: 10px;
+  width: 190px;
+  column-gap: 10px;
+  align-items: baseline;
+}
 #post_title {
   height: 30px;
 }
@@ -207,7 +238,7 @@ label {
 .post_result {
   font-weight: bold;
   margin-top: 30px;
-  color: #FD2D01;
+  color: #fd2d01;
   font-size: 25px;
 }
 

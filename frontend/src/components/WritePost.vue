@@ -120,7 +120,8 @@ export default {
   top: 100px;
   text-align: center;
   background-color: white;
-  border: 1px solid black;
+  border: 2px solid black;
+  border-radius: 10px;
   padding: 20px;
 }
 #new_post_form {

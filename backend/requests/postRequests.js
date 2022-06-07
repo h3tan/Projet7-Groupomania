@@ -107,6 +107,22 @@ exports.savePostInDatabase = async (req, res, next) => {
   }
 };
 
+exports.requestUpdatePostSameFile = async (req, res, next) => {
+  try {
+    connexion.query(
+      `update post set title = ?, post_text = ?, date_updated = now() where id_post = ?;`,
+      [req.body.title, req.body.text, req.params.id_post],
+      function (err, result) {
+        req.errorUpdatePost = err;
+        next();
+      }
+    );
+  } catch (err) {
+    let message = "Erreur avec les données";
+    throw new Error(message);
+  }
+};
+
 exports.requestUpdatePost = async (req, res, next) => {
   try {
     let imageUrl = null;
