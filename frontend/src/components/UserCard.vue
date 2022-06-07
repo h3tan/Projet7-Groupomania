@@ -1,5 +1,9 @@
 <template>
-  <div class="user_card" data-id_user="id_user">
+  <div
+    class="user_card"
+    data-id_user="id_user"
+    v-if="id_user != active_user_id"
+  >
     <router-link :to="`/users/${nickname}`">
       <div class="avatar_box">
         <UserAvatar :avatar="avatar" />
@@ -14,6 +18,11 @@ import UserAvatar from "@/components/UserAvatar";
 
 export default {
   name: "UserCard",
+  data() {
+    return {
+      active_user_id: localStorage.getItem("userId"),
+    };
+  },
   props: ["id_user", "avatar", "nickname"],
   components: {
     UserAvatar,
