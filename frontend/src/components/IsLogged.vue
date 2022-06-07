@@ -12,7 +12,7 @@
       <transition name="SlideNav">
         <nav class="nav_section__post__menu" v-if="show_nav_post">
           <router-link to="/whatsnew">Sujets récents</router-link>
-          <router-link to="/users/">Utilisateurs</router-link>
+          <router-link to="/users">Utilisateurs</router-link>
         </nav>
       </transition>
     </div>

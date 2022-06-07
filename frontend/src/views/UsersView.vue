@@ -16,6 +16,7 @@
 <script>
 import UserCard from "@/components/UserCard";
 import { requestAllUsersInfos } from "@/functions/fetchUser";
+
 export default {
   name: "UsersView",
   data() {

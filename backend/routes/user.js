@@ -32,6 +32,14 @@ router.get(
   userCtrl.sendAllUsersInfosToFront
 );
 
+// Route pour obtenir les infos d'un autre utilisateur
+router.get(
+  "/users/nickname/:nickname",
+  auth,
+  userReq.requestAnotherUserInfos,
+  userCtrl.sendAnotherUserInfosToFront
+);
+
 // Route pour obtenir les infos utilisateurs
 router.get(
   "/users/:id",

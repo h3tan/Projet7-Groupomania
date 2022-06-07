@@ -46,6 +46,14 @@ exports.login = (req, res, next) => {
     .catch((error) => res.status(500).json({ error }));
 };
 
+exports.sendAnotherUserInfosToFront = async (req, res, next) => {
+  if (req.userInfos == undefined) {
+    res.status(401).json({ error: "Nom d'utilisateur incorrect" });
+    return;
+  }
+  return res.status(200).json(req.userInfos);
+};
+
 exports.sendAllUsersInfosToFront = async (req, res, next) => {
   if (req.errorAllUsers) {
     res

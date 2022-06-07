@@ -92,6 +92,28 @@ export const requestUserInfos = async (id) => {
   }
 };
 
+export const requestAnotherUserInfosFromAPI = async (nickname) => {
+  try {
+    let userInfosJson = await fetch(
+      `http://localhost:3000/api/auth/users/nickname/${nickname}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      }
+    );
+    let reponse = await userInfosJson.json();
+    if (reponse.error) {
+      return reponse.error;
+    }
+    return reponse;
+  } catch (err) {
+    let message = `Impossible de trouver l'API`;
+    throw new Error(message);
+  }
+};
+
 export const requestUpdateUserFromAPI = async (id, last_name, first_name) => {
   try {
     let postJson = await fetch(`http://localhost:3000/api/auth/users/${id}`, {

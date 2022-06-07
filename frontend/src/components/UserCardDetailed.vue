@@ -1,11 +1,13 @@
 <template>
-  <div class="user_card" data-id_user="id_user">
-    <router-link :to="`/users/${nickname}`">
-      <div class="avatar_box">
-        <UserAvatar :avatar="avatar" />
-      </div>
-      <div class="nickname">{{ nickname }}</div>
-    </router-link>
+  <div class="user_card" :data-id_user="id_user">
+    <div class="avatar_box">
+      <UserAvatar :avatar="avatar" />
+    </div>
+    <div class="nickname">{{ nickname }}</div>
+    <div class="real_names">
+      <p>Nom: {{ last_name }}</p>
+      <p>Prénom: {{ first_name }}</p>
+    </div>
   </div>
 </template>
 
@@ -13,8 +15,8 @@
 import UserAvatar from "@/components/UserAvatar";
 
 export default {
-  name: "UserCard",
-  props: ["id_user", "avatar", "nickname"],
+  name: "UserCardDetailed",
+  props: ["id_user", "avatar", "nickname", "last_name", "first_name"],
   components: {
     UserAvatar,
   },
@@ -23,15 +25,16 @@ export default {
 
 <style scoped lang="scss">
 .user_card {
-  width: 160px;
+  width: 70%;
   border: 2px solid red;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 10px;
+  margin: auto;
   background-color: white;
+  padding-bottom: 20px;
 }
 .avatar_box {
   display: flex;
@@ -52,8 +55,12 @@ export default {
   font-size: 18px;
   font-weight: bold;
 }
-a {
-  text-decoration: none;
-  color: #4e5166;
+.real_names {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  p {
+      margin: 5px;
+  }
 }
 </style>

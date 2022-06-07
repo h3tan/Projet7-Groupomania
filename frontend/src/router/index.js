@@ -34,7 +34,7 @@ const routes = [
   },
   {
     path: "/users/:nickname",
-    name: "users",
+    name: "user",
     component: SingleUserView,
   },
   {

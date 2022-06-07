@@ -26,7 +26,7 @@ import DateComponent from "@/components/DateComponent";
 import UserAvatar from "@/components/UserAvatar.vue";
 
 export default {
-  name: "PostCard",
+  name: "PostCardDetailed",
   data() {
     return {
       userId: localStorage.getItem("userId"),

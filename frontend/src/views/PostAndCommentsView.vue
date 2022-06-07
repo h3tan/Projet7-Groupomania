@@ -136,7 +136,6 @@ export default {
       }
       this.$router.push("/whatsnew"); // Redirection lorsque le post n'existe pas
     },
-    // Prépare le post pour l'envoyer à l'API puis redirige vers whatsnew
     updatePostPage() {
       this.assignPostInformations();
     },
