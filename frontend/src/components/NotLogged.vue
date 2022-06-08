@@ -62,6 +62,8 @@ export default {
 <style scoped lang="scss">
 .nav_menu {
   display: flex;
+  position: relative;
+  cursor: pointer;
   h3 {
     margin-right: 15px;
   }

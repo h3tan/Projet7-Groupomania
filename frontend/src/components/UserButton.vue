@@ -16,6 +16,9 @@ export default {
 $color-formButton: #FD2D01;
 $color-logoutButton: #4E5166;
 
+button {
+  cursor: pointer;
+}
 .formButton {
     width: 200px;
     height: 50px;

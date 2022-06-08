@@ -48,6 +48,10 @@
           <i class="fas fa-eye" v-if="password_showed"></i>
         </div>
       </div>
+      <p id="password_infos">
+        Comporte 10 caractères, 1 minuscule, 1 majuscule, 1 chiffre et un
+        caractère spécial
+      </p>
       <div class="submitForm">
         <transition name="fadeButton">
           <UserButton
@@ -158,7 +162,11 @@ export default {
   width: 30px;
   bottom: 24px;
 }
-
+#password_infos {
+  text-align: left;
+  margin: 0;
+  margin-top: 5px;
+}
 i {
   position: absolute;
 }
@@ -221,6 +229,7 @@ button {
   height: 30px;
   display: flex;
   justify-content: center;
+  position: relative;
   margin-top: 40px;
 }
 .signed {
@@ -230,7 +239,7 @@ button {
   margin-right: auto;
   left: 0;
   right: 0;
-  bottom: -7px;
+  bottom: 45px;
   width: 300px;
   height: 100px;
   font-weight: bold;
@@ -257,7 +266,7 @@ button {
   height: 50px;
   left: 0;
   right: 0;
-  bottom: -55px;
+  bottom: 0px;
 }
 
 .successAppear-enter-active,
