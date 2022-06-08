@@ -141,6 +141,11 @@ export default {
       this.assignPostInformations();
     },
   },
+  beforeCreate() {
+    if (this.$store.state.logState == false) {
+      this.$router.push("/login");
+    }
+  },
   created() {
     this.assignPostInformations();
   },

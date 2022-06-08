@@ -20,6 +20,11 @@ export default {
       this.$emit("modifyAvatar");
     },
   },
+  beforeCreate() {
+    if (this.$store.state.logState == false) {
+      this.$router.push("/login");
+    }
+  },
 };
 </script>
 

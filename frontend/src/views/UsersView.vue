@@ -2,13 +2,13 @@
   <div id="users">
     <h1>Utilisateurs</h1>
     <div class="users_container">
-        <UserCard
-          :id_user="user.id_user"
-          :avatar="user.picture"
-          :nickname="user.nickname"
-          v-for="user in users"
-          :key="user.id_user"
-        />
+      <UserCard
+        :id_user="user.id_user"
+        :avatar="user.picture"
+        :nickname="user.nickname"
+        v-for="user in users"
+        :key="user.id_user"
+      />
     </div>
   </div>
 </template>
@@ -37,6 +37,11 @@ export default {
         this.users = reponse;
       }
     },
+  },
+  beforeCreate() {
+    if (this.$store.state.logState == false) {
+      this.$router.push("/login");
+    }
   },
   created() {
     this.assignUsersInfos();
