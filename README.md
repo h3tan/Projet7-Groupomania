@@ -7,7 +7,7 @@ A partir du dossier /frontend:
 - "npm run serve" pour lancer le serveur frontend
 
 A partir du dossier /backend:
-- "npm install" pour installer les dépendances
+- "npm install" pour installer les dépendances, possibilité de conflit, résolution possible avec la commande "npm --force install"
 - Lancer une application MySQL (base de données utilisée par ce projet) puis lancer les commandes SQL du fichier "groupomania_social.sql"
   du repository ou celui fourni avec le zip du projet pour créer la base avec ses tables
 - Créer un fichier ".env" avec les variables d'environnement suivantes:
