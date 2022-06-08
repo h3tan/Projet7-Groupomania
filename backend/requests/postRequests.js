@@ -34,7 +34,8 @@ exports.requestIdOfPostCreator = async (req, res, next) => {
 exports.requestAllPosts = async (req, res, next) => {
   try {
     connexion.query(
-      `select * from post join user on post.id_user = user.id_user order by post.id_post desc`,
+      `select post.id_post, post.title, post.date_created, post.date_updated, user.picture, user.nickname
+      from post join user on post.id_user = user.id_user order by post.id_post desc`,
       function (err, result) {
         req.resultAllPosts = result;
         req.errorAllPosts = err;

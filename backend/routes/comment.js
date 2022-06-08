@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../middlewares/auth");
-//const checkPost = require("../middlewares/checkPost");
 const commentCtrl = require("../controllers/comment");
 const reqComment = require("../requests/commentRequests");
 

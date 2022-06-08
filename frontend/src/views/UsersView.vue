@@ -32,7 +32,6 @@ export default {
   methods: {
     requestAllUsersInfos,
     async assignUsersInfos() {
-      console.log("entrée");
       let reponse = await requestAllUsersInfos();
       if (!reponse.error) {
         this.users = reponse;
