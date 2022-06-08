@@ -5,6 +5,7 @@ import UsersView from "../views/UsersView.vue";
 import WhatsNewView from "../views/WhatsNewView.vue";
 import PostAndCommentsView from "../views/PostAndCommentsView.vue";
 import SingleUserView from "../views/SingleUserView.vue";
+import ErrorPageView from "../views/ErrorPageView.vue";
 
 const routes = [
   {
@@ -46,6 +47,11 @@ const routes = [
     path: "/post/:id",
     name: "post",
     component: PostAndCommentsView,
+  },
+  {
+    path: "/error",
+    name: "error",
+    component: ErrorPageView,
   },
 ];
 

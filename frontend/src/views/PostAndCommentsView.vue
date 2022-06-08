@@ -1,7 +1,7 @@
 <template>
   <div id="post_section" :data-id_post="id_post" :data-id_user="post_id_user">
     <div class="nav">
-      <navButton link="/whatsnew" nav_button_name="Retour" />
+      <NavButton link="/whatsnew" nav_button_name="Retour" />
       <!-- <router-link to="/whatsnew">Back</router-link> -->
     </div>
     <div class="title_container">
@@ -134,7 +134,8 @@ export default {
         }
         return;
       }
-      this.$router.push("/whatsnew"); // Redirection lorsque le post n'existe pas
+      this.$router.push("/error");
+      //this.$router.push("/whatsnew"); // Redirection lorsque le post n'existe pas
     },
     updatePostPage() {
       this.assignPostInformations();
