@@ -10,7 +10,9 @@
         v-model="modify_title"
       />
       <div id="add_file">
-        <label id="label_file" for="input_file">Ajouter un fichier image</label>
+        <label id="label_file" for="input_file"
+          >Ajouter ou modifier une image</label
+        >
         <input
           type="file"
           id="input_file"
@@ -25,7 +27,7 @@
         <button id="cancel_file" @click="cancelFileChosen" v-if="fileChosen">
           Annuler
         </button>
-        <div class="keep_file_box">
+        <div class="keep_file_box" v-if="post_image">
           <input
             type="checkbox"
             name="keep_file"
@@ -119,6 +121,7 @@ export default {
         this.result = "Post Modifié !";
         this.modify_title = "";
         this.modify_text = "";
+        this.fileChosen = false;
         setTimeout(() => {
           this.$emit("postUpdated");
           this.$emit("cancelPost");
@@ -189,7 +192,6 @@ label {
   padding: 0px 23px 0px;
   border: 1px solid;
   width: 220px;
-  height: 30px;
   border-radius: 4px;
   text-align: center;
   font-weight: 400;
