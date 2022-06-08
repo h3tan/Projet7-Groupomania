@@ -219,23 +219,22 @@ export default {
   margin-bottom: 50px;
   position: relative;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-#modify_password {
-  position: absolute;
 }
 .password_change_result {
   height: 30px;
   display: flex;
   justify-content: center;
+  position: relative;
   margin-top: 40px;
+  width: 200px;
 }
 .confirmed {
   color: green;
   position: absolute;
-  right: 48px;
-  bottom: 35px;
+  bottom: 25px;
   font-weight: bold;
   font-size: 20px;
 }
@@ -248,7 +247,6 @@ export default {
   color: #fd2d01;
   font-size: 20px;
   height: 50px;
-  margin-top: 20px;
 }
 
 .successAppear-enter-active,
