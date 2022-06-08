@@ -55,7 +55,7 @@
       <div class="submitForm">
         <transition name="fadeButton">
           <UserButton
-            v-if="!confirmSignup"
+            v-show="!confirmSignup"
             buttonClass="formButton"
             buttonText="Valider"
             disabled
@@ -222,14 +222,19 @@ input {
 }
 
 button {
-  margin-top: 40px;
+  width: 50px;
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
 }
 
 .signup_result {
   height: 30px;
   display: flex;
   justify-content: center;
-  position: relative;
   margin-top: 40px;
 }
 .signed {
@@ -239,7 +244,6 @@ button {
   margin-right: auto;
   left: 0;
   right: 0;
-  bottom: 45px;
   width: 300px;
   height: 100px;
   font-weight: bold;
@@ -260,13 +264,10 @@ button {
   font-weight: bold;
   color: #fd2d01;
   font-size: 20px;
-  position: absolute;
   margin-left: auto;
   margin-right: auto;
   height: 50px;
-  left: 0;
-  right: 0;
-  bottom: 0px;
+  margin-top: 70px;
 }
 
 .successAppear-enter-active,
