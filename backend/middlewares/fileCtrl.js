@@ -25,11 +25,11 @@ exports.deleteFile = (req, res, next) => {
 // Suppression de plusieurs images dans le dossier 'images'
 exports.deleteUserAllPostFiles = (req, res, next) => {
   for (let i in req.file) {
-    if (req.file[i].post_picture != null) {
-      const filename = req.file[i].post_picture.split("/images/")[1];
-    fs.unlink(`images/${filename}`, () => {
-      console.log(`${filename} deleted`);
-    });
+    if (req.file[i].image != null) {
+      const filename = req.file[i].image.split("/images/")[1];
+      fs.unlink(`images/${filename}`, () => {
+        console.log(`${filename} deleted`);
+      });
     }
   }
   next();

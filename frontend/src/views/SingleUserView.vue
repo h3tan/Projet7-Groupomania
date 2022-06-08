@@ -2,7 +2,7 @@
   <div id="user" :data-nickname="$route.params.nickname">
     <navButton link="/users" nav_button_name="Retour" />
     <div class="title_container">
-      <h1>Information utilisateur</h1>
+      <h1>Informations utilisateur</h1>
     </div>
     <UserCardDetailed
       :id_user="id_user"

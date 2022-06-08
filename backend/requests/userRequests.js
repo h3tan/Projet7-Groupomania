@@ -133,7 +133,7 @@ exports.requestAvatar = (req, res, next) => {
 exports.requestUserPostPictures = (req, res, next) => {
   try {
     connexion.query(
-      `SELECT image FROM post WHERE user_id = ?`,
+      `SELECT image FROM post WHERE id_user = ?`,
       [req.auth.userId],
       function (err, result) {
         req.file = result;
