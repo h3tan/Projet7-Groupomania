@@ -28,16 +28,16 @@ III. Se positionner sur le dossier "backend" (à la racine du projet faites "cd 
 3. Installation de helmet:
 - npm install helmet
 
-4. Installation de jsonwebtoken
+4. Installation de jsonwebtoken:
 - npm install jsonwebtoken
 
-5. Installation de multer
+5. Installation de multer:
 - npm install multer
 
 6. Installation de Bcrypt:
 - npm install bcrypt
 
-7. Installation de MySQL
+7. Installation de MySQL:
 
 - sudo apt update
 - sudo apt install mysql-server
