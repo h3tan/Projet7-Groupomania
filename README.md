@@ -6,11 +6,11 @@ II. Installation du front-end:
 
 Se positionnner sur le dossier "frontend" (à la racine du projet faites "cd frontend") et effectuer les commandes suivantes:
 
-Installation de Vue-cli:
+- Installation de Vue-cli:
 
-- npm install -g @vue/cli
-- Si vue-router n'est pas installé de base: "vue add router" et "npm install vue-router"
-- Si vuex n'est pas installé de base: "vue add vuex" et "npm install vuex"
+npm install -g @vue/cli
+Si vue-router n'est pas installé de base: "vue add router" et "npm install vue-router"
+Si vuex n'est pas installé de base: "vue add vuex" et "npm install vuex"
 
 En cas de conflit éventuel avec d'autres dépendances (notamment fontawesome), utilisez "npm install --force" pour chaque installation
 
@@ -19,37 +19,38 @@ En cas de conflit éventuel avec d'autres dépendances (notamment fontawesome), 
 
 III. Se positionner sur le dossier "backend" (à la racine du projet faites "cd backend") et effectuer les commandes suivantes:
 
-Installation de express:
-- npm install express
+- Installation de express:
+npm install express
 
-Installation de nodemon:
-- npm install nodemon
+- Installation de nodemon:
+npm install nodemon
 
-Installation de helmet:
-- npm install helmet
+- Installation de helmet:
+npm install helmet
 
-Installation de jsonwebtoken
-- npm install jsonwebtoken
+- Installation de jsonwebtoken
+npm install jsonwebtoken
 
-Installation de multer
-- npm install multer
+- Installation de multer
+npm install multer
 
-Installation de Bcrypt:
-- npm install bcrypt
+- Installation de Bcrypt:
+npm install bcrypt
 
-Installation de MySQL
-- sudo apt update
-- sudo apt install mysql-server
-- Lancer MySQL: "sudo service mysql start"
-- Créer le mot de passe pour l'utilisateur "root": mysqladmin -u root password "votremotdepasse"
-- Activer le terminal MySQL: mysql -u root -p (entrez le mot de passe défini au point précédent)
+- Installation de MySQL
+
+sudo apt update
+sudo apt install mysql-server
+Lancer MySQL: "sudo service mysql start"
+Créer le mot de passe pour l'utilisateur "root": mysqladmin -u root password "votremotdepasse"
+Activer le terminal MySQL: mysql -u root -p (entrez le mot de passe défini au point précédent)
 A partir du terminal MySQL:
-- Lancer les commandes SQL du fichier "groupomania_social.sql" du repository ou celui fourni avec le zip du projet pour créer la base avec ses tables
-- Entrez la commande "use groupomania_social" pour se positionner sur cette base.
+Lancer les commandes SQL du fichier "groupomania_social.sql" du repository ou celui fourni avec le zip du projet pour créer la base avec ses tables
+Entrez la commande "use groupomania_social" pour se positionner sur cette base.
 
-Installation de dotenv pour gérer les variables d'environnement:
-- npm install dotenv
-- Créer un fichier ".env" avec les variables d'environnement suivantes:
+- Installation de dotenv pour gérer les variables d'environnement:
+npm install dotenv
+Créer un fichier ".env" avec les variables d'environnement suivantes:
  
  - MYSQL_HOST = // Nom de l'hôte spécifié lors de l'installation de MySQL
  - MYSQL_ID = // ID de l'utilisateur ayant tous les droits spécifié lors de l'installation de MySQL
@@ -60,6 +61,7 @@ Installation de dotenv pour gérer les variables d'environnement:
 - Créer les dossiers "images" et "avatar" pour stocker les fichiers images
 
 IV. Fonctionnalités du projet: (au 06/06/2022)
+
 - Inscription d'un utilisateur (Le mot de passe doit comporter 10 caractères, 1 minuscule, 1 majuscule, 1 chiffre et un caractère spécial)
 - Connexion d'un utilisateur
 - Déconnexion de l'utilisateur
