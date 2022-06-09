@@ -20,22 +20,22 @@ En cas de conflit éventuel avec d'autres dépendances (notamment fontawesome), 
 III. Se positionner sur le dossier "backend" (à la racine du projet faites "cd backend") et effectuer les commandes suivantes:
 
 - Installation de express:
-npm install express
+	npm install express
 
 - Installation de nodemon:
-npm install nodemon
+	npm install nodemon
 
 - Installation de helmet:
-npm install helmet
+	npm install helmet
 
 - Installation de jsonwebtoken
-npm install jsonwebtoken
+	npm install jsonwebtoken
 
 - Installation de multer
-npm install multer
+	npm install multer
 
 - Installation de Bcrypt:
-npm install bcrypt
+	npm install bcrypt
 
 - Installation de MySQL
 
